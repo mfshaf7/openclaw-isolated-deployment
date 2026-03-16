@@ -1,0 +1,21 @@
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# Local evidence that may contain sensitive data
+evidence/screenshots/*
+evidence/logs/*
+evidence/validation-notes/*
+!evidence/screenshots/.gitkeep
+!evidence/logs/.gitkeep
+!evidence/validation-notes/.gitkeep
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Python / Node noise if used later
+node_modules/
+__pycache__/
