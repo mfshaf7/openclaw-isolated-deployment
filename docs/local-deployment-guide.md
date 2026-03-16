@@ -110,9 +110,10 @@ cd ~/projects/openclaw-isolated-deployment
 
 ### Step 5 — Obtain OpenClaw from a trusted source
 
-- Clone or download OpenClaw from the official upstream source you trust.
-- Record the release, tag, image, or commit used.
-- Do not start from random mirrors for the first build.
+- Use the official upstream repository: `https://github.com/openclaw/openclaw`
+- Record the release, tag, branch, or commit used for the build.
+- Use the documented Docker install path from the upstream project for the first baseline.
+- Do not start from random mirrors or repackaged images for the first build.
 
 ### Step 6 — Create runtime configuration
 
@@ -130,7 +131,15 @@ cd ~/projects/openclaw-isolated-deployment
 
 ### Step 8 — Start the stack
 
-Start OpenClaw using the documented Docker-based method appropriate to the upstream project.
+Start OpenClaw using the documented Docker-based method from the official upstream project.
+
+Baseline upstream flow:
+
+```bash
+git clone https://github.com/openclaw/openclaw.git
+cd openclaw
+./docker-setup.sh
+```
 
 Preserve at minimum:
 

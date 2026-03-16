@@ -17,7 +17,7 @@
 - [ ] VM baseline recorded
 
 ## OpenClaw deployment
-- [ ] Trusted upstream source recorded
+- [ ] Official upstream source recorded (`github.com/openclaw/openclaw`)
 - [ ] `.env` created inside target VM
 - [ ] Persistent storage path confirmed
 - [ ] Startup logs captured
