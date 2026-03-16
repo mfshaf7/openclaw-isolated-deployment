@@ -4,23 +4,23 @@
 
 This runbook documents the **operator-side setup** used to manage this project from a Windows workstation.
 
-It exists so the documentation and troubleshooting workspace can be rebuilt cleanly if the local environment is lost, changed, or rebuilt.
+It exists so the documentation and operator workspace can be rebuilt cleanly if the local environment is lost, changed, or rebuilt.
 
 The runbook covers:
 
 - WSL Ubuntu installation
-- selecting the correct shell
+- launching the Ubuntu shell
 - base package installation
 - Node.js installation with `nvm`
 - Codex CLI installation
-- workspace creation using the `~/projects/openclaw-isolated-deployment` naming standard
+- workspace creation at `~/projects/openclaw-isolated-deployment`
 - early failure modes already encountered
 
 ## 2. Why this runbook exists
 
 A deployment repository becomes fragile if it depends on memory or ad hoc terminal history.
 
-This runbook exists to make the operator environment repeatable and to preserve real setup failures that changed the correct path.
+This runbook exists to make the operator environment repeatable and to preserve setup details that changed the correct path.
 
 ## 3. Windows prerequisites
 
@@ -49,7 +49,6 @@ wsl -l -v
 Expected outcome:
 
 - `Ubuntu` appears as an installed distro
-- `docker-desktop` may also appear if Docker Desktop is installed
 
 ## 6. Start the correct shell
 
@@ -59,19 +58,11 @@ Launch Ubuntu explicitly:
 wsl -d Ubuntu
 ```
 
-A correct prompt should look similar to:
+A normal Ubuntu prompt should look similar to:
 
 ```bash
 your-user@your-host:~$
 ```
-
-Do **not** continue from a prompt like:
-
-```bash
-docker-desktop:~#
-```
-
-That is Docker Desktop’s internal distro, not the intended operator workspace.
 
 ## 7. Install base packages inside Ubuntu
 
@@ -166,27 +157,7 @@ pwd
 ls -la
 ```
 
-## 12. Known issue 1 — wrong shell (`docker-desktop`)
-
-### Symptom
-Commands like `sudo apt update` failed in a shell that showed:
-
-```bash
-docker-desktop:~#
-```
-
-### Cause
-The session was opened inside Docker Desktop’s internal WSL distro instead of Ubuntu.
-
-### Fix
-Use PowerShell to list distros and launch Ubuntu explicitly:
-
-```powershell
-wsl -l -v
-wsl -d Ubuntu
-```
-
-## 13. Known issue 2 — npm global install `EACCES`
+## 12. Known issue 1 — npm global install `EACCES`
 
 ### Symptom
 This failed:
@@ -203,7 +174,7 @@ Node/npm had been installed using apt, so global npm installs targeted root-owne
 ### Fix
 Use `nvm` to manage Node under the user profile, then reinstall Codex CLI globally without `sudo`.
 
-## 14. Operating rule after setup
+## 13. Operating rule after setup
 
 For this project, every time the deployment troubleshooting path changes:
 
@@ -211,7 +182,7 @@ For this project, every time the deployment troubleshooting path changes:
 - update the authoritative guide if the build method changed
 - check formatting for consistency before considering the change complete
 
-## 15. Run record template
+## 14. Run record template
 
 Keep a record for each rebuild:
 

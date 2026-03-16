@@ -2,7 +2,7 @@
 
 ## Operator workspace
 - [ ] Ubuntu WSL installed
-- [ ] Correct distro confirmed (`Ubuntu`, not `docker-desktop`)
+- [ ] Ubuntu shell opened and verified
 - [ ] Base packages installed
 - [ ] Node.js installed through `nvm`
 - [ ] Codex CLI installed and verified

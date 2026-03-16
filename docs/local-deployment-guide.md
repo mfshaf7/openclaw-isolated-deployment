@@ -61,14 +61,12 @@ Recommended starting point for the target VM:
 
 Track the real values in `deployment/vm-baseline.md`.
 
-## 6. Workspace naming standard
+## 6. Operator workspace path
 
-Use the following workspace naming consistently:
+Use the following workspace path consistently:
 
 - workspace root: `~/projects`
 - project root: `~/projects/openclaw-isolated-deployment`
-
-Use the generic workspace root `~/projects`, but keep the project folder name specific as `openclaw-isolated-deployment`.
 
 ### Workspace and Repository Layout
 
@@ -77,7 +75,7 @@ Use the generic workspace root `~/projects`, but keep the project folder name sp
 └── openclaw-isolated-deployment/
 ```
 
-Both levels must be created explicitly.
+Create both levels explicitly.
 
 ## 7. Build workflow
 

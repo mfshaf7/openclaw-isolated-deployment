@@ -70,9 +70,8 @@ This prevents the repository from drifting away from reality.
 
 ## Current known issues already captured
 
-This repository already includes two real early setup failures:
+This repository already includes one early setup failure:
 
-- landing in the wrong WSL distro (`docker-desktop`) instead of Ubuntu
 - `npm install -g @openai/codex` failing with `EACCES` under apt-managed Node.js
 
 Those are included because real deployment repositories should preserve operational truth, not just the final happy path.
