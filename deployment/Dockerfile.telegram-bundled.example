@@ -1,0 +1,8 @@
+FROM openclaw:stable-preview
+
+# Replace the bundled Telegram plugin with the repository-managed replacement.
+# Build from the openclaw-isolated-deployment repository root so this path exists.
+COPY telegram-override-plugin/ /app/extensions/telegram/
+
+# Keep the runtime on the bundled plugin seam.
+ENV OPENCLAW_BUNDLED_PLUGINS_DIR=/app/extensions

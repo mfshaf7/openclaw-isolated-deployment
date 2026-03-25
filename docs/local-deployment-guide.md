@@ -121,6 +121,8 @@ cd ~/projects/openclaw-isolated-deployment
 - Populate the minimum required values only.
 - Do not enable optional connectors until baseline runtime works.
 - Do not store real secrets in markdown, scripts, or version-controlled compose files.
+- If the gateway remains bound beyond loopback in Docker, configure
+  `gateway.auth.rateLimit` in the runtime config.
 
 ### Step 7 — Prepare storage
 
@@ -148,6 +150,45 @@ Preserve at minimum:
 - startup logs
 - bound ports
 - first warnings or errors
+
+### Step 8a — Apply bundled channel replacements the supported way
+
+If you need to replace a built-in channel such as `telegram`, do not load a
+second plugin with the same id through `plugins.load.paths`.
+
+Use a custom deployment image that replaces the bundled plugin directory
+instead. In this repository that means replacing `/app/extensions/telegram`
+with the contents of `telegram-override-plugin/`.
+
+That keeps the runtime on the supported bundled-plugin seam and avoids
+duplicate-id override warnings.
+
+For non-bundled plugins such as `pc-control`, use managed installs such as:
+
+```bash
+openclaw plugins install ./pc-control-openclaw-plugin
+```
+
+That writes `plugins.installs` provenance records and avoids untracked local
+plugin warnings.
+
+### Step 8b — Harden the host boundary the supported way
+
+On Windows + WSL + Docker, do not assume that publishing
+`127.0.0.1:hostPort:containerPort` is available or stable. Validate it on the
+real host before treating it as the security boundary.
+
+If localhost-only port publishing is rejected by the Docker/WSL forwarder, keep
+the upstream publish shape and move the exposure control to the Windows host
+firewall instead.
+
+For this repository's current implementation that means:
+
+- keep gateway auth in `token` mode
+- add `gateway.auth.rateLimit`
+- enforce inbound restrictions on `18789` and `18790` with Windows Firewall
+- verify that Windows-side `http://127.0.0.1:18789/healthz` still works after
+  the firewall rule is applied
 
 ### Step 9 — Validate baseline function
 
@@ -179,6 +220,18 @@ The preferred local pattern is:
 - no public tunnel during the initial phase
 
 This keeps the runtime private and makes the execution boundary clear.
+
+### Docker/WSL note
+
+In Docker-on-WSL environments, the practical enforcement point may be the
+Windows host firewall rather than `gateway.bind=loopback` or a compose-level
+`127.0.0.1:...` publish rule.
+
+Use the app/runtime controls and the host controls together:
+
+- OpenClaw gateway token auth
+- OpenClaw failed-auth rate limiting
+- Windows Firewall rules for the forwarded OpenClaw ports
 
 ## 9. Secrets handling rules
 

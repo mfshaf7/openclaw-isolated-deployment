@@ -1,0 +1,30 @@
+{
+  "id": "pc-control",
+  "name": "PC Control",
+  "description": "Typed adapter tools for the pc-control host bridge.",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": { "type": "boolean" },
+      "bridgeUrl": { "type": "string" },
+      "authTokenEnv": { "type": "string" },
+      "timeoutMs": { "type": "number" },
+      "operationTimeoutsMs": {
+        "type": "object",
+        "additionalProperties": { "type": "number" }
+      },
+      "sharedPathMap": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" }
+        }
+      },
+      "allowWriteOperations": { "type": "boolean" },
+      "allowExportOperations": { "type": "boolean" },
+      "allowBrowserInspect": { "type": "boolean" }
+    }
+  }
+}

@@ -20,6 +20,10 @@
 - [ ] Official upstream source recorded (`github.com/openclaw/openclaw`)
 - [ ] `.env` created inside target VM
 - [ ] Persistent storage path confirmed
+- [ ] Any built-in channel replacement shipped through a bundled-plugin image build, not `plugins.load.paths`
+- [ ] Any non-bundled local plugin installed through `openclaw plugins install`
+- [ ] `gateway.auth.rateLimit` configured when `gateway.bind` stays beyond loopback
+- [ ] Host firewall rules restrict OpenClaw ports if Docker/WSL cannot enforce localhost-only publish safely
 - [ ] Startup logs captured
 - [ ] Host localhost access confirmed
 - [ ] First interaction validated

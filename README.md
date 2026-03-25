@@ -26,6 +26,20 @@ The baseline used by this repository is fixed as follows:
 
 This repository exists to support that exact model.
 
+The supported plugin model used here is:
+
+- built-in channel replacements such as `telegram` are shipped as bundled-plugin
+  replacements in the deployment image
+- non-bundled local plugins such as `pc-control` are installed through
+  `openclaw plugins install` so `plugins.installs` provenance is recorded
+
+The supported hardening model used here is:
+
+- keep gateway token auth enabled
+- add `gateway.auth.rateLimit` when the gateway remains bound beyond loopback
+- enforce local-only or trusted-scope access at the Windows host firewall layer
+  when Docker/WSL port publishing cannot safely be restricted to `127.0.0.1`
+
 ## Repository operating rule
 
 For this project, **a fix is not complete until the documentation is updated too**.
