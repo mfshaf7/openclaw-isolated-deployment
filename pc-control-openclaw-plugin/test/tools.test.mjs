@@ -101,6 +101,133 @@ test("send_file_to_telegram tool emits MEDIA:path for staged files", async () =>
   }
 });
 
+test("stage_for_telegram in Telegram DM does not require an extra confirm flag", async () => {
+  process.env.OPENCLAW_GATEWAY_TOKEN = "token";
+
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({
+    ok: true,
+    async json() {
+      return {
+        ok: true,
+        result: {
+          path: "/tmp/openclaw-staging/portfolio.docx",
+          staged: true,
+        },
+      };
+    },
+  });
+
+  try {
+    const tools = createPcControlTools({
+      pluginConfig: {
+        bridgeUrl: "http://host.docker.internal:48721",
+        authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
+        allowExportOperations: true,
+        sharedPathMap: {
+          from: "/tmp/openclaw-staging",
+          to: "/container-staging",
+        },
+      },
+      toolContext: {
+        messageChannel: "telegram",
+        sessionKey: "agent:main:telegram:direct:test",
+        requesterSenderId: "1337",
+      },
+    });
+    const tool = tools.find((entry) => entry.name === "pc_control_stage_for_telegram");
+    assert.ok(tool, "expected stage_for_telegram tool to be registered");
+
+    const result = await tool.execute("call-stage-no-confirm", {
+      path: "desktop/portfolio.docx",
+    });
+
+    assert.deepEqual(result.content, [
+      { type: "text", text: "MEDIA:/container-staging/portfolio.docx" },
+    ]);
+    assert.equal(result.details.path, "/container-staging/portfolio.docx");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("send_file_to_telegram in Telegram DM does not require an extra confirm flag", async () => {
+  process.env.OPENCLAW_GATEWAY_TOKEN = "token";
+
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({
+    ok: true,
+    async json() {
+      return {
+        ok: true,
+        result: {
+          path: "/tmp/openclaw-staging/portfolio.docx",
+          staged: true,
+        },
+      };
+    },
+  });
+
+  try {
+    const tools = createPcControlTools({
+      pluginConfig: {
+        bridgeUrl: "http://host.docker.internal:48721",
+        authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
+        allowExportOperations: true,
+        sharedPathMap: {
+          from: "/tmp/openclaw-staging",
+          to: "/container-staging",
+        },
+      },
+      toolContext: {
+        messageChannel: "telegram",
+        sessionKey: "agent:main:telegram:direct:test",
+        requesterSenderId: "1337",
+      },
+    });
+    const tool = tools.find((entry) => entry.name === "pc_control_send_file_to_telegram");
+    assert.ok(tool, "expected send_file_to_telegram tool to be registered");
+
+    const result = await tool.execute("call-send-no-confirm", {
+      path: "desktop/portfolio.docx",
+    });
+
+    assert.deepEqual(result.content, [
+      { type: "text", text: "MEDIA:/container-staging/portfolio.docx" },
+    ]);
+    assert.equal(result.details.path, "/container-staging/portfolio.docx");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("send_file_to_telegram still requires confirm outside Telegram delivery contexts", async () => {
+  process.env.OPENCLAW_GATEWAY_TOKEN = "token";
+
+  const tools = createPcControlTools({
+    pluginConfig: {
+      bridgeUrl: "http://host.docker.internal:48721",
+      authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
+      allowExportOperations: true,
+    },
+    toolContext: {
+      messageChannel: "web",
+      sessionKey: "agent:main:main",
+      requesterSenderId: "1337",
+    },
+  });
+  const tool = tools.find((entry) => entry.name === "pc_control_send_file_to_telegram");
+  assert.ok(tool, "expected send_file_to_telegram tool to be registered");
+
+  await assert.rejects(
+    () =>
+      tool.execute("call-send-requires-confirm", {
+        path: "desktop/portfolio.docx",
+      }),
+    /requires confirm=true/,
+  );
+});
+
 test("capture_desktop_screenshot emits MEDIA:path for staged screenshots", async () => {
   process.env.OPENCLAW_GATEWAY_TOKEN = "token";
 

@@ -99,6 +99,21 @@ function requireConfirmedAction(params, actionLabel) {
   }
 }
 
+function isTelegramDeliveryContext(api) {
+  return (
+    api?.toolContext?.messageChannel === "telegram" &&
+    typeof api?.toolContext?.requesterSenderId === "string" &&
+    api.toolContext.requesterSenderId.trim().length > 0
+  );
+}
+
+function shouldBypassExplicitConfirm(api, definition) {
+  if (!definition?.bypassConfirmInTelegramDelivery) {
+    return false;
+  }
+  return isTelegramDeliveryContext(api);
+}
+
 function normalizeGuessedHomeAlias(value) {
   const raw = typeof value === "string" ? value.trim() : "";
   if (!raw) {
@@ -280,7 +295,9 @@ function createExportTool(api, definition) {
       if (!config.allowExportOperations) {
         denyByPolicy("Export operations are disabled in pc-control plugin config");
       }
-      requireConfirmedAction(params, definition.label);
+      if (!shouldBypassExplicitConfirm(api, definition)) {
+        requireConfirmedAction(params, definition.label);
+      }
       const payload = buildPayload(
         api,
         definition.operation,
@@ -342,7 +359,11 @@ export function createPcControlTools(api) {
       description: "Primary tool for listing a host-PC folder inside allowed roots. Use this instead of exec for desktop, downloads, and documents.",
       operation: "fs.list",
       parameters: operationSchema({
-        path: { type: "string", description: "Allowed host folder alias or relative path to list." },
+        path: {
+          type: "string",
+          description:
+            "Allowed host folder alias or one exact verified relative path to list. Prefer exact child names learned from previous tool output, for example desktop/PERSONAL JOB DATA. Do not escape spaces with backslashes or invent rewritten path segments.",
+        },
       }),
       mapParams: (params) => ({ path: params.path }),
     }),
@@ -368,7 +389,7 @@ export function createPcControlTools(api) {
         root: {
           type: "string",
           description:
-            "One allowed host root alias or one verified relative path. Examples: desktop, documents, downloads, desktop/finance. Not valid: ~/Documents or documents;downloads.",
+            "One allowed host root alias or one exact verified relative path. Examples: desktop, documents, downloads, desktop/PERSONAL JOB DATA. Not valid: ~/Documents, documents;downloads, or guessed rewrites like personal\\job data.",
         },
         pattern: { type: "string", description: "Filename pattern, e.g. *.docx or *resume*.*." },
         limit: { type: "number", description: "Maximum results." },
@@ -441,8 +462,9 @@ export function createPcControlTools(api) {
       createExportTool(api, {
       name: "pc_control_stage_for_telegram",
       label: "PC Control Stage For Telegram",
-      description: "Stage a host-PC file for Telegram delivery. Use this instead of generic read, web_fetch, or write when the user wants a host file sent to Telegram.",
+      description: "Stage a host-PC file for Telegram delivery. Use this only when the user explicitly asks to stage or prepare a file for later Telegram delivery. Do not use this for direct 'send it to me' requests when pc_control_send_file_to_telegram fits.",
       operation: "fs.stage_for_telegram",
+      bypassConfirmInTelegramDelivery: true,
       parameters: operationSchema({
         path: { type: "string", description: "Path to stage." },
         confirm: { type: "boolean", description: "Must be true for export actions." },
@@ -452,8 +474,9 @@ export function createPcControlTools(api) {
       createExportTool(api, {
       name: "pc_control_send_file_to_telegram",
       label: "PC Control Send File To Telegram",
-      description: "Primary tool for sending a host-PC file to the user in Telegram. Use this after the exact host file is identified. Do not use web_fetch, generic read, or write for host file delivery.",
+      description: "Primary tool for sending a host-PC file to the user in Telegram. Use this after the exact host file is identified for any direct 'send', 'send it to me', or 'resend it' request. Do not use pc_control_stage_for_telegram when the user is asking for immediate delivery.",
       operation: "fs.stage_for_telegram",
+      bypassConfirmInTelegramDelivery: true,
       parameters: operationSchema({
         path: { type: "string", description: "Exact host-PC file path or host alias path to send." },
         confirm: { type: "boolean", description: "Must be true for Telegram file delivery." },
@@ -475,6 +498,7 @@ export function createPcControlTools(api) {
       label: "PC Control Send Desktop Screenshot To Telegram",
       description: "Primary tool for 'send me a screenshot of my desktop' requests. Capture the current host-PC desktop and return it directly to Telegram. Do not replace this with manual screenshot instructions when available.",
       operation: "display.screenshot",
+      bypassConfirmInTelegramDelivery: true,
       parameters: operationSchema({
         confirm: { type: "boolean", description: "Must be true for desktop screenshot capture." },
       }),
