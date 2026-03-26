@@ -183,6 +183,6 @@ When rebuilding the operator workstation, record:
 
 ## Related Documents
 
-- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/README.md)
-- [local-deployment-guide.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/local-deployment-guide.md)
-- [repository-map.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/repository-map.md)
+- [README.md](../README.md)
+- [local-deployment-guide.md](local-deployment-guide.md)
+- [repository-map.md](repository-map.md)

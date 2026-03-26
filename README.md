@@ -46,13 +46,11 @@ openclaw-isolated-deployment/
 │   └── ...
 ├── deployment/
 │   ├── build-checklist.md
-│   ├── vm-baseline.md
-│   └── telegram-fast-AGENTS.md
+│   └── vm-baseline.md
 ├── pc-control-bridge/
 ├── pc-control-openclaw-plugin/
 ├── openclaw-telegram-enhanced/
-├── scripts/
-└── upstream-openclaw/
+└── ...
 ```
 
 ## Repository Roles
@@ -61,16 +59,14 @@ The repository is intentionally split into separate subprojects with separate re
 
 | Path | Purpose |
 | --- | --- |
-| `upstream-openclaw/` | Vendored upstream OpenClaw baseline used as the runtime foundation and comparison point. |
 | `pc-control-bridge/` | Narrow host-control bridge that enforces policy, allowed roots, audits, and controlled host operations. |
 | `pc-control-openclaw-plugin/` | Typed OpenClaw plugin that exposes the bridge as approved tools instead of generic shell access. |
 | `openclaw-telegram-enhanced/` | Bundled Telegram replacement that adds deterministic `pc-control` routing, screenshots, media delivery, and confirmation flows. |
 | `docs/` | System documentation: architecture, rationale, operator runbooks, known issues, and security review. |
 | `deployment/` | Deployment-specific guidance, checklists, and runtime-facing configuration notes. |
-| `scripts/` | Operator and host automation used to start, repair, and validate the isolated deployment. |
 
 Read the full repo map here:
-- [repository-map.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/repository-map.md)
+- [repository-map.md](docs/repository-map.md)
 
 ## Architecture
 
@@ -94,7 +90,7 @@ The important part is not the specific products. It is the separation of duties:
 - the **host** is never the trust anchor for OpenClaw itself
 
 Read the detailed architecture here:
-- [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
+- [architecture-overview.md](docs/architecture-overview.md)
 
 ## Isolation Model
 
@@ -137,14 +133,14 @@ It does **not** claim to be:
 
 For someone new to this repository, the right reading order is:
 
-1. [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
-2. [repository-map.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/repository-map.md)
-3. [local-deployment-guide.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/local-deployment-guide.md)
-4. [security-architecture-review.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/security-architecture-review.md)
-5. [pc-control-openclaw-model.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/pc-control-openclaw-model.md)
+1. [architecture-overview.md](docs/architecture-overview.md)
+2. [repository-map.md](docs/repository-map.md)
+3. [local-deployment-guide.md](docs/local-deployment-guide.md)
+4. [security-architecture-review.md](docs/security-architecture-review.md)
+5. [pc-control-openclaw-model.md](docs/pc-control-openclaw-model.md)
 
 If you are rebuilding the operator workstation, then use:
-- [wsl-codex-runbook.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/wsl-codex-runbook.md)
+- [wsl-codex-runbook.md](docs/wsl-codex-runbook.md)
 
 ## Documentation Standard
 

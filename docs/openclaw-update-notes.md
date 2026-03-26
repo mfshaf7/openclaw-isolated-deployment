@@ -40,11 +40,11 @@ Known local core-touch points currently include:
 ## Deployment-Specific Components
 
 - Telegram override workspace copy:
-  - [openclaw-telegram-enhanced](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced)
+  - [openclaw-telegram-enhanced](../openclaw-telegram-enhanced)
 - managed OpenClaw plugin:
-  - [pc-control-openclaw-plugin](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin)
+  - [pc-control-openclaw-plugin](../pc-control-openclaw-plugin)
 - host enforcement layer:
-  - [pc-control-bridge](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge)
+  - [pc-control-bridge](../pc-control-bridge)
 
 ## Upgrade Approach
 

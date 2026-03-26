@@ -61,7 +61,7 @@ The goal is a clean isolated baseline.
 - deployment repo checked out
 
 Use:
-- [wsl-codex-runbook.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/wsl-codex-runbook.md)
+- [wsl-codex-runbook.md](wsl-codex-runbook.md)
 
 ### Runtime side
 
@@ -70,7 +70,7 @@ Use:
 - enough CPU, RAM, and disk for your workload
 
 Record actual choices in:
-- [vm-baseline.md](/home/mfshaf7/projects/openclaw-isolated-deployment/deployment/vm-baseline.md)
+- [vm-baseline.md](../deployment/vm-baseline.md)
 
 ## Baseline Runtime Build
 
@@ -126,7 +126,7 @@ Why:
 - duplicate runtime plugin ids create ambiguity and loader noise
 
 Relevant component:
-- [openclaw-telegram-enhanced/README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/README.md)
+- [openclaw-telegram-enhanced/README.md](../openclaw-telegram-enhanced/README.md)
 
 ### Layer B: pc-control plugin
 
@@ -137,14 +137,14 @@ openclaw plugins install ./pc-control-openclaw-plugin
 ```
 
 Relevant component:
-- [pc-control-openclaw-plugin/README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin/README.md)
+- [pc-control-openclaw-plugin/README.md](../pc-control-openclaw-plugin/README.md)
 
 ### Layer C: host bridge
 
 Run the `pc-control-bridge` on the Windows/WSL side rather than trying to turn the isolated runtime into the host enforcement point.
 
 Relevant component:
-- [pc-control-bridge/README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/README.md)
+- [pc-control-bridge/README.md](../pc-control-bridge/README.md)
 
 ## Network Boundary
 
@@ -181,6 +181,6 @@ For bridge-backed features, the validation standard is stronger:
 
 ## Related Documents
 
-- [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
-- [security-architecture-review.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/security-architecture-review.md)
-- [pc-control-openclaw-model.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/pc-control-openclaw-model.md)
+- [architecture-overview.md](architecture-overview.md)
+- [security-architecture-review.md](security-architecture-review.md)
+- [pc-control-openclaw-model.md](pc-control-openclaw-model.md)

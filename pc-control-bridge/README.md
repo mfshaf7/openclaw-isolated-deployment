@@ -77,9 +77,7 @@ The bridge groups operations into policy classes.
   - host discovery outside allowed roots
   - monitor power
 
-See the operation registry in:
-- [types.mjs](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/src/types.mjs)
-- [dispatcher.mjs](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/src/dispatcher.mjs)
+See the standalone `pc-control-bridge` repository for the operation registry and implementation.
 
 ## Notable Operations
 
@@ -101,15 +99,7 @@ See the operation registry in:
 
 ## Configuration
 
-Policy and runtime config live under:
-
-- [policy.example.json](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/config/policy.example.json)
-- [policy.wsl.example.json](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/config/policy.wsl.example.json)
-
-Local active variants in this workspace include:
-
-- [policy.json](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/config/policy.json)
-- [policy.local.json](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/config/policy.local.json)
+Policy and runtime config live in the standalone `pc-control-bridge` repository and the operator's local environment.
 
 ## Deployment Notes
 
@@ -125,21 +115,11 @@ The bridge is also part of the self-heal chain, but self-heal should only be con
 
 ## Tests
 
-Current local bridge tests include:
-
-- [display.test.mjs](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/test/display.test.mjs)
-- [fs.test.mjs](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/test/fs.test.mjs)
-- [policy.test.mjs](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/test/policy.test.mjs)
-
-Run:
-
-```bash
-node --test test/*.test.mjs
-```
+The runnable bridge tests also live in the standalone `pc-control-bridge` repository.
 
 ## Relationship To The Rest Of The Workspace
 
-- Architecture and rationale: [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
-- Host-control model: [pc-control-openclaw-model.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/pc-control-openclaw-model.md)
-- OpenClaw adapter: [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin/README.md)
-- Telegram override: [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/README.md)
+- Architecture and rationale: [architecture-overview.md](../docs/architecture-overview.md)
+- Host-control model: [pc-control-openclaw-model.md](../docs/pc-control-openclaw-model.md)
+- OpenClaw adapter: [README.md](../pc-control-openclaw-plugin/README.md)
+- Telegram override: [README.md](../openclaw-telegram-enhanced/README.md)

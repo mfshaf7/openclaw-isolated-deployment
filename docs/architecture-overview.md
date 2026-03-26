@@ -278,8 +278,8 @@ It is specifically a reference for **isolated local deployment with controlled h
 
 ## Related Documents
 
-- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/README.md)
-- [repository-map.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/repository-map.md)
-- [local-deployment-guide.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/local-deployment-guide.md)
-- [security-architecture-review.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/security-architecture-review.md)
-- [pc-control-openclaw-model.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/pc-control-openclaw-model.md)
+- [README.md](../README.md)
+- [repository-map.md](repository-map.md)
+- [local-deployment-guide.md](local-deployment-guide.md)
+- [security-architecture-review.md](security-architecture-review.md)
+- [pc-control-openclaw-model.md](pc-control-openclaw-model.md)

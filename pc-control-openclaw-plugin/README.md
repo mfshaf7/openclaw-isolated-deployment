@@ -134,8 +134,8 @@ That is why the plugin is split across read, organize, export, browser-inspect, 
 
 Tests live under:
 
-- [config.test.mjs](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin/test/config.test.mjs)
-- [tools.test.mjs](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin/test/tools.test.mjs)
+- [config.test.mjs](test/config.test.mjs)
+- [tools.test.mjs](test/tools.test.mjs)
 
 Run:
 
@@ -146,7 +146,7 @@ node test/tools.test.mjs
 
 ## Related Documents
 
-- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/README.md)
-- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/README.md)
-- [pc-control-openclaw-model.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/pc-control-openclaw-model.md)
-- [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
+- [README.md](../pc-control-bridge/README.md)
+- [README.md](../openclaw-telegram-enhanced/README.md)
+- [pc-control-openclaw-model.md](../docs/pc-control-openclaw-model.md)
+- [architecture-overview.md](../docs/architecture-overview.md)

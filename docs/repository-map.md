@@ -13,12 +13,9 @@ flowchart TD
     Root[openclaw-isolated-deployment]
     Root --> Docs[docs]
     Root --> Deploy[deployment]
-    Root --> Scripts[scripts]
-    Root --> Upstream[upstream-openclaw]
     Root --> Bridge[pc-control-bridge]
     Root --> Plugin[pc-control-openclaw-plugin]
     Root --> Telegram[openclaw-telegram-enhanced]
-    Root --> Evidence[evidence]
 ```
 
 ## Documentation Placement Rule
@@ -38,24 +35,6 @@ So:
 That keeps cross-cutting material centralized without hiding component contracts from the repos that implement them.
 
 ## Subproject Roles
-
-### `upstream-openclaw/`
-
-This is the upstream OpenClaw codebase used as the baseline runtime.
-
-Why it exists here:
-
-- to make the isolated deployment reproducible from a known upstream baseline
-- to keep local overrides and deployment changes close to the runtime they affect
-- to make it clear what is upstream behavior vs what is local adaptation
-
-What it is **not**:
-
-- the place to document the isolated deployment model
-- the place to explain Windows host-control policy
-- the place to document local operational quirks of this deployment
-
-Those explanations belong in the outer repository docs.
 
 ### `pc-control-bridge/`
 
@@ -113,26 +92,6 @@ Why it exists:
 - checklist and baseline docs should not pollute component READMEs
 - this is where environment-specific deployment procedure lives
 
-### `scripts/`
-
-This holds the executable operator glue.
-
-Why it exists:
-
-- the runtime needs repeatable start, repair, and verification procedures
-- self-heal should reflect the real known-good procedure, not folklore
-- scripts are part of the deployment contract, not just convenience snippets
-
-### `evidence/`
-
-This stores sanitized proof of failures, validations, and screenshots.
-
-Why it exists:
-
-- an isolated deployment repo should preserve operational truth
-- evidence helps explain why docs and procedures changed
-- this is useful during publication review and postmortems
-
 ## Why Not Collapse Everything Into One Repo Layer
 
 Because the layers represent different responsibilities:
@@ -149,9 +108,9 @@ If these are mixed together without explanation, the repository becomes difficul
 
 If you want to understand:
 
-- the system model: start with [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
-- the deployment baseline: read [local-deployment-guide.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/local-deployment-guide.md)
-- the host-control security model: read [pc-control-openclaw-model.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/pc-control-openclaw-model.md)
-- the actual bridge contract: read [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/README.md)
-- the OpenClaw adapter contract: read [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin/README.md)
-- the Telegram channel contract: read [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/README.md)
+- the system model: start with [architecture-overview.md](architecture-overview.md)
+- the deployment baseline: read [local-deployment-guide.md](local-deployment-guide.md)
+- the host-control security model: read [pc-control-openclaw-model.md](pc-control-openclaw-model.md)
+- the actual bridge contract: read [README.md](../pc-control-bridge/README.md)
+- the OpenClaw adapter contract: read [README.md](../pc-control-openclaw-plugin/README.md)
+- the Telegram channel contract: read [README.md](../openclaw-telegram-enhanced/README.md)

@@ -73,10 +73,10 @@ Keeping those responsibilities separate avoids mixing channel UX with host polic
 
 The most important code paths in this repository for the isolated deployment are:
 
-- [bot-message-dispatch.ts](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/src/bot-message-dispatch.ts)
-- [bot-message-dispatch.pc-control.ts](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/src/bot-message-dispatch.pc-control.ts)
-- [bot-handlers.runtime.ts](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/src/bot-handlers.runtime.ts)
-- [bot/delivery.ts](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/src/bot/delivery.ts)
+- [bot-message-dispatch.ts](src/bot-message-dispatch.ts)
+- [bot-message-dispatch.pc-control.ts](src/bot-message-dispatch.pc-control.ts)
+- [bot-handlers.runtime.ts](src/bot-handlers.runtime.ts)
+- [bot/delivery.ts](src/bot/delivery.ts)
 
 ## Tests
 
@@ -84,14 +84,14 @@ This package already contains a large Telegram-specific test surface.
 
 For the isolated deployment work, the most relevant tests are under:
 
-- [bot-message-dispatch.test.ts](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/src/bot-message-dispatch.test.ts)
-- [inline-buttons.test.ts](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/src/inline-buttons.test.ts)
-- [lane-delivery.test.ts](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/src/lane-delivery.test.ts)
-- [monitor.test.ts](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/src/monitor.test.ts)
+- [bot-message-dispatch.test.ts](src/bot-message-dispatch.test.ts)
+- [inline-buttons.test.ts](src/inline-buttons.test.ts)
+- [lane-delivery.test.ts](src/lane-delivery.test.ts)
+- [monitor.test.ts](src/monitor.test.ts)
 
 ## Related Documents
 
-- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/README.md)
-- [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
-- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin/README.md)
-- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/README.md)
+- [README.md](../README.md)
+- [architecture-overview.md](../docs/architecture-overview.md)
+- [README.md](../pc-control-openclaw-plugin/README.md)
+- [README.md](../pc-control-bridge/README.md)
