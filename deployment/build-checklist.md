@@ -23,6 +23,7 @@
 - [ ] Standalone `openclaw-telegram-enhanced` repo synced into deployment build copy with `./deployment/sync-telegram-build-copy.sh`
 - [ ] `./deployment/verify-workspace-sync.sh` passes
 - [ ] `./deployment/verify-bridge-workspace.sh` passes
+- [ ] `./deployment/verify-pc-control-contract.sh` passes
 - [ ] Bundled image built through `./deployment/build-openclaw-local.sh` or an equivalent command path
 - [ ] Any built-in channel replacement shipped through a bundled-plugin image build, not `plugins.load.paths`
 - [ ] Any non-bundled local plugin installed through `openclaw plugins install`

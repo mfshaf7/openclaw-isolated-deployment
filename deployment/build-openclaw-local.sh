@@ -21,6 +21,7 @@ echo
 "$ROOT/deployment/sync-telegram-build-copy.sh" "$ROOT"
 "$ROOT/deployment/verify-workspace-sync.sh" "$ROOT"
 "$ROOT/deployment/verify-bridge-workspace.sh" "$ROOT"
+"$ROOT/deployment/verify-pc-control-contract.sh" "$ROOT"
 
 echo
 echo "Building Docker image..."

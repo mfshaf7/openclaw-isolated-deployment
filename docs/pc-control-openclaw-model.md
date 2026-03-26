@@ -54,7 +54,6 @@ Should feel close to immediate:
 - file listing
 - file search
 - metadata inspection
-- browser tab listing
 
 #### Tier B: Deliberate file changes
 
@@ -82,10 +81,7 @@ Recommended operations:
 - `pc_control.fs_read_meta`
 - `pc_control.fs_mkdir`
 - `pc_control.fs_move`
-- `pc_control.zip_for_export`
 - `pc_control.stage_for_telegram`
-- `pc_control.browser_tabs_list`
-- `pc_control.browser_tab_inspect`
 
 These can be implemented by:
 
@@ -147,7 +143,6 @@ This profile keeps the useful read-only tools visible:
 - `pc_control_fs_list`
 - `pc_control_fs_search`
 - `pc_control_fs_read_meta`
-- `pc_control_browser_tabs_list`
 
 And it keeps higher-risk tools hidden until they are deliberately enabled.
 
@@ -159,7 +154,9 @@ For the current isolated deployment, the balanced recommendation is:
 - do not present generic `exec` as the normal path for host-PC actions
 - use `pc-control` for host insight and later host organization/export
 - enable write operations only after the bridge policy is tested on the real Windows host
-- enable export and tab inspection last
+- enable export only after file-send and screenshot paths are proven on the real bridge
+
+Scaffold-only bridge features such as browser tab inspection and zip export must stay hidden from the plugin surface until the bridge implements them fully and they have their own tests.
 
 This avoids the two common failure modes:
 

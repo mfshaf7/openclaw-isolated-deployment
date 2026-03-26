@@ -307,29 +307,6 @@ function createExportTool(api, definition) {
   };
 }
 
-function createBrowserInspectTool(api, definition) {
-  const config = resolvePcControlConfig(api);
-  return {
-    name: definition.name,
-    label: definition.label,
-    description: definition.description,
-    parameters: definition.parameters,
-    async execute(_id, params) {
-      if (!config.allowBrowserInspect) {
-        denyByPolicy("Browser inspection is disabled in pc-control plugin config");
-      }
-      requireConfirmedAction(params, definition.label);
-      const payload = buildPayload(
-        api,
-        definition.operation,
-        normalizeHostArguments(definition.mapParams(params)),
-      );
-      const result = await callPcControlBridge(config, payload);
-      return jsonResult(result.result);
-    },
-  };
-}
-
 export function createPcControlTools(api) {
   const config = resolvePcControlConfig(api);
   const tools = [

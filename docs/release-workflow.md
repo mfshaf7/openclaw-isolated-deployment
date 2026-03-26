@@ -100,6 +100,7 @@ Run:
 ./deployment/sync-telegram-build-copy.sh
 ./deployment/verify-workspace-sync.sh
 ./deployment/verify-bridge-workspace.sh
+./deployment/verify-pc-control-contract.sh
 ```
 
 Or use the bundled wrapper:
@@ -112,7 +113,8 @@ This wrapper:
 
 1. syncs the Telegram build copy
 2. runs both workspace verifiers
-3. builds the bundled image with the Telegram replacement
+3. verifies that the exposed `pc-control` tool surface does not leak scaffold-only bridge capabilities
+4. builds the bundled image with the Telegram replacement
 
 These checks are meant to fail fast if:
 
@@ -120,6 +122,7 @@ These checks are meant to fail fast if:
 - junk like `node_modules/` is present in the embedded Telegram copy
 - the deployment bridge folder stopped being documentation-only
 - the standalone bridge repo is missing expected source directories
+- the `pc-control` plugin still exposes scaffold-only bridge operations such as browser inspection or zip export
 
 ## Required Verification After Build
 

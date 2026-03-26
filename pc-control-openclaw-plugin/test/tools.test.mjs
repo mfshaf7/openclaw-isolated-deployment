@@ -683,3 +683,24 @@ test("move tool rewrites guessed Linux home paths in source and destination", as
     globalThis.fetch = originalFetch;
   }
 });
+
+test("scaffold-only bridge tools are not exposed in the plugin surface", () => {
+  const tools = createPcControlTools({
+    pluginConfig: {
+      bridgeUrl: "http://host.docker.internal:48721",
+      authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
+      allowExportOperations: true,
+      allowBrowserInspect: true,
+    },
+    toolContext: {
+      messageChannel: "telegram",
+      sessionKey: "agent:main:telegram:direct:test",
+      requesterSenderId: "1337",
+    },
+  });
+
+  const names = new Set(tools.map((entry) => entry.name));
+  assert.equal(names.has("pc_control_browser_tab_inspect"), false);
+  assert.equal(names.has("pc_control_browser_tabs_list"), false);
+  assert.equal(names.has("pc_control_zip_for_export"), false);
+});

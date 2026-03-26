@@ -51,12 +51,12 @@ Those belong to the bridge and channel layers.
 ### Read-only by default
 
 - `pc_control_health_check`
-- `pc_control_fs_list`
-- `pc_control_fs_search`
-- `pc_control_fs_read_meta`
-- `pc_control_browser_tabs_list`
 - `pc_control_find_in_allowed_roots`
-- `pc_control_find_ranked_files`
+- `pc_control_fs_list`
+- `pc_control_list_host_folder`
+- `pc_control_fs_search`
+- `pc_control_find_host_files`
+- `pc_control_fs_read_meta`
 
 ### Hidden until `allowWriteOperations: true`
 
@@ -65,24 +65,10 @@ Those belong to the bridge and channel layers.
 
 ### Hidden until `allowExportOperations: true`
 
-- `pc_control_zip_for_export`
 - `pc_control_stage_for_telegram`
 - `pc_control_send_file_to_telegram`
 - `pc_control_capture_desktop_screenshot`
 - `pc_control_send_desktop_screenshot_to_telegram`
-
-### Hidden until `allowAdminOperations: true`
-
-- `pc_control_discover_host_locations`
-- `pc_control_browse_host_path`
-- `pc_control_add_allowed_root`
-- `pc_control_remove_allowed_root`
-- `pc_control_set_monitor_power`
-- `pc_control_self_heal`
-
-### Hidden until `allowBrowserInspect: true`
-
-- `pc_control_browser_tab_inspect`
 
 ## Example Config
 
@@ -129,6 +115,9 @@ This plugin is designed around three ideas:
 3. export to Telegram should stay separate from ordinary file organization
 
 That is why the plugin is split across read, organize, export, browser-inspect, and admin-style actions.
+That is why the plugin is split across read, organize, and export actions.
+
+Scaffold-only bridge capabilities such as browser inspection and zip export are intentionally not exposed here until the bridge implements them fully and they have their own tests.
 
 ## Tests
 
