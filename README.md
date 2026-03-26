@@ -67,6 +67,7 @@ The repository is intentionally split into separate subprojects with separate re
 
 Read the full repo map here:
 - [repository-map.md](docs/repository-map.md)
+- [workspace-sync-policy.md](docs/workspace-sync-policy.md)
 
 ## Workspace Layout
 
@@ -168,6 +169,9 @@ For someone new to this repository, the right reading order is:
 
 If you are rebuilding the operator workstation, then use:
 - [wsl-codex-runbook.md](docs/wsl-codex-runbook.md)
+
+If you are maintaining the multi-repo workspace and need to keep the build copy aligned with the standalone repos, use:
+- [workspace-sync-policy.md](docs/workspace-sync-policy.md)
 
 ## Documentation Standard
 

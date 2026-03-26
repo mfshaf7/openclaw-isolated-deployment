@@ -81,6 +81,7 @@ Expected workspace shape:
 
 Use:
 - [wsl-codex-runbook.md](wsl-codex-runbook.md)
+- [workspace-sync-policy.md](workspace-sync-policy.md)
 
 ### Runtime side
 
@@ -157,6 +158,9 @@ Deployment copy:
 
 The deployment image path in this repository copies the workspace copy. To reproduce the same result reliably, keep that workspace copy aligned with the standalone Telegram repository revision you intend to deploy.
 
+Use:
+- [workspace-sync-policy.md](workspace-sync-policy.md)
+
 ### Layer B: pc-control plugin
 
 Install the `pc-control` plugin as a managed local plugin.
@@ -223,6 +227,9 @@ To reproduce the documented deployment behavior:
 3. treat `openclaw-isolated-deployment` as the deployment, documentation, and integration workspace
 4. make sure the Telegram bundled copy used in image builds matches the intended standalone Telegram revision
 5. verify real end-to-end actions after setup instead of relying on static config alone
+
+For ongoing workspace maintenance, also follow:
+- [workspace-sync-policy.md](workspace-sync-policy.md)
 
 For bridge-backed features, the validation standard is stronger:
 

@@ -120,6 +120,7 @@ If you want to understand:
 
 - the system model: start with [architecture-overview.md](architecture-overview.md)
 - the deployment baseline: read [local-deployment-guide.md](local-deployment-guide.md)
+- the multi-repo sync rules: read [workspace-sync-policy.md](workspace-sync-policy.md)
 - the host-control security model: read [pc-control-openclaw-model.md](pc-control-openclaw-model.md)
 - the actual bridge contract: read [README.md](../pc-control-bridge/README.md)
 - the OpenClaw adapter contract: read [README.md](../pc-control-openclaw-plugin/README.md)
