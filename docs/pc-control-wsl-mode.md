@@ -18,12 +18,11 @@ It is intentionally a **supported mode**, not a hidden local hack.
 - ClawHub-style skill: `pc-control`
 - OpenClaw plugin: `pc-control`
 - Host bridge: `pc-control-bridge`
-- Startup helpers:
-  - `scripts/start-pc-control-bridge.sh`
-  - `scripts/start-pc-control-bridge-daemon.sh`
-  - `scripts/start-pc-control-bridge-hidden.ps1`
-  - `scripts/register-pc-control-bridge-task.ps1`
-  - `scripts/register-pc-control-bridge-hidden-task.ps1`
+- Startup helpers in the standalone bridge repo:
+  - `pc-control-bridge/scripts/start-pc-control-bridge.sh`
+  - `pc-control-bridge/scripts/start-pc-control-bridge-daemon.sh`
+  - `pc-control-bridge/scripts/start-pc-control-bridge-hidden.ps1`
+  - `pc-control-bridge/scripts/register-pc-control-bridge-task.ps1`
 
 ## Prerequisites
 
@@ -33,6 +32,9 @@ It is intentionally a **supported mode**, not a hidden local hack.
 - Node installed inside WSL for the bridge runtime
 - OpenClaw gateway token available through the local OpenClaw state file
 - Docker container able to reach the host bridge through `host.docker.internal`
+- workspace layout that includes both:
+  - `~/projects/openclaw-isolated-deployment`
+  - `~/projects/pc-control-bridge`
 
 ## Supported trust model
 
@@ -125,6 +127,16 @@ It should not be described as:
 
 - native Windows service mode
 - fully generic no-prerequisite host control
+
+## Reproduction Notes
+
+This mode is reproducible by another operator only if they use the standalone bridge repository as the runnable source tree.
+
+That means:
+
+- deployment and docs come from `openclaw-isolated-deployment`
+- bridge scripts, config examples, and bridge runtime come from `pc-control-bridge`
+- the OpenClaw plugin continues to come from `openclaw-isolated-deployment/pc-control-openclaw-plugin`
 
 ## Known limitations
 

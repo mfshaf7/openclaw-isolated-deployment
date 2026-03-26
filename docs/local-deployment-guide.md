@@ -60,6 +60,25 @@ The goal is a clean isolated baseline.
 - WSL workspace ready
 - deployment repo checked out
 
+The current implementation also expects the related source repositories to be checked out alongside this repository:
+
+```bash
+mkdir -p ~/projects
+cd ~/projects
+git clone <your-openclaw-isolated-deployment-repo-url>
+git clone <your-pc-control-bridge-repo-url>
+git clone <your-openclaw-telegram-enhanced-repo-url>
+```
+
+Expected workspace shape:
+
+```text
+~/projects/
+├── openclaw-isolated-deployment/
+├── pc-control-bridge/
+└── openclaw-telegram-enhanced/
+```
+
 Use:
 - [wsl-codex-runbook.md](wsl-codex-runbook.md)
 
@@ -117,7 +136,7 @@ After the upstream baseline is working, this repository adds the isolated-deploy
 
 ### Layer A: bundled Telegram override
 
-Use the local Telegram override as the bundled `telegram` plugin replacement instead of treating it as a second side-loaded `telegram` plugin.
+Use the repository-managed Telegram override as the bundled `telegram` plugin replacement instead of treating it as a second side-loaded `telegram` plugin.
 
 Why:
 
@@ -127,6 +146,16 @@ Why:
 
 Relevant component:
 - [openclaw-telegram-enhanced/README.md](../openclaw-telegram-enhanced/README.md)
+
+Canonical source:
+
+- standalone repo: `~/projects/openclaw-telegram-enhanced`
+
+Deployment copy:
+
+- workspace copy: `openclaw-isolated-deployment/openclaw-telegram-enhanced/`
+
+The deployment image path in this repository copies the workspace copy. To reproduce the same result reliably, keep that workspace copy aligned with the standalone Telegram repository revision you intend to deploy.
 
 ### Layer B: pc-control plugin
 
@@ -139,12 +168,25 @@ openclaw plugins install ./pc-control-openclaw-plugin
 Relevant component:
 - [pc-control-openclaw-plugin/README.md](../pc-control-openclaw-plugin/README.md)
 
+Source of truth:
+
+- this repository owns `pc-control-openclaw-plugin/`
+
 ### Layer C: host bridge
 
 Run the `pc-control-bridge` on the Windows/WSL side rather than trying to turn the isolated runtime into the host enforcement point.
 
 Relevant component:
 - [pc-control-bridge/README.md](../pc-control-bridge/README.md)
+
+Canonical source:
+
+- standalone repo: `~/projects/pc-control-bridge`
+
+Important:
+
+- the current local implementation uses the standalone bridge repository for runnable bridge code and scripts
+- the small `pc-control-bridge/` folder inside `openclaw-isolated-deployment` is documentation only in this workspace and should not be treated as the runnable bridge source tree
 
 ## Network Boundary
 
@@ -171,6 +213,16 @@ Minimum validation for a usable isolated deployment:
 3. persistent state location is known
 4. Telegram or another chosen control surface works
 5. bridge-backed host actions work only through the intended path
+
+## Reproducibility Rule
+
+To reproduce the same behavior as the current local implementation:
+
+1. use the multi-repo workspace layout shown above
+2. treat `pc-control-bridge` and `openclaw-telegram-enhanced` as standalone source repositories
+3. treat `openclaw-isolated-deployment` as the deployment, documentation, and integration workspace
+4. make sure the Telegram bundled copy used in image builds matches the intended standalone Telegram revision
+5. verify real end-to-end actions after setup instead of relying on static config alone
 
 For bridge-backed features, the validation standard is stronger:
 

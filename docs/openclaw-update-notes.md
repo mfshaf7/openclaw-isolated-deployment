@@ -46,6 +46,12 @@ Known local core-touch points currently include:
 - host enforcement layer:
   - [pc-control-bridge](../pc-control-bridge)
 
+Canonical source-of-truth split:
+
+- `pc-control-openclaw-plugin/` is maintained in this repository
+- `pc-control-bridge/` runtime source is maintained in the standalone bridge repository
+- `openclaw-telegram-enhanced/` runtime source is maintained in the standalone Telegram repository, with a deployment copy kept here for bundled image builds
+
 ## Upgrade Approach
 
 When updating the base runtime:

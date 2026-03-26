@@ -32,6 +32,12 @@ So:
 - `pc-control-openclaw-plugin/README.md` explains the adapter plugin
 - `openclaw-telegram-enhanced/README.md` explains the Telegram channel replacement
 
+Canonical source ownership for the current implementation is:
+
+- standalone repo: `pc-control-bridge`
+- standalone repo: `openclaw-telegram-enhanced`
+- workspace repo: `openclaw-isolated-deployment/pc-control-openclaw-plugin`
+
 That keeps cross-cutting material centralized without hiding component contracts from the repos that implement them.
 
 ## Subproject Roles
@@ -47,6 +53,8 @@ Why it exists:
 - deterministic Telegram behavior is only credible if the host side is also typed and constrained
 
 It is the place where host-specific implementation details belong.
+
+In the current local implementation, the runnable bridge code lives in the standalone `pc-control-bridge` repository. The bridge folder in this workspace is documentation-oriented.
 
 ### `pc-control-openclaw-plugin/`
 
@@ -71,6 +79,8 @@ Why it exists:
 - built-in channel replacement is cleaner than carrying a broad core fork for Telegram-specific behavior
 
 This repository exists because the channel itself needed opinionated behavior, not just extra tools.
+
+In the current local implementation, the Telegram source of truth is the standalone `openclaw-telegram-enhanced` repository. This workspace also carries a deployment copy used by the bundled-image path.
 
 ### `docs/`
 
