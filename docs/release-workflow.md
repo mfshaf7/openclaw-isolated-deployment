@@ -99,6 +99,7 @@ Run:
 ```bash
 ./deployment/sync-telegram-build-copy.sh
 ./deployment/verify-workspace-sync.sh
+./deployment/verify-telegram-router-contract.sh
 ./deployment/verify-bridge-workspace.sh
 ./deployment/verify-pc-control-contract.sh
 ```
@@ -119,6 +120,7 @@ This wrapper:
 These checks are meant to fail fast if:
 
 - the embedded Telegram build copy drifted from the standalone Telegram repo
+- the Telegram deterministic router became too broad and started hijacking normal conversation
 - junk like `node_modules/` is present in the embedded Telegram copy
 - the deployment bridge folder stopped being documentation-only
 - the standalone bridge repo is missing expected source directories

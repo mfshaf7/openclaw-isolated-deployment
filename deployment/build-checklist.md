@@ -22,6 +22,7 @@
 - [ ] Persistent storage path confirmed
 - [ ] Standalone `openclaw-telegram-enhanced` repo synced into deployment build copy with `./deployment/sync-telegram-build-copy.sh`
 - [ ] `./deployment/verify-workspace-sync.sh` passes
+- [ ] `./deployment/verify-telegram-router-contract.sh` passes
 - [ ] `./deployment/verify-bridge-workspace.sh` passes
 - [ ] `./deployment/verify-pc-control-contract.sh` passes
 - [ ] Bundled image built through `./deployment/build-openclaw-local.sh` or an equivalent command path
