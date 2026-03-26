@@ -62,6 +62,12 @@ When updating the base runtime:
 4. verify bridge reachability from the gateway
 5. verify at least one real Telegram host-control action, not just health endpoints
 
+Standard build path:
+
+```bash
+./deployment/build-openclaw-local.sh
+```
+
 ## Minimum Verification After An Update
 
 The minimum acceptable verification set is:

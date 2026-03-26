@@ -1,4 +1,5 @@
-FROM openclaw:stable-preview
+ARG OPENCLAW_BASE_IMAGE=openclaw:stable-preview
+FROM ${OPENCLAW_BASE_IMAGE}
 
 # Add a practical Linux baseline for built-in/OpenClaw skills.
 USER root

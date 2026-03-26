@@ -102,6 +102,18 @@ Run:
 ./deployment/verify-bridge-workspace.sh
 ```
 
+Or use the bundled wrapper:
+
+```bash
+./deployment/build-openclaw-local.sh
+```
+
+This wrapper:
+
+1. syncs the Telegram build copy
+2. runs both workspace verifiers
+3. builds the bundled image with the Telegram replacement
+
 These checks are meant to fail fast if:
 
 - the embedded Telegram build copy drifted from the standalone Telegram repo
@@ -119,6 +131,22 @@ After building and deploying, verify real behavior instead of only startup healt
 4. one real read path works
 5. one real send/export path works
 6. one real mutating path works if enabled
+
+## Bundled Image Build Command
+
+The standard bundled image build path is:
+
+```bash
+./deployment/build-openclaw-local.sh
+```
+
+Optional environment overrides:
+
+```bash
+OPENCLAW_LOCAL_IMAGE_TAG=openclaw:local \
+OPENCLAW_BASE_IMAGE=openclaw:stable-preview \
+./deployment/build-openclaw-local.sh
+```
 
 ## What Not To Do
 

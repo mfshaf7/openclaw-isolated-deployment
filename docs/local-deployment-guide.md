@@ -170,6 +170,12 @@ Before building, verify the sync state:
 ./deployment/verify-bridge-workspace.sh
 ```
 
+Or use the gated build wrapper:
+
+```bash
+./deployment/build-openclaw-local.sh
+```
+
 ### Layer B: pc-control plugin
 
 Install the `pc-control` plugin as a managed local plugin.
