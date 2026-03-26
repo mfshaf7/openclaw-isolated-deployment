@@ -60,7 +60,7 @@ The goal is a clean isolated baseline.
 - WSL workspace ready
 - deployment repo checked out
 
-The current implementation also expects the related source repositories to be checked out alongside this repository:
+The full deployment workspace also expects the related source repositories to be checked out alongside this repository:
 
 ```bash
 mkdir -p ~/projects
@@ -149,7 +149,7 @@ Relevant component:
 
 Canonical source:
 
-- standalone repo: `~/projects/openclaw-telegram-enhanced`
+- `~/projects/openclaw-telegram-enhanced`
 
 Deployment copy:
 
@@ -181,11 +181,11 @@ Relevant component:
 
 Canonical source:
 
-- standalone repo: `~/projects/pc-control-bridge`
+- `~/projects/pc-control-bridge`
 
 Important:
 
-- the current local implementation uses the standalone bridge repository for runnable bridge code and scripts
+- the bridge runtime and scripts come from the standalone bridge repository
 - the small `pc-control-bridge/` folder inside `openclaw-isolated-deployment` is documentation only in this workspace and should not be treated as the runnable bridge source tree
 
 ## Network Boundary
@@ -216,7 +216,7 @@ Minimum validation for a usable isolated deployment:
 
 ## Reproducibility Rule
 
-To reproduce the same behavior as the current local implementation:
+To reproduce the documented deployment behavior:
 
 1. use the multi-repo workspace layout shown above
 2. treat `pc-control-bridge` and `openclaw-telegram-enhanced` as standalone source repositories

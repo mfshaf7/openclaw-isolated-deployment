@@ -70,7 +70,7 @@ Read the full repo map here:
 
 ## Workspace Layout
 
-To reproduce the current implementation cleanly, use a multi-repo workspace under a common parent directory.
+To reproduce this deployment model cleanly, use a multi-repo workspace under a common parent directory.
 
 Example:
 
@@ -93,7 +93,7 @@ Important:
 - the Telegram source of truth is the standalone `openclaw-telegram-enhanced` repo, even though this repository also carries a workspace copy used by the deployment image path
 - this repository still keeps `pc-control-openclaw-plugin/` locally because that plugin is part of the deployment workspace itself
 
-If someone clones only this repository, they will understand the architecture, but they will not have the full standalone bridge source tree that the current local implementation depends on.
+If someone clones only this repository, they will understand the architecture, but they will not have the full standalone bridge source tree required for the complete host-control workflow.
 
 ## Architecture
 

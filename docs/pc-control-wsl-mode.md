@@ -130,7 +130,7 @@ It should not be described as:
 
 ## Reproduction Notes
 
-This mode is reproducible by another operator only if they use the standalone bridge repository as the runnable source tree.
+This mode is reproducible only if the standalone bridge repository is used as the runnable source tree.
 
 That means:
 
