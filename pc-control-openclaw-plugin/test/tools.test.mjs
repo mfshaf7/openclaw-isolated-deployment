@@ -684,6 +684,54 @@ test("move tool rewrites guessed Linux home paths in source and destination", as
   }
 });
 
+test("quarantine tool rewrites guessed Linux home paths", async () => {
+  process.env.OPENCLAW_GATEWAY_TOKEN = "token";
+
+  const originalFetch = globalThis.fetch;
+  let capturedRequest;
+  globalThis.fetch = async (_url, init) => {
+    capturedRequest = JSON.parse(init.body);
+    return {
+      ok: true,
+      async json() {
+        return {
+          ok: true,
+          result: {
+            quarantined: true,
+          },
+        };
+      },
+    };
+  };
+
+  try {
+    const tools = createPcControlTools({
+      pluginConfig: {
+        bridgeUrl: "http://host.docker.internal:48721",
+        authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
+        allowWriteOperations: true,
+      },
+      toolContext: {
+        messageChannel: "telegram",
+        sessionKey: "agent:main:telegram:direct:test",
+        requesterSenderId: "1337",
+      },
+    });
+    const tool = tools.find((entry) => entry.name === "pc_control_fs_quarantine");
+    assert.ok(tool, "expected fs_quarantine tool to be registered");
+
+    await tool.execute("call-4", {
+      path: "/home/Fahmi/Desktop/Resume.docx",
+      confirm: true,
+    });
+
+    assert.equal(capturedRequest.operation, "fs.quarantine");
+    assert.equal(capturedRequest.arguments.path, "desktop/Resume.docx");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test("scaffold-only bridge tools are not exposed in the plugin surface", () => {
   const tools = createPcControlTools({
     pluginConfig: {

@@ -409,6 +409,18 @@ export function createPcControlTools(api) {
       }),
       mapParams: (params) => ({ source: params.source, destination: params.destination }),
     }),
+      createWriteTool(api, {
+      name: "pc_control_fs_quarantine",
+      label: "PC Control Quarantine Path",
+      description:
+        "Move a file or folder out of the visible working area into the managed pc-control quarantine directory. Use this instead of delete when the goal is to clean up a folder view without permanent removal.",
+      operation: "fs.quarantine",
+      parameters: operationSchema({
+        path: { type: "string", description: "Source path inside allowed roots." },
+        confirm: { type: "boolean", description: "Must be true for mutating actions." },
+      }),
+      mapParams: (params) => ({ path: params.path }),
+    }),
     );
   }
 
