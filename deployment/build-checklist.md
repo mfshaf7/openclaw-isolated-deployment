@@ -20,6 +20,9 @@
 - [ ] Official upstream source recorded (`github.com/openclaw/openclaw`)
 - [ ] `.env` created inside target VM
 - [ ] Persistent storage path confirmed
+- [ ] Standalone `openclaw-telegram-enhanced` repo synced into deployment build copy with `./deployment/sync-telegram-build-copy.sh`
+- [ ] `./deployment/verify-workspace-sync.sh` passes
+- [ ] `./deployment/verify-bridge-workspace.sh` passes
 - [ ] Any built-in channel replacement shipped through a bundled-plugin image build, not `plugins.load.paths`
 - [ ] Any non-bundled local plugin installed through `openclaw plugins install`
 - [ ] `gateway.auth.rateLimit` configured when `gateway.bind` stays beyond loopback

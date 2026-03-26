@@ -165,6 +165,7 @@ Use:
 Before building, verify the sync state:
 
 ```bash
+./deployment/sync-telegram-build-copy.sh
 ./deployment/verify-workspace-sync.sh
 ./deployment/verify-bridge-workspace.sh
 ```

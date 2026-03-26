@@ -55,7 +55,13 @@ When updating Telegram source:
 
 1. make the code/doc change in the standalone `openclaw-telegram-enhanced` repository first
 2. verify it there
-3. copy the intended runtime files into the deployment workspace copy
+3. sync the intended runtime files into the deployment workspace copy:
+
+```bash
+./deployment/sync-telegram-build-copy.sh
+```
+
+This sync helper copies only the shared Telegram runtime files and leaves the intentionally different repo-level files alone.
 4. rebuild the bundled image from `openclaw-isolated-deployment`
 5. verify behavior end to end
 
@@ -66,6 +72,7 @@ Do not treat the deployment workspace copy as an independent long-term fork unle
 Before building, run:
 
 ```bash
+./deployment/sync-telegram-build-copy.sh
 ./deployment/verify-workspace-sync.sh
 ./deployment/verify-bridge-workspace.sh
 ```
@@ -123,7 +130,7 @@ This verifier ensures:
 Before producing a deployment image, confirm:
 
 1. `pc-control-openclaw-plugin/` changes are committed in `openclaw-isolated-deployment`
-2. `openclaw-telegram-enhanced` standalone changes are copied into the deployment workspace copy if needed
+2. `openclaw-telegram-enhanced` standalone changes are synced into the deployment workspace copy if needed
 3. the bridge repository revision is the intended one for the host side
 4. no local-only junk like `node_modules/`, temp logs, or host placeholder directories are being mistaken for source
 

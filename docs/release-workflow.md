@@ -44,8 +44,17 @@ For Telegram changes:
 
 1. make the source change in `openclaw-telegram-enhanced`
 2. commit and verify it there
-3. sync the intended runtime files into:
-   - `openclaw-isolated-deployment/openclaw-telegram-enhanced/`
+3. sync the intended runtime files into the deployment copy:
+
+```bash
+./deployment/sync-telegram-build-copy.sh
+```
+
+This sync helper copies only the shared runtime files used by the bundled image path. It does not overwrite the intentionally different deployment-copy files such as:
+
+- `README.md`
+- `package.json`
+- `docs/`
 4. run:
 
 ```bash
@@ -88,6 +97,7 @@ For deployment/docs/plugin changes that belong only to `openclaw-isolated-deploy
 Run:
 
 ```bash
+./deployment/sync-telegram-build-copy.sh
 ./deployment/verify-workspace-sync.sh
 ./deployment/verify-bridge-workspace.sh
 ```
