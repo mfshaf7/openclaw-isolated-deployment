@@ -1,253 +1,186 @@
-# OpenClaw Local Deployment Guide
+# Local Deployment Guide
 
-## 1. Purpose
+## Purpose
 
-This document defines the **authoritative local deployment path** for this repository.
+This document is the authoritative deployment path for running OpenClaw in the isolated model used by this repository.
 
-It assumes a privacy-first build where OpenClaw does **not** run directly on the primary workstation. Instead, the workstation is used for the documentation and operator workflow, while the runtime itself is isolated inside a dedicated Ubuntu virtual machine.
+It is not a generic OpenClaw install guide. It describes the specific deployment pattern this workspace is built around:
 
-This guide is not a generic install note. It is the controlled implementation path that should be kept current as real deployment issues are discovered and fixed.
+- Windows workstation for the operator
+- WSL for the operator shell and repo maintenance
+- isolated Ubuntu VM for the OpenClaw runtime
+- Docker-based runtime inside that VM
+- optional narrow host-PC control through `pc-control`
 
-## 2. Fixed deployment model
+## Deployment Model
 
-The deployment pattern for this project is:
+```mermaid
+flowchart LR
+    Windows[Windows workstation]
+    WSL[WSL operator workspace]
+    VM[Ubuntu VM]
+    Docker[Docker runtime]
+    Gateway[OpenClaw Gateway]
+    Bridge[pc-control bridge]
 
-**Windows workstation -> Ubuntu WSL workspace for documentation / Codex CLI -> dedicated Ubuntu VM -> Docker-based OpenClaw runtime -> localhost-style host access only**
-
-### Why this model is fixed
-
-This structure gives a stronger privacy and containment story than:
-
-- native host installation on the primary workstation
-- loosely managed Docker on the main host
-- public tunneling during early setup
-
-It also creates a clear trust boundary that is easier to explain, document, and rebuild.
-
-## 3. Non-goals
-
-This guide does not claim to deliver:
-
-- enterprise-ready production architecture
-- public internet exposure
-- high availability
-- broad connector activation from day one
-- a guarantee that local deployment is inherently safe
-
-The local phase exists to establish a controlled baseline only.
-
-## 4. Required companion rule
-
-Every time troubleshooting changes the deployment path, update the documentation in the same session.
-
-That means:
-
-- record the issue in `docs/deployment-issues.md`
-- update this guide if the known-good method changed
-
-A fix is not complete until both are done.
-
-## 5. Baseline assumptions
-
-Recommended starting point for the target VM:
-
-- Ubuntu Server LTS
-- 2–4 vCPU
-- 4–8 GB RAM
-- 40+ GB disk
-- NAT or host-only networking
-- Docker Engine installed inside the VM
-- only the minimum required application port forwarded
-
-Track the real values in `deployment/vm-baseline.md`.
-
-## 6. Operator workspace path
-
-Use the following workspace path consistently:
-
-- workspace root: `~/projects`
-- project root: `~/projects/openclaw-isolated-deployment`
-
-### Workspace and Repository Layout
-
-```text
-~/projects/
-└── openclaw-isolated-deployment/
+    Windows --> WSL
+    WSL --> VM
+    VM --> Docker --> Gateway
+    Gateway --> Bridge
+    Bridge --> Windows
 ```
 
-Create both levels explicitly.
+## Why This Model Exists
 
-## 7. Build workflow
+This deployment model exists to avoid running the assistant runtime directly on the main workstation.
 
-### Step 1 — Prepare the operator workspace
+It gives clearer answers to:
 
-Use the WSL/Codex runbook first so the documentation and troubleshooting environment is stable.
+- where the assistant runs
+- where persistent state lives
+- what can touch the Windows host directly
+- where host-policy enforcement belongs
 
-Reference: [`docs/wsl-codex-runbook.md`](wsl-codex-runbook.md)
+## Non-Goals
 
-### Step 2 — Prepare the target VM
+This guide does not attempt to define:
 
-- Create a dedicated Ubuntu VM.
-- Patch the OS fully.
-- Create a non-root administrative user.
-- Record hypervisor, CPU, RAM, disk, network mode, and forwarded ports.
-- Avoid mixing unrelated services into this VM.
+- highly available production architecture
+- public internet exposure
+- multi-tenant deployment
+- every OpenClaw feature from day one
 
-### Step 3 — Install Docker inside the VM
+The goal is a clean isolated baseline.
 
-- Install Docker Engine and Compose support.
-- Confirm the runtime starts cleanly.
-- Record Docker version and install method.
+## Prerequisites
 
-### Step 4 — Create the deployment workspace inside the VM
+### Operator side
+
+- Windows workstation
+- WSL workspace ready
+- deployment repo checked out
+
+Use:
+- [wsl-codex-runbook.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/wsl-codex-runbook.md)
+
+### Runtime side
+
+- dedicated Ubuntu VM
+- Docker Engine installed
+- enough CPU, RAM, and disk for your workload
+
+Record actual choices in:
+- [vm-baseline.md](/home/mfshaf7/projects/openclaw-isolated-deployment/deployment/vm-baseline.md)
+
+## Baseline Runtime Build
+
+### 1. Prepare the VM
+
+- patch the OS
+- create a non-root admin user
+- keep unrelated workloads off the VM
+
+### 2. Create the runtime workspace
 
 ```bash
 mkdir -p ~/projects
 cd ~/projects
-mkdir -p openclaw-isolated-deployment
-cd ~/projects/openclaw-isolated-deployment
+git clone https://github.com/openclaw/openclaw.git upstream-openclaw
+cd upstream-openclaw
 ```
 
-### Step 5 — Obtain OpenClaw from a trusted source
+### 3. Start from the upstream Docker path
 
-- Use the official upstream repository: `https://github.com/openclaw/openclaw`
-- Record the release, tag, branch, or commit used for the build.
-- Use the documented Docker install path from the upstream project for the first baseline.
-- Do not start from random mirrors or repackaged images for the first build.
+Use the upstream OpenClaw Docker flow as the baseline runtime start.
 
-### Step 6 — Create runtime configuration
-
-- Copy `deployment/.env.example` to a real `.env` inside the VM only.
-- Populate the minimum required values only.
-- Do not enable optional connectors until baseline runtime works.
-- Do not store real secrets in markdown, scripts, or version-controlled compose files.
-- If the gateway remains bound beyond loopback in Docker, configure
-  `gateway.auth.rateLimit` in the runtime config.
-
-### Step 7 — Prepare storage
-
-- Define where persistent state lives.
-- Confirm Docker volumes or directories are writable.
-- Confirm logs can be located later.
-- Record any path ownership adjustments required.
-
-### Step 8 — Start the stack
-
-Start OpenClaw using the documented Docker-based method from the official upstream project.
-
-Baseline upstream flow:
+Example baseline flow:
 
 ```bash
-git clone https://github.com/openclaw/openclaw.git
-cd openclaw
 ./docker-setup.sh
 ```
 
-Preserve at minimum:
+The exact upstream command may evolve. The important point is that this repository starts from the supported upstream Docker path, then layers isolated-deployment changes on top.
 
-- command used
-- container status output
-- startup logs
-- bound ports
-- first warnings or errors
+### 4. Record the first working state
 
-### Step 8a — Apply bundled channel replacements the supported way
+Capture:
 
-If you need to replace a built-in channel such as `telegram`, do not load a
-second plugin with the same id through `plugins.load.paths`.
+- upstream revision used
+- commands run
+- container status
+- exposed ports
+- first startup logs
 
-Use a custom deployment image that replaces the bundled plugin directory
-instead. In this repository that means replacing `/app/extensions/telegram`
-with the contents of `telegram-override-plugin/`.
+## Repository-Specific Layers
 
-That keeps the runtime on the supported bundled-plugin seam and avoids
-duplicate-id override warnings.
+After the upstream baseline is working, this repository adds the isolated-deployment layers.
 
-For non-bundled plugins such as `pc-control`, use managed installs such as:
+### Layer A: bundled Telegram override
+
+Use the local Telegram override as the bundled `telegram` plugin replacement instead of treating it as a second side-loaded `telegram` plugin.
+
+Why:
+
+- `telegram` is a built-in channel
+- deterministic `pc-control` behavior belongs at the channel layer
+- duplicate runtime plugin ids create ambiguity and loader noise
+
+Relevant component:
+- [openclaw-telegram-enhanced/README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/README.md)
+
+### Layer B: pc-control plugin
+
+Install the `pc-control` plugin as a managed local plugin.
 
 ```bash
 openclaw plugins install ./pc-control-openclaw-plugin
 ```
 
-That writes `plugins.installs` provenance records and avoids untracked local
-plugin warnings.
+Relevant component:
+- [pc-control-openclaw-plugin/README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin/README.md)
 
-### Step 8b — Harden the host boundary the supported way
+### Layer C: host bridge
 
-On Windows + WSL + Docker, do not assume that publishing
-`127.0.0.1:hostPort:containerPort` is available or stable. Validate it on the
-real host before treating it as the security boundary.
+Run the `pc-control-bridge` on the Windows/WSL side rather than trying to turn the isolated runtime into the host enforcement point.
 
-If localhost-only port publishing is rejected by the Docker/WSL forwarder, keep
-the upstream publish shape and move the exposure control to the Windows host
-firewall instead.
+Relevant component:
+- [pc-control-bridge/README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/README.md)
 
-For this repository's current implementation that means:
+## Network Boundary
 
-- keep gateway auth in `token` mode
-- add `gateway.auth.rateLimit`
-- enforce inbound restrictions on `18789` and `18790` with Windows Firewall
-- verify that Windows-side `http://127.0.0.1:18789/healthz` still works after
-  the firewall rule is applied
+The intended boundary is:
 
-### Step 9 — Validate baseline function
+- OpenClaw runtime stays in the isolated VM/container
+- host access is authenticated
+- Windows firewall or equivalent host controls may still be the practical enforcement point for forwarded ports
 
-At minimum confirm:
+Do not assume Docker-on-WSL localhost-only publishing is the only control you need or that it will always behave the same on every host.
 
-- containers stay up without fatal restart loops
-- host access works through localhost-style forwarding
-- the UI loads
-- one baseline interaction works
-- logs are readable
-- state location is known
+## Secrets
 
-### Step 10 — Update evidence and issue log
+- keep real secrets out of version control
+- keep runtime secrets in the runtime environment or local secret files
+- treat screenshots and logs as potentially sensitive
 
-After each meaningful attempt:
+## Validation Checklist
 
-- add evidence under `evidence/` if safe to keep
-- update `docs/deployment-issues.md`
-- update this guide if the official path changed
+Minimum validation for a usable isolated deployment:
 
-## 8. Networking standard
+1. gateway starts cleanly
+2. UI or channel access works
+3. persistent state location is known
+4. Telegram or another chosen control surface works
+5. bridge-backed host actions work only through the intended path
 
-The preferred local pattern is:
+For bridge-backed features, the validation standard is stronger:
 
-- VM uses **NAT** or **host-only** networking
-- only the minimum required application port is forwarded
-- the host accesses the service through `http://localhost:<forwarded-port>`
-- no broad LAN exposure
-- no public tunnel during the initial phase
+1. host bridge process exists
+2. bridge local health works
+3. bridge is reachable from the gateway
+4. a real operation succeeds, not just `/healthz`
 
-This keeps the runtime private and makes the execution boundary clear.
+## Related Documents
 
-### Docker/WSL note
-
-In Docker-on-WSL environments, the practical enforcement point may be the
-Windows host firewall rather than `gateway.bind=loopback` or a compose-level
-`127.0.0.1:...` publish rule.
-
-Use the app/runtime controls and the host controls together:
-
-- OpenClaw gateway token auth
-- OpenClaw failed-auth rate limiting
-- Windows Firewall rules for the forwarded OpenClaw ports
-
-## 9. Secrets handling rules
-
-- never commit `.env`
-- keep real values only inside the VM
-- use `.env.example` only for placeholders and documentation
-- do not hardcode tokens into scripts or compose files
-- scrub logs before publishing if they contain sensitive values
-
-## 10. Definition of done for the local phase
-
-The local phase is complete when:
-
-- OpenClaw runs inside the isolated VM
-- host access works through localhost-style forwarding
-- runtime restart behavior is understood
-- persistent state location is known
-- issues encountered are documented
-- the build can be repeated from notes rather than memory
+- [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
+- [security-architecture-review.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/security-architecture-review.md)
+- [pc-control-openclaw-model.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/pc-control-openclaw-model.md)

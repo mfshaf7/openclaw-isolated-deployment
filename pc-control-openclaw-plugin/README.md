@@ -1,64 +1,90 @@
-# PC Control OpenClaw Plugin
+# pc-control OpenClaw Plugin
 
-This plugin exposes typed OpenClaw tools that forward approved operations to the `pc-control-bridge`.
+This plugin exposes the host bridge as **typed OpenClaw tools**.
 
-Install it through:
+It exists so OpenClaw can work with host-PC operations through a narrow, explicit adapter instead of relying on generic shell execution or channel-specific hacks.
 
-```bash
-openclaw plugins install ./pc-control-openclaw-plugin
+## Why This Exists
+
+In the isolated deployment model:
+
+- OpenClaw runtime lives in an isolated VM/container
+- host-PC access is enforced by `pc-control-bridge`
+- user-facing channels such as Telegram need predictable tool behavior
+
+This plugin is the contract between OpenClaw and the bridge.
+
+## Architecture Role
+
+```mermaid
+flowchart LR
+    Gateway[OpenClaw Gateway]
+    Plugin[pc-control plugin]
+    Bridge[pc-control bridge]
+    Host[Windows host]
+
+    Gateway --> Plugin --> Bridge --> Host
 ```
 
-Using the managed installer is the supported clean path because it writes
-`plugins.installs` provenance records. Avoid copying this plugin into
-`~/.openclaw/extensions` by hand for long-lived deployments.
+The plugin translates assistant intent into typed bridge calls with explicit permission groupings and confirmation semantics.
 
-For a containerized OpenClaw runtime talking to a Windows-side or WSL-side
-bridge, the usual bridge URL is:
+## What The Plugin Does
 
-- `http://host.docker.internal:48721`
+It provides:
 
-## Default behavior
+- bridge-backed OpenClaw tools
+- confirmation policy handling
+- path normalization and alias rewrites
+- Telegram-friendly media results for file export and screenshots
+- bridge and recovery client wiring
 
-The plugin is designed for a balanced deployment posture:
+It does **not** own:
 
-- read-only tools are available by default
-- write tools are hidden unless explicitly enabled
-- export tools are hidden unless explicitly enabled
-- browser tab inspection is hidden unless explicitly enabled
+- host path enforcement
+- audit logging
+- channel rendering policy
 
-This keeps normal host insight smooth without turning host control into unrestricted remote execution.
+Those belong to the bridge and channel layers.
 
-## Tool groups
+## Tool Groups
 
-Read-only by default:
+### Read-only by default
 
 - `pc_control_health_check`
 - `pc_control_fs_list`
 - `pc_control_fs_search`
 - `pc_control_fs_read_meta`
 - `pc_control_browser_tabs_list`
+- `pc_control_find_in_allowed_roots`
+- `pc_control_find_ranked_files`
 
-Hidden until `allowWriteOperations: true`:
+### Hidden until `allowWriteOperations: true`
 
 - `pc_control_fs_mkdir`
 - `pc_control_fs_move`
 
-When enabled, these still require `confirm: true` in the tool call.
-
-Hidden until `allowExportOperations: true`:
+### Hidden until `allowExportOperations: true`
 
 - `pc_control_zip_for_export`
 - `pc_control_stage_for_telegram`
+- `pc_control_send_file_to_telegram`
+- `pc_control_capture_desktop_screenshot`
+- `pc_control_send_desktop_screenshot_to_telegram`
 
-When enabled, these still require `confirm: true` in the tool call.
+### Hidden until `allowAdminOperations: true`
 
-Hidden until `allowBrowserInspect: true`:
+- `pc_control_discover_host_locations`
+- `pc_control_browse_host_path`
+- `pc_control_add_allowed_root`
+- `pc_control_remove_allowed_root`
+- `pc_control_set_monitor_power`
+- `pc_control_self_heal`
+
+### Hidden until `allowBrowserInspect: true`
 
 - `pc_control_browser_tab_inspect`
 
-When enabled, this still requires `confirm: true` in the tool call.
-
-## Example config
+## Example Config
 
 ```json
 {
@@ -72,6 +98,7 @@ When enabled, this still requires `confirm: true` in the tool call.
           "authTokenEnv": "PC_CONTROL_BRIDGE_TOKEN",
           "timeoutMs": 10000,
           "allowWriteOperations": false,
+          "allowAdminOperations": false,
           "allowExportOperations": false,
           "allowBrowserInspect": false
         }
@@ -81,7 +108,45 @@ When enabled, this still requires `confirm: true` in the tool call.
 }
 ```
 
-The bridge token should be supplied through the environment variable named by
-`authTokenEnv`.
+The bridge token should come from the environment variable named by `authTokenEnv`.
 
-Write tools can be enabled for organize mode, but they still require `confirm: true` in the tool call.
+## Install
+
+Use the managed installer path:
+
+```bash
+openclaw plugins install ./pc-control-openclaw-plugin
+```
+
+That keeps plugin provenance under OpenClaw’s normal install records instead of relying on ad hoc copies.
+
+## Operational Model
+
+This plugin is designed around three ideas:
+
+1. read-only host insight should be easy
+2. mutating host actions should be deliberate
+3. export to Telegram should stay separate from ordinary file organization
+
+That is why the plugin is split across read, organize, export, browser-inspect, and admin-style actions.
+
+## Tests
+
+Tests live under:
+
+- [config.test.mjs](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin/test/config.test.mjs)
+- [tools.test.mjs](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin/test/tools.test.mjs)
+
+Run:
+
+```bash
+node test/config.test.mjs
+node test/tools.test.mjs
+```
+
+## Related Documents
+
+- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge/README.md)
+- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced/README.md)
+- [pc-control-openclaw-model.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/pc-control-openclaw-model.md)
+- [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)

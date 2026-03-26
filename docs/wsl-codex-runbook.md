@@ -1,110 +1,107 @@
-# WSL + Codex CLI Runbook
+# WSL Operator Workstation Runbook
 
-## 1. Purpose
+## Purpose
 
-This runbook documents the **operator-side setup** used to manage this project from a Windows workstation.
+This runbook documents the **operator workstation setup** used to manage the isolated OpenClaw deployment from a Windows machine.
 
-It exists so the documentation and operator workspace can be rebuilt cleanly if the local environment is lost, changed, or rebuilt.
+Despite the filename, this is not a “Codex install guide”. It is the workstation baseline for:
 
-The runbook covers:
+- editing docs and configs
+- running validation commands
+- maintaining deployment scripts
+- interacting with the isolated runtime from a controlled shell
+
+Codex CLI or any other editor/terminal tooling is optional on top of this baseline.
+
+## What This Runbook Covers
 
 - WSL Ubuntu installation
-- launching the Ubuntu shell
-- base package installation
+- shell and package baseline
 - Node.js installation with `nvm`
-- Codex CLI installation
-- workspace creation at `~/projects/openclaw-isolated-deployment`
-- early failure modes already encountered
+- Git and workspace creation
+- optional operator tooling notes
+- common rebuild checks
 
-## 2. Why this runbook exists
+## Why This Exists
 
-A deployment repository becomes fragile if it depends on memory or ad hoc terminal history.
+The runtime is isolated on purpose. That means the workstation setup still matters, because it is the place where the operator:
 
-This runbook exists to make the operator environment repeatable and to preserve setup details that changed the correct path.
+- reads and edits the deployment repo
+- runs maintenance scripts
+- checks logs and health
+- prepares changes before they are applied to the isolated runtime
 
-## 3. Windows prerequisites
+If the workstation setup is ad hoc, the deployment becomes harder to rebuild and maintain.
+
+## Windows Prerequisites
 
 - Windows with WSL2 support enabled
-- internet access for package downloads
-- ability to open PowerShell as Administrator
+- administrator access to install WSL
+- internet access for packages and source checkouts
 
-## 4. Install Ubuntu WSL
+## Install Ubuntu WSL
 
-Run this in **PowerShell as Administrator**:
+Run in PowerShell as Administrator:
 
 ```powershell
 wsl --install -d Ubuntu
 ```
 
-During first launch, Ubuntu will prompt for a default Unix username and password.
+After first launch, create the normal Ubuntu username and password.
 
-## 5. Verify available WSL distros
-
-Run in PowerShell:
+## Verify WSL
 
 ```powershell
 wsl -l -v
 ```
 
-Expected outcome:
+Expected result:
 
-- `Ubuntu` appears as an installed distro
+- `Ubuntu` appears
+- version is WSL2
 
-## 6. Start the correct shell
-
-Launch Ubuntu explicitly:
+## Start The Correct Shell
 
 ```powershell
 wsl -d Ubuntu
 ```
 
-A normal Ubuntu prompt should look similar to:
+## Base Packages
 
-```bash
-your-user@your-host:~$
-```
-
-## 7. Install base packages inside Ubuntu
-
-Run in Ubuntu:
+Run inside Ubuntu:
 
 ```bash
 cd ~
 sudo apt update
-sudo apt install -y curl ca-certificates git
+sudo apt install -y curl ca-certificates git build-essential
 ```
 
-## 8. Install Node.js using nvm
+## Install Node.js With `nvm`
 
-The correct method for this repository is **nvm-based Node installation**, not apt-managed global Node, because global npm installs later failed with `EACCES` under the apt-managed path.
+Use `nvm` rather than apt-managed Node. This avoids global npm permission problems and keeps the operator environment under the user profile.
 
-### Remove apt-managed Node if already installed
+### Remove apt-managed Node if needed
 
 ```bash
 sudo apt remove -y nodejs npm
 ```
 
-### Install nvm
+### Install `nvm`
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-```
-
-### Load nvm into the current shell
-
-```bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 ```
 
-### Install latest LTS Node
+### Install the current LTS Node
 
 ```bash
 nvm install --lts
 nvm use --lts
 ```
 
-### Verify Node and npm
+### Verify
 
 ```bash
 node -v
@@ -113,29 +110,13 @@ which node
 which npm
 ```
 
-## 9. Install Codex CLI
-
-Run in Ubuntu after Node is managed by `nvm`:
-
-```bash
-npm install -g @openai/codex
-```
-
-Verify installation:
-
-```bash
-codex --help
-```
-
-## 10. Create the project workspace
-
-Run in Ubuntu:
+## Create The Workspace
 
 ```bash
 mkdir -p ~/projects
 cd ~/projects
-mkdir -p openclaw-isolated-deployment
-cd ~/projects/openclaw-isolated-deployment
+git clone <your-repo-url> openclaw-isolated-deployment
+cd openclaw-isolated-deployment
 pwd
 ```
 
@@ -145,53 +126,63 @@ Expected path:
 /home/<your-user>/projects/openclaw-isolated-deployment
 ```
 
-## 11. First working checks
+## Optional Operator Tooling
+
+This repository does not require one specific editor or agent tool.
+
+Common optional choices are:
+
+- Codex CLI
+- VS Code Remote WSL
+- Neovim
+- standard shell aliases and Git helpers
+
+Those are operator preferences, not part of the deployment contract.
+
+If you do install additional CLI tooling, keep it user-local and separate from the isolated runtime.
+
+## First Working Checks
 
 Run:
 
 ```bash
 node -v
 npm -v
-codex --help
+git --version
 pwd
 ls -la
 ```
 
-## 12. Known issue 1 — npm global install `EACCES`
+## Known Failure Mode: apt-managed Node and global npm permissions
 
 ### Symptom
-This failed:
 
-```bash
-npm install -g @openai/codex
-```
-
-with an `EACCES` error attempting to write under `/usr/lib/node_modules`.
+Global npm installs fail with `EACCES` under system-owned directories such as `/usr/lib/node_modules`.
 
 ### Cause
-Node/npm had been installed using apt, so global npm installs targeted root-owned system directories.
+
+Node/npm was installed with apt instead of `nvm`.
 
 ### Fix
-Use `nvm` to manage Node under the user profile, then reinstall Codex CLI globally without `sudo`.
 
-## 13. Operating rule after setup
+Use `nvm` for the workstation shell environment and reinstall any optional operator CLI tools without `sudo`.
 
-For this project, every time the deployment troubleshooting path changes:
+## Rebuild Record
 
-- update `docs/deployment-issues.md`
-- update the authoritative guide if the build method changed
-- check formatting for consistency before considering the change complete
+When rebuilding the operator workstation, record:
 
-## 14. Run record template
+- date
+- Windows version
+- WSL distro version
+- Ubuntu username
+- Node version
+- npm version
+- workspace path
+- extra optional operator tools installed
+- notes about anything that changed from the normal path
 
-Keep a record for each rebuild:
+## Related Documents
 
-- Date:
-- Windows version:
-- WSL distro version:
-- Ubuntu username:
-- Node version:
-- npm version:
-- Codex CLI version or install verification result:
-- Workspace path:
-- Notes:
+- [README.md](/home/mfshaf7/projects/openclaw-isolated-deployment/README.md)
+- [local-deployment-guide.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/local-deployment-guide.md)
+- [repository-map.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/repository-map.md)

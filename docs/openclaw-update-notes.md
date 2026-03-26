@@ -1,53 +1,82 @@
-Pinned OpenClaw base for this deployment: `v2026.3.23-2`
+# OpenClaw Update Notes
 
-Current live image:
-- `openclaw:local`
+## Purpose
 
-Local patch artifact:
-- [openclaw-stable-preview-local.patch](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/openclaw-stable-preview-local.patch)
+This document records how the isolated deployment tracks upstream OpenClaw and what must be checked when the base runtime is updated.
 
-Local Telegram override plugin:
-- workspace copy: [telegram-override-plugin](/home/mfshaf7/projects/openclaw-isolated-deployment/telegram-override-plugin)
-- current official deployment shape: bundled replacement at `/app/extensions/telegram`
+It exists because this workspace is not a stock upstream deployment. The runtime has local deployment layers that must be preserved deliberately during upgrades.
 
-Current plugin/runtime shape:
-- `telegram` loads from the bundled image replacement
-- `pc-control` is installed through managed plugin records in `plugins.installs`
-- gateway auth uses token mode plus failed-auth rate limiting
-- Windows Firewall enforces inbound blocks on ports `18789` and `18790`
+## Current Baseline
 
-Why this exists:
-- `origin/main` did not build cleanly in this environment.
-- The live deployment depends on local Telegram/runtime adjustments plus `pc-control` integration behavior.
-- Future updates should start from a stable tag, then replay this patch deliberately instead of merging onto a moving `main`.
+- pinned OpenClaw base: `v2026.3.23-2`
+- current local image: `openclaw:local`
 
-Minimum verification after any future update:
-- Windows-side gateway health: `http://127.0.0.1:18789/healthz`
-- Telegram plugin loads
-- `pc-control` plugin loads
-- `pc-control` skill is ready
-- bridge health: `http://host.docker.internal:48721/healthz`
-- screenshot send still works
-- host file send still works
-- Windows Firewall rules for `18789` and `18790` are still present if Docker/WSL
-  localhost-only publishing remains unsupported
+## Local Runtime Shape
 
-Known local core-touch points:
+The current deployment shape is:
+
+- upstream OpenClaw as the base runtime
+- bundled Telegram replacement in the image
+- managed `pc-control` plugin install
+- authenticated gateway with rate limiting
+- Windows firewall as part of the practical host exposure boundary
+
+## Local Change Areas To Recheck During Updates
+
+These are the places where updates can affect this deployment model:
+
+- bundled Telegram replacement behavior
+- `pc-control` plugin compatibility
+- bridge reachability and auth assumptions
+- local media handling for `pc_control_*` flows
+- build-time behavior in the local image path
+
+Known local core-touch points currently include:
+
 - `extensions/telegram/src/*`
 - `src/agents/pi-embedded-subscribe.tools.ts`
 - `scripts/tsdown-build.mjs`
 
-Preferred long-term deployment shape:
-- keep more behavior in the `pc-control` plugin/bridge
-- keep Telegram custom behavior in a bundled plugin replacement image, not a config-loaded duplicate
-- keep the core patch file small and reviewable
-- keep host exposure controls at the Windows firewall layer unless the Docker/WSL
-  platform is proven to support a stable localhost-only publish path
+## Deployment-Specific Components
 
-Refactor status:
-- generic reply-layer drift was reverted back to the stable tag
-- bundled Telegram patches were removed from the core image source tree
-- Telegram custom behavior now loads from the bundled replacement in the deployment image
-- remaining core-touching changes are only:
-  - trusted local media for `pc_control_*`
-  - the pinned stable-tag build warning gate in `scripts/tsdown-build.mjs`
+- Telegram override workspace copy:
+  - [openclaw-telegram-enhanced](/home/mfshaf7/projects/openclaw-isolated-deployment/openclaw-telegram-enhanced)
+- managed OpenClaw plugin:
+  - [pc-control-openclaw-plugin](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-openclaw-plugin)
+- host enforcement layer:
+  - [pc-control-bridge](/home/mfshaf7/projects/openclaw-isolated-deployment/pc-control-bridge)
+
+## Upgrade Approach
+
+When updating the base runtime:
+
+1. start from a stable upstream tag, not a moving branch
+2. rebuild the image with the bundled Telegram replacement
+3. verify the managed `pc-control` plugin still loads
+4. verify bridge reachability from the gateway
+5. verify at least one real Telegram host-control action, not just health endpoints
+
+## Minimum Verification After An Update
+
+The minimum acceptable verification set is:
+
+- Windows-side gateway health works
+- Telegram plugin loads
+- `pc-control` plugin loads
+- bridge health works from the gateway container
+- Telegram screenshot still works
+- Telegram file send still works
+- deterministic `pc-control` routing still works
+- host firewall controls are still present if the runtime still depends on them
+
+## Current Direction
+
+The preferred long-term direction remains:
+
+- keep more host behavior in the `pc-control` bridge/plugin layers
+- keep Telegram-specific behavior in the Telegram replacement
+- keep direct core-touching changes as small and reviewable as possible
+
+## Notes
+
+This document should be updated whenever the local runtime baseline changes or when a new upstream version requires deployment-specific adaptation.

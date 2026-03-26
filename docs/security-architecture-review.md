@@ -97,7 +97,7 @@ The recommended balanced model is:
 - keeps the current isolation story intact
 - avoids arbitrary host shell by default
 - supports real user tasks
-- stays publishable as a skill + bridge pattern
+- stays clean as a skill + bridge pattern
 - gives a cleaner security review story than direct unrestricted remote execution
 
 ## Recommended trust boundaries
@@ -263,4 +263,4 @@ It is:
 - low-friction read-only host insight
 - deliberate approval for risky actions
 - no hidden trust-boundary collapse
-- a publishable and reusable skill architecture
+- a reusable skill architecture

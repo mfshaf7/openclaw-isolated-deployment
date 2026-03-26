@@ -50,14 +50,14 @@ Anything else worth preserving.
 
 ---
 
-## Issue 001 — `npm install -g @openai/codex` failed with `EACCES`
+## Issue 001 — user-local global npm installs failed with `EACCES` under apt-managed Node
 
 **Date:** 2026-03-17  
 **Build stage:** workspace  
 **Status:** Fixed  
 
 ### Symptom
-Installing Codex CLI globally failed under Ubuntu WSL.
+Installing an optional user-local CLI tool with `npm install -g ...` failed under Ubuntu WSL.
 
 ### Observed error
 ```text
@@ -69,7 +69,7 @@ npm error Error: EACCES: permission denied, mkdir '/usr/lib/node_modules/@openai
 ```
 
 ### Impact
-Blocked Codex CLI installation and invalidated the earlier assumption that apt-managed Node.js was sufficient.
+Blocked operator CLI installation and invalidated the earlier assumption that apt-managed Node.js was sufficient for the workstation shell.
 
 ### Root cause hypothesis
 Initial suspicion was a one-off permissions problem that might be bypassed with elevated privileges.
@@ -78,7 +78,7 @@ Initial suspicion was a one-off permissions problem that might be bypassed with 
 Node.js and npm had been installed via apt, so global npm packages targeted root-owned directories under `/usr/lib/node_modules`.
 
 ### Fix applied
-Removed apt-managed Node/npm, installed `nvm`, loaded it into the shell, installed LTS Node through `nvm`, then retried the global Codex CLI install without `sudo`.
+Removed apt-managed Node/npm, installed `nvm`, loaded it into the shell, installed LTS Node through `nvm`, then retried the global user-local CLI install without `sudo`.
 
 ```bash
 sudo apt remove -y nodejs npm
@@ -87,15 +87,15 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 nvm install --lts
 nvm use --lts
-npm install -g @openai/codex
-codex --help
+npm install -g <tool>
+<tool> --help
 ```
 
 ### Verification
-`node -v`, `npm -v`, and `codex --help` should complete successfully from the user shell.
+`node -v`, `npm -v`, and the chosen CLI help command should complete successfully from the user shell.
 
 ### Guide update required
-`docs/wsl-codex-runbook.md` and any Word/PDF runbook derived from it
+`docs/wsl-codex-runbook.md`
 
 ### Notes
 Do not normalize `sudo npm install -g ...` as the fix path for this repository.

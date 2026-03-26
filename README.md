@@ -1,104 +1,157 @@
-# openclaw-isolated-deployment
+# OpenClaw Isolated Deployment
 
-Privacy-first deployment workspace for building, troubleshooting, and documenting an **isolated local OpenClaw deployment**.
+This repository is a reference implementation for running **OpenClaw in a truly isolated local environment** instead of collapsing the assistant, host control, and operator tooling into one machine with one trust boundary.
 
-This repository is opinionated on purpose. It does not treat OpenClaw as a quick local install on the primary workstation. It treats it as a system that should be:
+It exists to solve a specific problem:
 
-- isolated from the daily-use host
-- documented as it is built
-- reproducible after failure or rebuild
-- honest about errors, assumptions, and non-goals
-- structured for later publication on GitHub
+- keep the OpenClaw runtime isolated from the daily-use workstation
+- keep host-PC control behind a narrow, explicit bridge
+- keep Telegram and other user-facing control surfaces deterministic enough for real operations
+- document the whole system so another operator can reproduce it without inheriting local folklore
 
-## Deployment standard used here
+This is not just a scratchpad for one machine. The goal is an explainable, reusable deployment model with clear trust boundaries.
 
-The baseline used by this repository is fixed as follows:
+## Why This Repository Exists
 
-- **Workspace root:** `~/projects`
-- **Project root:** `~/projects/openclaw-isolated-deployment`
-- **Primary host:** Windows workstation with WSL Ubuntu for documentation and Codex CLI workflow
-- **Deployment target:** dedicated Ubuntu virtual machine
-- **Runtime:** Docker-based OpenClaw deployment inside the VM
-- **Networking:** NAT or host-only with minimal forwarding only
-- **Access path:** host browser to localhost-style forwarded port
-- **Exposure level:** no public exposure during the local phase
-- **Secrets handling:** real values stored only inside the VM, never in source control
+The default local story for personal assistants is usually some variation of:
 
-This repository exists to support that exact model.
+- install everything on the main workstation
+- connect channels directly
+- grant broad local execution
+- debug problems live in production
 
-The supported plugin model used here is:
+That works quickly, but it muddies the trust boundary. The runtime, the host, the operator shell, and the user-facing surface become the same place.
 
-- built-in channel replacements such as `telegram` are shipped as bundled-plugin
-  replacements in the deployment image
-- non-bundled local plugins such as `pc-control` are installed through
-  `openclaw plugins install` so `plugins.installs` provenance is recorded
+This repository takes the opposite approach:
 
-The supported hardening model used here is:
+- **OpenClaw runtime** lives in an isolated Ubuntu VM
+- **Operator workflow** lives in WSL on the Windows workstation
+- **Host-PC control** goes through a separate `pc-control-bridge`
+- **Telegram behavior** is tightened so host actions stay deterministic and auditable
 
-- keep gateway token auth enabled
-- add `gateway.auth.rateLimit` when the gateway remains bound beyond loopback
-- enforce local-only or trusted-scope access at the Windows host firewall layer
-  when Docker/WSL port publishing cannot safely be restricted to `127.0.0.1`
+That separation is the whole reason this repository exists.
 
-## Repository operating rule
-
-For this project, **a fix is not complete until the documentation is updated too**.
-
-Every meaningful change in approach should result in two updates:
-
-1. the issue log is updated with the failure, diagnosis, and fix
-2. the authoritative guide is updated so the known-good path stays current
-
-This prevents the repository from drifting away from reality.
-
-## Repository structure
+## What This Repository Contains
 
 ```text
-.
+openclaw-isolated-deployment/
 ├── README.md
-├── .gitignore
 ├── docs/
+│   ├── architecture-overview.md
+│   ├── repository-map.md
 │   ├── local-deployment-guide.md
 │   ├── wsl-codex-runbook.md
-│   ├── deployment-issues.md
-│   ├── architecture-notes-template.md
-│   └── production-migration-notes.md
+│   ├── security-architecture-review.md
+│   ├── pc-control-openclaw-model.md
+│   └── ...
 ├── deployment/
-│   ├── .env.example
 │   ├── build-checklist.md
-│   ├── docker-compose.override.example.yml
-│   └── vm-baseline.md
-└── evidence/
-    ├── screenshots/
-    ├── logs/
-    └── validation-notes/
+│   ├── vm-baseline.md
+│   └── telegram-fast-AGENTS.md
+├── pc-control-bridge/
+├── pc-control-openclaw-plugin/
+├── openclaw-telegram-enhanced/
+├── scripts/
+└── upstream-openclaw/
 ```
 
-## Start order
+## Repository Roles
 
-1. Follow [`docs/wsl-codex-runbook.md`](docs/wsl-codex-runbook.md) to prepare the Windows + WSL + Codex CLI workspace.
-2. Fill in [`deployment/vm-baseline.md`](deployment/vm-baseline.md) with the real target VM details.
-3. Use [`docs/local-deployment-guide.md`](docs/local-deployment-guide.md) as the authoritative deployment path.
-4. Record every breakage in [`docs/deployment-issues.md`](docs/deployment-issues.md).
-5. Fold confirmed fixes back into the guide immediately.
+The repository is intentionally split into separate subprojects with separate responsibilities.
 
-## Current known issues already captured
+| Path | Purpose |
+| --- | --- |
+| `upstream-openclaw/` | Vendored upstream OpenClaw baseline used as the runtime foundation and comparison point. |
+| `pc-control-bridge/` | Narrow host-control bridge that enforces policy, allowed roots, audits, and controlled host operations. |
+| `pc-control-openclaw-plugin/` | Typed OpenClaw plugin that exposes the bridge as approved tools instead of generic shell access. |
+| `openclaw-telegram-enhanced/` | Bundled Telegram replacement that adds deterministic `pc-control` routing, screenshots, media delivery, and confirmation flows. |
+| `docs/` | System documentation: architecture, rationale, operator runbooks, known issues, and security review. |
+| `deployment/` | Deployment-specific guidance, checklists, and runtime-facing configuration notes. |
+| `scripts/` | Operator and host automation used to start, repair, and validate the isolated deployment. |
 
-This repository already includes one early setup failure:
+Read the full repo map here:
+- [repository-map.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/repository-map.md)
 
-- `npm install -g @openai/codex` failing with `EACCES` under apt-managed Node.js
+## Architecture
 
-Those are included because real deployment repositories should preserve operational truth, not just the final happy path.
+```mermaid
+flowchart LR
+    User[Telegram / Web UI / Operator] --> Gateway[OpenClaw Gateway in isolated Ubuntu VM]
+    Gateway --> TG[Bundled Telegram override]
+    Gateway --> PCP[pc-control OpenClaw plugin]
+    PCP --> Bridge[pc-control bridge on Windows/WSL host]
+    Bridge --> Host[Windows host resources]
+    Operator[WSL operator workspace] --> Gateway
+    Operator --> Bridge
+```
 
-## Publishing discipline
+The important part is not the specific products. It is the separation of duties:
 
-Before pushing publicly:
+- the **Gateway** orchestrates
+- the **Telegram override** controls channel behavior
+- the **plugin** translates typed assistant intent into allowed operations
+- the **bridge** enforces host policy
+- the **host** is never the trust anchor for OpenClaw itself
 
-- remove real tokens, usernames, internal paths, hostnames, and private IPs
-- scrub screenshots and logs for secrets
-- keep only reproducible findings
-- make sure issue entries are useful to another operator, not just your own machine
+Read the detailed architecture here:
+- [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
 
-## Included downloadable runbook
+## Isolation Model
 
-If you want the richer Word version alongside the markdown docs, place the latest runbook document under a separate release asset or `docs-assets/` folder rather than making the repository depend on `.docx` as the primary source of truth.
+The supported deployment model in this repository is:
+
+**Windows workstation -> WSL operator workspace -> isolated Ubuntu VM -> Docker-based OpenClaw runtime -> explicit bridge back to the Windows host for narrow PC control**
+
+This model is chosen because it gives clear answers to questions like:
+
+- Where does the assistant runtime live?
+- Where do secrets live?
+- Where does host file access actually happen?
+- What is the audit point for host-control requests?
+- What is allowed to touch the primary workstation directly?
+
+## Design Principles
+
+- **Isolation before convenience**: the runtime should not default to living on the main workstation.
+- **Typed host control over raw shell**: host access should go through explicit operations with policy and audit.
+- **Deterministic user flows**: Telegram should not hallucinate tool plans for sensitive host actions.
+- **Documentation follows reality**: if the implementation changes, the docs change in the same work.
+- **Clear by default**: docs should explain why the system exists, not assume private local context.
+
+## Current Scope
+
+This repository currently documents and implements:
+
+- isolated OpenClaw deployment patterns
+- host bridge enforcement for file, health, export, and monitor actions
+- Telegram confirmation and deterministic routing for `pc-control`
+- self-heal and runtime verification patterns for the host bridge
+
+It does **not** claim to be:
+
+- a full production HA platform
+- a general replacement for upstream OpenClaw docs
+- a public multi-tenant service template
+
+## Start Here
+
+For someone new to this repository, the right reading order is:
+
+1. [architecture-overview.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/architecture-overview.md)
+2. [repository-map.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/repository-map.md)
+3. [local-deployment-guide.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/local-deployment-guide.md)
+4. [security-architecture-review.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/security-architecture-review.md)
+5. [pc-control-openclaw-model.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/pc-control-openclaw-model.md)
+
+If you are rebuilding the operator workstation, then use:
+- [wsl-codex-runbook.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/wsl-codex-runbook.md)
+
+## Documentation Standard
+
+In this repository, a fix is not complete until:
+
+1. the implementation is updated
+2. the relevant documentation is updated
+3. the docs explain both the **what** and the **why**
+
+That rule exists because this repository is meant to be useful to the next operator, not only the original one.
