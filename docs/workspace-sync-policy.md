@@ -67,6 +67,7 @@ Before building, run:
 
 ```bash
 ./deployment/verify-workspace-sync.sh
+./deployment/verify-bridge-workspace.sh
 ```
 
 This verifier checks the shared Telegram source tree between:
@@ -95,6 +96,18 @@ For `pc-control-bridge`:
 - the small `pc-control-bridge/` folder inside `openclaw-isolated-deployment` is documentation-oriented
 
 Do not expect the deployment workspace copy to be enough to run or modify the bridge runtime.
+
+Use:
+
+```bash
+./deployment/verify-bridge-workspace.sh
+```
+
+This verifier ensures:
+
+- the deployment bridge folder remains documentation-only
+- the standalone bridge repo exists next to the deployment workspace
+- the standalone bridge repo still contains the expected runtime source directories
 
 ## Reproducible Workspace Shape
 
@@ -126,3 +139,9 @@ Do not blindly copy:
 - local state or exported credentials
 
 Only sync intentional source, docs, and build inputs.
+
+## Release Workflow
+
+For the end-to-end update sequence, read:
+
+- [release-workflow.md](release-workflow.md)

@@ -82,6 +82,7 @@ Expected workspace shape:
 Use:
 - [wsl-codex-runbook.md](wsl-codex-runbook.md)
 - [workspace-sync-policy.md](workspace-sync-policy.md)
+- [release-workflow.md](release-workflow.md)
 
 ### Runtime side
 
@@ -165,6 +166,7 @@ Before building, verify the sync state:
 
 ```bash
 ./deployment/verify-workspace-sync.sh
+./deployment/verify-bridge-workspace.sh
 ```
 
 ### Layer B: pc-control plugin
@@ -236,6 +238,7 @@ To reproduce the documented deployment behavior:
 
 For ongoing workspace maintenance, also follow:
 - [workspace-sync-policy.md](workspace-sync-policy.md)
+- [release-workflow.md](release-workflow.md)
 
 For bridge-backed features, the validation standard is stronger:
 
