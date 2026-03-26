@@ -434,12 +434,12 @@ test("find_in_allowed_roots searches the roots exposed by bridge policy without 
         return {
           ok: true,
           result: {
-            ...(body.operation === "health.check"
+            ...(body.operation === "config.allowed_roots.list"
               ? {
-                  allowedRoots: [
-                    { path: "/mnt/c/Users/Example/Desktop", exists: true },
-                    { path: "/mnt/c/Users/Example/Projects", exists: true },
-                    { path: "/mnt/c/Users/Example/Downloads", exists: true },
+                  roots: [
+                    "/mnt/c/Users/Example/Desktop",
+                    "/mnt/c/Users/Example/Projects",
+                    "/mnt/c/Users/Example/Downloads",
                   ],
                 }
               : {
@@ -477,7 +477,7 @@ test("find_in_allowed_roots searches the roots exposed by bridge policy without 
     const payload = JSON.parse(result.content[0].text);
     assert.deepEqual(
       requests.map((entry) => entry.operation),
-      ["health.check", "fs.search", "fs.search", "fs.search"],
+      ["config.allowed_roots.list", "fs.search", "fs.search", "fs.search"],
     );
     assert.deepEqual(
       requests.slice(1).map((entry) => entry.arguments.root),

@@ -223,12 +223,10 @@ function createAllowedRootsSearchTool(api) {
     async execute(_id, params) {
       const pattern = params?.pattern;
       const limit = Math.max(1, Number(params?.limit || 20));
-      const healthPayload = buildPayload(api, "health.check", {});
-      const healthResult = await callPcControlBridge(config, healthPayload);
-      const allowedRoots = Array.isArray(healthResult?.result?.allowedRoots)
-        ? healthResult.result.allowedRoots
-            .filter((entry) => entry && entry.exists === true && typeof entry.path === "string")
-            .map((entry) => entry.path)
+      const rootsPayload = buildPayload(api, "config.allowed_roots.list", {});
+      const rootsResult = await callPcControlBridge(config, rootsPayload);
+      const allowedRoots = Array.isArray(rootsResult?.result?.roots)
+        ? rootsResult.result.roots.filter((entry) => typeof entry === "string" && entry.trim())
         : [];
       if (allowedRoots.length === 0) {
         denyByPolicy("No allowed roots are currently available from the pc-control bridge");
@@ -407,14 +405,6 @@ export function createPcControlTools(api) {
       }),
       mapParams: (params) => ({ path: params.path }),
     }),
-    createReadTool(api, {
-      name: "pc_control_browser_tabs_list",
-      label: "PC Control List Browser Tabs",
-      description: "List open browser tabs as metadata through the pc-control bridge.",
-      operation: "browser.tabs.list",
-      parameters: operationSchema(),
-      mapParams: () => ({}),
-    }),
   ];
 
   if (config.allowWriteOperations) {
@@ -447,18 +437,6 @@ export function createPcControlTools(api) {
 
   if (config.allowExportOperations) {
     tools.push(
-      createExportTool(api, {
-      name: "pc_control_zip_for_export",
-      label: "PC Control Zip For Export",
-      description: "Create a zip in the bridge staging area for later export.",
-      operation: "fs.zip_for_export",
-      parameters: operationSchema({
-        paths: { type: "array", items: { type: "string" }, description: "Paths to include." },
-        output_name: { type: "string", description: "Desired zip filename." },
-        confirm: { type: "boolean", description: "Must be true for export actions." },
-      }),
-      mapParams: (params) => ({ paths: params.paths, output_name: params.output_name }),
-    }),
       createExportTool(api, {
       name: "pc_control_stage_for_telegram",
       label: "PC Control Stage For Telegram",
