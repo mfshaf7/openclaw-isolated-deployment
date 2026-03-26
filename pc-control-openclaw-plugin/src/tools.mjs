@@ -485,21 +485,5 @@ export function createPcControlTools(api) {
     );
   }
 
-  if (config.allowBrowserInspect) {
-    tools.push(
-      createBrowserInspectTool(api, {
-      name: "pc_control_browser_tab_inspect",
-      label: "PC Control Inspect Browser Tab",
-      description: "Inspect one browser tab through the pc-control bridge.",
-      operation: "browser.tabs.inspect",
-      parameters: operationSchema({
-        tab_id: { type: "string", description: "Tab identifier from browser.tabs.list." },
-        confirm: { type: "boolean", description: "Must be true for deeper browser inspection." },
-      }),
-      mapParams: (params) => ({ tab_id: params.tab_id }),
-    }),
-    );
-  }
-
   return tools;
 }
