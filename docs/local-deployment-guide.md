@@ -161,6 +161,12 @@ The deployment image path in this repository copies the workspace copy. To repro
 Use:
 - [workspace-sync-policy.md](workspace-sync-policy.md)
 
+Before building, verify the sync state:
+
+```bash
+./deployment/verify-workspace-sync.sh
+```
+
 ### Layer B: pc-control plugin
 
 Install the `pc-control` plugin as a managed local plugin.

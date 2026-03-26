@@ -61,6 +61,30 @@ When updating Telegram source:
 
 Do not treat the deployment workspace copy as an independent long-term fork unless that divergence is intentional and documented.
 
+## Verification Command
+
+Before building, run:
+
+```bash
+./deployment/verify-workspace-sync.sh
+```
+
+This verifier checks the shared Telegram source tree between:
+
+- `openclaw-isolated-deployment/openclaw-telegram-enhanced`
+- the standalone `openclaw-telegram-enhanced` repository next to it
+
+It intentionally ignores allowed differences such as:
+
+- `README.md`
+- `package.json`
+- `docs/`
+- `.gitignore`
+- `LICENSE`
+- `CONTRIBUTING.md`
+
+It also fails if unwanted junk such as `node_modules/` is present in the deployment copy.
+
 ## Bridge Rule
 
 The bridge does not follow the same duplication model.
