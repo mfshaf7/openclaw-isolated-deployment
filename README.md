@@ -26,7 +26,7 @@ This repository takes the opposite approach:
 
 - **OpenClaw runtime** lives in an isolated Ubuntu VM
 - **Operator workflow** lives in WSL on the Windows workstation
-- **Host-PC control** goes through a separate `pc-control-bridge`
+- **Host-PC control** goes through a separate `openclaw-host-bridge`
 - **Telegram behavior** is tightened so host actions stay deterministic and auditable
 
 That separation is the whole reason this repository exists.
@@ -47,7 +47,7 @@ openclaw-isolated-deployment/
 ├── deployment/
 │   ├── build-checklist.md
 │   └── vm-baseline.md
-├── pc-control-bridge/
+├── openclaw-host-bridge/
 ├── pc-control-openclaw-plugin/
 ├── openclaw-telegram-enhanced/
 └── ...
@@ -59,7 +59,7 @@ The repository is intentionally split into separate subprojects with separate re
 
 | Path | Purpose |
 | --- | --- |
-| `pc-control-bridge/` | Narrow host-control bridge that enforces policy, allowed roots, audits, and controlled host operations. |
+| `openclaw-host-bridge/` | Narrow host-control bridge that enforces policy, allowed roots, audits, and controlled host operations. |
 | `pc-control-openclaw-plugin/` | Typed OpenClaw plugin that exposes the bridge as approved tools instead of generic shell access. |
 | `openclaw-telegram-enhanced/` | Bundled Telegram replacement that adds deterministic `pc-control` routing, screenshots, media delivery, and confirmation flows. |
 | `docs/` | System documentation: architecture, rationale, operator runbooks, known issues, and security review. |
@@ -78,19 +78,19 @@ Example:
 ```text
 ~/projects/
 ├── openclaw-isolated-deployment/
-├── pc-control-bridge/
+├── openclaw-host-bridge/
 └── openclaw-telegram-enhanced/
 ```
 
 This is the intended split:
 
 - `openclaw-isolated-deployment` is the system and deployment workspace
-- `pc-control-bridge` is the canonical bridge source repository
+- `openclaw-host-bridge` is the canonical bridge source repository
 - `openclaw-telegram-enhanced` is the canonical Telegram channel source repository
 
 Important:
 
-- the bridge source of truth is the standalone `pc-control-bridge` repo, not the small bridge README copy inside this repository
+- the bridge source of truth is the standalone `openclaw-host-bridge` repo, not the small bridge README copy inside this repository
 - the Telegram source of truth is the standalone `openclaw-telegram-enhanced` repo, even though this repository also carries a workspace copy used by the deployment image path
 - this repository still keeps `pc-control-openclaw-plugin/` locally because that plugin is part of the deployment workspace itself
 
@@ -103,7 +103,7 @@ flowchart LR
     User[Telegram / Web UI / Operator] --> Gateway[OpenClaw Gateway in isolated Ubuntu VM]
     Gateway --> TG[Bundled Telegram override]
     Gateway --> PCP[pc-control OpenClaw plugin]
-    PCP --> Bridge[pc-control bridge on Windows/WSL host]
+    PCP --> Bridge[OpenClaw host bridge on Windows/WSL host]
     Bridge --> Host[Windows host resources]
     Operator[WSL operator workspace] --> Gateway
     Operator --> Bridge

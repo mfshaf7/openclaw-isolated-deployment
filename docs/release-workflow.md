@@ -20,7 +20,7 @@ Use these roles:
   - deployment docs
   - deployment image inputs
   - `pc-control-openclaw-plugin/`
-- `pc-control-bridge`
+- `openclaw-host-bridge`
   - canonical bridge runtime source
   - canonical bridge scripts, config examples, and tests
 - `openclaw-telegram-enhanced`
@@ -71,7 +71,7 @@ This sync helper copies only the shared runtime files used by the bundled image 
 
 For bridge changes:
 
-1. make the source change in `pc-control-bridge`
+1. make the source change in `openclaw-host-bridge`
 2. verify the bridge there
 3. run:
 

@@ -3,8 +3,8 @@ set -euo pipefail
 
 ROOT="${1:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
 PARENT="$(cd -- "$ROOT/.." && pwd)"
-DEPLOY_BRIDGE="$ROOT/pc-control-bridge"
-CANON_BRIDGE="${PC_CONTROL_BRIDGE_REPO:-$PARENT/pc-control-bridge}"
+DEPLOY_BRIDGE="$ROOT/openclaw-host-bridge"
+CANON_BRIDGE="${PC_CONTROL_BRIDGE_REPO:-$PARENT/openclaw-host-bridge}"
 
 if [[ ! -d "$DEPLOY_BRIDGE" ]]; then
   echo "Missing deployment bridge folder: $DEPLOY_BRIDGE" >&2
@@ -30,7 +30,7 @@ if [[ -n "$unexpected" ]]; then
   echo "$unexpected" >&2
   echo >&2
   echo "The deployment workspace bridge folder is documentation-oriented only." >&2
-  echo "Runnable bridge code must stay in the standalone pc-control-bridge repository." >&2
+  echo "Runnable bridge code must stay in the standalone openclaw-host-bridge repository." >&2
   exit 1
 fi
 

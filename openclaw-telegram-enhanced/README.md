@@ -24,7 +24,7 @@ flowchart LR
     Telegram[Telegram override plugin]
     Gateway[OpenClaw Gateway]
     PcControl[pc-control plugin]
-    Bridge[pc-control bridge]
+    Bridge[OpenClaw host bridge]
 
     User --> Telegram --> Gateway --> PcControl --> Bridge
 ```
@@ -94,4 +94,4 @@ For the isolated deployment work, the most relevant tests are under:
 - [README.md](../README.md)
 - [architecture-overview.md](../docs/architecture-overview.md)
 - [README.md](../pc-control-openclaw-plugin/README.md)
-- [README.md](../pc-control-bridge/README.md)
+- [README.md](../openclaw-host-bridge/README.md)

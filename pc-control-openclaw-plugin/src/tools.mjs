@@ -229,7 +229,7 @@ function createAllowedRootsSearchTool(api) {
         ? rootsResult.result.roots.filter((entry) => typeof entry === "string" && entry.trim())
         : [];
       if (allowedRoots.length === 0) {
-        denyByPolicy("No allowed roots are currently available from the pc-control bridge");
+        denyByPolicy("No allowed roots are currently available from the OpenClaw host bridge");
       }
       const results = [];
       for (const root of allowedRoots) {
@@ -313,7 +313,7 @@ export function createPcControlTools(api) {
     createReadTool(api, {
       name: "pc_control_health_check",
       label: "PC Control Health Check",
-      description: "Run a read-only health summary against the pc-control bridge.",
+      description: "Run a read-only health summary against the OpenClaw host bridge.",
       operation: "health.check",
       parameters: operationSchema(),
       mapParams: () => ({}),
@@ -321,7 +321,7 @@ export function createPcControlTools(api) {
     createReadTool(api, {
       name: "pc_control_fs_list",
       label: "PC Control List Files",
-      description: "List direct children of an allowed host-PC directory through the pc-control bridge. Prefer this over exec for desktop, downloads, and documents.",
+      description: "List direct children of an allowed host-PC directory through the OpenClaw host bridge. Prefer this over exec for desktop, downloads, and documents.",
       operation: "fs.list",
       parameters: operationSchema({
         path: { type: "string", description: "Allowed root or relative path to list." },
@@ -345,7 +345,7 @@ export function createPcControlTools(api) {
     createReadTool(api, {
       name: "pc_control_fs_search",
       label: "PC Control Search Files",
-      description: "Search files under an allowed host-PC root through the pc-control bridge. Prefer this over exec for host file finding.",
+      description: "Search files under an allowed host-PC root through the OpenClaw host bridge. Prefer this over exec for host file finding.",
       operation: "fs.search",
       parameters: operationSchema({
         root: { type: "string", description: "Allowed root or relative path." },
@@ -375,7 +375,7 @@ export function createPcControlTools(api) {
     createReadTool(api, {
       name: "pc_control_fs_read_meta",
       label: "PC Control Read Metadata",
-      description: "Read file or directory metadata through the pc-control bridge.",
+      description: "Read file or directory metadata through the OpenClaw host bridge.",
       operation: "fs.read_meta",
       parameters: operationSchema({
         path: { type: "string", description: "Path inside allowed roots." },
@@ -389,7 +389,7 @@ export function createPcControlTools(api) {
       createWriteTool(api, {
       name: "pc_control_fs_mkdir",
       label: "PC Control Make Directory",
-      description: "Create a directory inside allowed roots through the pc-control bridge.",
+      description: "Create a directory inside allowed roots through the OpenClaw host bridge.",
       operation: "fs.mkdir",
       parameters: operationSchema({
         path: { type: "string", description: "Directory path inside allowed roots." },
@@ -400,7 +400,7 @@ export function createPcControlTools(api) {
       createWriteTool(api, {
       name: "pc_control_fs_move",
       label: "PC Control Move Path",
-      description: "Move a file or folder inside allowed roots through the pc-control bridge.",
+      description: "Move a file or folder inside allowed roots through the OpenClaw host bridge.",
       operation: "fs.move",
       parameters: operationSchema({
         source: { type: "string", description: "Source path inside allowed roots." },

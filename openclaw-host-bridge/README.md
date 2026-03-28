@@ -1,6 +1,6 @@
-# pc-control-bridge
+# openclaw-host-bridge
 
-`pc-control-bridge` is the host-side enforcement layer for the isolated OpenClaw deployment.
+`openclaw-host-bridge` is the host-side enforcement layer for the isolated OpenClaw deployment.
 
 It exists because the OpenClaw runtime is intentionally isolated in a VM/container and should not directly own the Windows host trust boundary.
 
@@ -49,7 +49,7 @@ Those belong to OpenClaw and the Telegram override layer.
 flowchart LR
     Gateway[OpenClaw Gateway]
     Plugin[pc-control plugin]
-    Bridge[pc-control-bridge]
+    Bridge[openclaw-host-bridge]
     Host[Windows host]
 
     Gateway --> Plugin --> Bridge --> Host
@@ -77,7 +77,7 @@ The bridge groups operations into policy classes.
   - host discovery outside allowed roots
   - monitor power
 
-See the standalone `pc-control-bridge` repository for the operation registry and implementation.
+See the standalone `openclaw-host-bridge` repository for the operation registry and implementation.
 
 ## Notable Operations
 
@@ -99,7 +99,7 @@ See the standalone `pc-control-bridge` repository for the operation registry and
 
 ## Configuration
 
-Policy and runtime config live in the standalone `pc-control-bridge` repository and the operator's local environment.
+Policy and runtime config live in the standalone `openclaw-host-bridge` repository and the operator's local environment.
 
 ## Deployment Notes
 
@@ -115,7 +115,7 @@ The bridge is also part of the self-heal chain, but self-heal should only be con
 
 ## Tests
 
-The runnable bridge tests also live in the standalone `pc-control-bridge` repository.
+The runnable bridge tests also live in the standalone `openclaw-host-bridge` repository.
 
 ## Relationship To The Rest Of The Workspace
 

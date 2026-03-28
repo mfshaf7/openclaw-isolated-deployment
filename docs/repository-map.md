@@ -13,7 +13,7 @@ flowchart TD
     Root[openclaw-isolated-deployment]
     Root --> Docs[docs]
     Root --> Deploy[deployment]
-    Root --> Bridge[pc-control-bridge]
+    Root --> Bridge[openclaw-host-bridge]
     Root --> Plugin[pc-control-openclaw-plugin]
     Root --> Telegram[openclaw-telegram-enhanced]
 ```
@@ -28,13 +28,13 @@ Documentation in this workspace should follow one rule:
 So:
 
 - `docs/` explains how the whole isolated system works
-- `pc-control-bridge/README.md` explains the bridge
+- `openclaw-host-bridge/README.md` explains the bridge
 - `pc-control-openclaw-plugin/README.md` explains the adapter plugin
 - `openclaw-telegram-enhanced/README.md` explains the Telegram channel replacement
 
 Canonical source ownership for this workspace model is:
 
-- standalone repo: `pc-control-bridge`
+- standalone repo: `openclaw-host-bridge`
 - standalone repo: `openclaw-telegram-enhanced`
 - workspace repo: `openclaw-isolated-deployment/pc-control-openclaw-plugin`
 
@@ -42,7 +42,7 @@ That keeps cross-cutting material centralized without hiding component contracts
 
 ## Subproject Roles
 
-### `pc-control-bridge/`
+### `openclaw-host-bridge/`
 
 This is the host-control enforcement layer.
 
@@ -54,7 +54,7 @@ Why it exists:
 
 It is the place where host-specific implementation details belong.
 
-The runnable bridge code lives in the standalone `pc-control-bridge` repository. The bridge folder in this workspace is documentation-oriented.
+The runnable bridge code lives in the standalone `openclaw-host-bridge` repository. The bridge folder in this workspace is documentation-oriented.
 
 ### `pc-control-openclaw-plugin/`
 
@@ -122,6 +122,6 @@ If you want to understand:
 - the deployment baseline: read [local-deployment-guide.md](local-deployment-guide.md)
 - the multi-repo sync rules: read [workspace-sync-policy.md](workspace-sync-policy.md)
 - the host-control security model: read [pc-control-openclaw-model.md](pc-control-openclaw-model.md)
-- the actual bridge contract: read [README.md](../pc-control-bridge/README.md)
+- the actual bridge contract: read [README.md](../openclaw-host-bridge/README.md)
 - the OpenClaw adapter contract: read [README.md](../pc-control-openclaw-plugin/README.md)
 - the Telegram channel contract: read [README.md](../openclaw-telegram-enhanced/README.md)

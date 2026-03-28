@@ -36,7 +36,7 @@ OpenClaw should not become the direct host enforcement point.
 
 ### 2. The host bridge is the enforcement point
 
-The Windows `pc-control-bridge` should own:
+The Windows `openclaw-host-bridge` should own:
 
 - operation allowlist
 - path restrictions

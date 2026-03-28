@@ -6,7 +6,7 @@ PARENT="$(cd -- "$ROOT/.." && pwd)"
 PLUGIN_TOOLS="$ROOT/pc-control-openclaw-plugin/src/tools.mjs"
 PLUGIN_TESTS="$ROOT/pc-control-openclaw-plugin/test/tools.test.mjs"
 PLUGIN_CONFIG_TESTS="$ROOT/pc-control-openclaw-plugin/test/config.test.mjs"
-CANON_BRIDGE="${PC_CONTROL_BRIDGE_REPO:-$PARENT/pc-control-bridge}"
+CANON_BRIDGE="${PC_CONTROL_BRIDGE_REPO:-$PARENT/openclaw-host-bridge}"
 BRIDGE_BROWSER_OPS="$CANON_BRIDGE/src/ops/browser.mjs"
 BRIDGE_FS_OPS="$CANON_BRIDGE/src/ops/fs.mjs"
 

@@ -9,7 +9,7 @@ It exists so OpenClaw can work with host-PC operations through a narrow, explici
 In the isolated deployment model:
 
 - OpenClaw runtime lives in an isolated VM/container
-- host-PC access is enforced by `pc-control-bridge`
+- host-PC access is enforced by `openclaw-host-bridge`
 - user-facing channels such as Telegram need predictable tool behavior
 
 This plugin is the contract between OpenClaw and the bridge.
@@ -20,7 +20,7 @@ This plugin is the contract between OpenClaw and the bridge.
 flowchart LR
     Gateway[OpenClaw Gateway]
     Plugin[pc-control plugin]
-    Bridge[pc-control bridge]
+    Bridge[OpenClaw host bridge]
     Host[Windows host]
 
     Gateway --> Plugin --> Bridge --> Host
@@ -135,7 +135,7 @@ node test/tools.test.mjs
 
 ## Related Documents
 
-- [README.md](../pc-control-bridge/README.md)
+- [README.md](../openclaw-host-bridge/README.md)
 - [README.md](../openclaw-telegram-enhanced/README.md)
 - [pc-control-openclaw-model.md](../docs/pc-control-openclaw-model.md)
 - [architecture-overview.md](../docs/architecture-overview.md)

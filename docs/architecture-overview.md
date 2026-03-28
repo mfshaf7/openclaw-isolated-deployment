@@ -32,7 +32,7 @@ flowchart LR
     VM[OpenClaw Gateway in isolated Ubuntu VM]
     TG[Telegram override plugin]
     PCP[pc-control OpenClaw plugin]
-    Bridge[pc-control bridge on Windows/WSL host]
+    Bridge[OpenClaw host bridge on Windows/WSL host]
     Host[Windows host resources]
 
     User --> TG
@@ -88,7 +88,7 @@ Its job is to expose allowed operations such as:
 
 It exists so OpenClaw can call approved host operations as tools instead of using raw shell execution.
 
-### 4. pc-control bridge
+### 4. OpenClaw host bridge
 
 The bridge is the trust anchor for host control.
 
@@ -111,7 +111,7 @@ flowchart TD
     C[Telegram / UI channel]
     G[Gateway]
     P[pc-control plugin]
-    B[pc-control bridge]
+    B[OpenClaw host bridge]
     H[Windows host]
 
     U --> C --> G --> P --> B --> H

@@ -7,7 +7,7 @@ This document defines how the multi-repo workspace stays aligned.
 It exists because this deployment model intentionally spans more than one repository:
 
 - `openclaw-isolated-deployment`
-- `pc-control-bridge`
+- `openclaw-host-bridge`
 - `openclaw-telegram-enhanced`
 
 Without a clear sync policy, operators can end up with a build workspace that looks correct in Git but does not actually match the intended runtime composition.
@@ -22,7 +22,7 @@ Use these ownership rules:
   - operator runbooks
   - `pc-control-openclaw-plugin/`
   - bundled Telegram build copy under `openclaw-telegram-enhanced/`
-- `pc-control-bridge`
+- `openclaw-host-bridge`
   - runnable bridge source
   - bridge scripts
   - bridge config examples
@@ -99,10 +99,10 @@ It also fails if unwanted junk such as `node_modules/` is present in the deploym
 
 The bridge does not follow the same duplication model.
 
-For `pc-control-bridge`:
+For `openclaw-host-bridge`:
 
 - the standalone repository is the runnable source tree
-- the small `pc-control-bridge/` folder inside `openclaw-isolated-deployment` is documentation-oriented
+- the small `openclaw-host-bridge/` folder inside `openclaw-isolated-deployment` is documentation-oriented
 
 Do not expect the deployment workspace copy to be enough to run or modify the bridge runtime.
 
@@ -123,7 +123,7 @@ This verifier ensures:
 ```text
 ~/projects/
 ├── openclaw-isolated-deployment/
-├── pc-control-bridge/
+├── openclaw-host-bridge/
 └── openclaw-telegram-enhanced/
 ```
 

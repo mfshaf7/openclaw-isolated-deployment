@@ -21,7 +21,7 @@ flowchart LR
     VM[Ubuntu VM]
     Docker[Docker runtime]
     Gateway[OpenClaw Gateway]
-    Bridge[pc-control bridge]
+    Bridge[OpenClaw host bridge]
 
     Windows --> WSL
     WSL --> VM
@@ -66,7 +66,7 @@ The full deployment workspace also expects the related source repositories to be
 mkdir -p ~/projects
 cd ~/projects
 git clone <your-openclaw-isolated-deployment-repo-url>
-git clone <your-pc-control-bridge-repo-url>
+git clone <your-openclaw-host-bridge-repo-url>
 git clone <your-openclaw-telegram-enhanced-repo-url>
 ```
 
@@ -75,7 +75,7 @@ Expected workspace shape:
 ```text
 ~/projects/
 ├── openclaw-isolated-deployment/
-├── pc-control-bridge/
+├── openclaw-host-bridge/
 └── openclaw-telegram-enhanced/
 ```
 
@@ -193,19 +193,19 @@ Source of truth:
 
 ### Layer C: host bridge
 
-Run the `pc-control-bridge` on the Windows/WSL side rather than trying to turn the isolated runtime into the host enforcement point.
+Run the `openclaw-host-bridge` on the Windows/WSL side rather than trying to turn the isolated runtime into the host enforcement point.
 
 Relevant component:
-- [pc-control-bridge/README.md](../pc-control-bridge/README.md)
+- [openclaw-host-bridge/README.md](../openclaw-host-bridge/README.md)
 
 Canonical source:
 
-- `~/projects/pc-control-bridge`
+- `~/projects/openclaw-host-bridge`
 
 Important:
 
 - the bridge runtime and scripts come from the standalone bridge repository
-- the small `pc-control-bridge/` folder inside `openclaw-isolated-deployment` is documentation only in this workspace and should not be treated as the runnable bridge source tree
+- the small `openclaw-host-bridge/` folder inside `openclaw-isolated-deployment` is documentation only in this workspace and should not be treated as the runnable bridge source tree
 
 ## Network Boundary
 
@@ -238,7 +238,7 @@ Minimum validation for a usable isolated deployment:
 To reproduce the documented deployment behavior:
 
 1. use the multi-repo workspace layout shown above
-2. treat `pc-control-bridge` and `openclaw-telegram-enhanced` as standalone source repositories
+2. treat `openclaw-host-bridge` and `openclaw-telegram-enhanced` as standalone source repositories
 3. treat `openclaw-isolated-deployment` as the deployment, documentation, and integration workspace
 4. make sure the Telegram bundled copy used in image builds matches the intended standalone Telegram revision
 5. verify real end-to-end actions after setup instead of relying on static config alone

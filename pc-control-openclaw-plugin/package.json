@@ -2,7 +2,7 @@
   "name": "pc-control",
   "version": "0.1.0",
   "private": true,
-  "description": "OpenClaw plugin scaffold for the pc-control bridge",
+  "description": "OpenClaw plugin scaffold for the OpenClaw host bridge",
   "type": "module",
   "scripts": {
     "test": "node --test"

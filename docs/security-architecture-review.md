@@ -223,7 +223,7 @@ Use the stronger practical boundary instead:
 
 ## Recommended next implementation steps
 
-1. Build and test the Windows `pc-control-bridge` locally on the host.
+1. Build and test the Windows `openclaw-host-bridge` locally on the host.
 2. Start with read-only operations only.
 3. Add policy-controlled organize operations.
 4. Add explicit export/staging operations last.
