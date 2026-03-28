@@ -10,7 +10,7 @@ It is not a generic OpenClaw install guide. It describes the specific deployment
 - WSL for the operator shell and repo maintenance
 - isolated Ubuntu VM for the OpenClaw runtime
 - Docker-based runtime inside that VM
-- optional narrow host-PC control through `pc-control`
+- optional narrow host-PC control through `host-control`
 
 ## Deployment Model
 
@@ -143,7 +143,7 @@ Use the repository-managed Telegram override as the bundled `telegram` plugin re
 Why:
 
 - `telegram` is a built-in channel
-- deterministic `pc-control` behavior belongs at the channel layer
+- deterministic `host-control` behavior belongs at the channel layer
 - duplicate runtime plugin ids create ambiguity and loader noise
 
 Relevant component:
@@ -176,20 +176,20 @@ Or use the gated build wrapper:
 ./deployment/build-openclaw-local.sh
 ```
 
-### Layer B: pc-control plugin
+### Layer B: host-control plugin
 
-Install the `pc-control` plugin as a managed local plugin.
+Install the `host-control` plugin as a managed local plugin.
 
 ```bash
-openclaw plugins install ./pc-control-openclaw-plugin
+openclaw plugins install ./host-control-openclaw-plugin
 ```
 
 Relevant component:
-- [pc-control-openclaw-plugin/README.md](../pc-control-openclaw-plugin/README.md)
+- [host-control-openclaw-plugin/README.md](../host-control-openclaw-plugin/README.md)
 
 Source of truth:
 
-- this repository owns `pc-control-openclaw-plugin/`
+- this repository owns `host-control-openclaw-plugin/`
 
 ### Layer C: host bridge
 
@@ -258,4 +258,4 @@ For bridge-backed features, the validation standard is stronger:
 
 - [architecture-overview.md](architecture-overview.md)
 - [security-architecture-review.md](security-architecture-review.md)
-- [pc-control-openclaw-model.md](pc-control-openclaw-model.md)
+- [host-control-openclaw-model.md](host-control-openclaw-model.md)

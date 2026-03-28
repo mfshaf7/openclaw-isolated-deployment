@@ -3,9 +3,9 @@ set -euo pipefail
 
 ROOT="${1:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
 PARENT="$(cd -- "$ROOT/.." && pwd)"
-DEPLOY_ROUTER="$ROOT/openclaw-telegram-enhanced/src/bot-message-dispatch.pc-control.ts"
+DEPLOY_ROUTER="$ROOT/openclaw-telegram-enhanced/src/bot-message-dispatch.host-control.ts"
 CANON_TELEGRAM="${OPENCLAW_TELEGRAM_REPO:-$PARENT/openclaw-telegram-enhanced}"
-CANON_ROUTER="$CANON_TELEGRAM/src/bot-message-dispatch.pc-control.ts"
+CANON_ROUTER="$CANON_TELEGRAM/src/bot-message-dispatch.host-control.ts"
 
 required_paths=(
   "$DEPLOY_ROUTER"
@@ -19,7 +19,7 @@ for path in "${required_paths[@]}"; do
   fi
 done
 
-echo "Verifying Telegram pc-control router contract"
+echo "Verifying Telegram host-control router contract"
 echo "  deployment router: $DEPLOY_ROUTER"
 echo "  canonical router : $CANON_ROUTER"
 echo
@@ -31,12 +31,12 @@ if ! cmp -s "$DEPLOY_ROUTER" "$CANON_ROUTER"; then
 fi
 
 if rg -n '\\bwhat about\\b|\\bhow about\\b' "$CANON_ROUTER" >/dev/null; then
-  echo "Router still contains overly broad conversational pc-control triggers." >&2
+  echo "Router still contains overly broad conversational host-control triggers." >&2
   exit 1
 fi
 
 if ! rg -n 'answer normally|just answer|no tools?|don'"'"'t use (?:pc-?control|tools?)' "$CANON_ROUTER" >/dev/null; then
-  echo "Router is missing non-pc-control escape phrases." >&2
+  echo "Router is missing non-host-control escape phrases." >&2
   exit 1
 fi
 

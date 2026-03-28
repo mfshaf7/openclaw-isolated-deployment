@@ -48,7 +48,7 @@ Those belong to OpenClaw and the Telegram override layer.
 ```mermaid
 flowchart LR
     Gateway[OpenClaw Gateway]
-    Plugin[pc-control plugin]
+    Plugin[host-control plugin]
     Bridge[openclaw-host-bridge]
     Host[Windows host]
 
@@ -120,6 +120,6 @@ The runnable bridge tests also live in the standalone `openclaw-host-bridge` rep
 ## Relationship To The Rest Of The Workspace
 
 - Architecture and rationale: [architecture-overview.md](../docs/architecture-overview.md)
-- Host-control model: [pc-control-openclaw-model.md](../docs/pc-control-openclaw-model.md)
-- OpenClaw adapter: [README.md](../pc-control-openclaw-plugin/README.md)
+- Host-control model: [host-control-openclaw-model.md](../docs/host-control-openclaw-model.md)
+- OpenClaw adapter: [README.md](../host-control-openclaw-plugin/README.md)
 - Telegram override: [README.md](../openclaw-telegram-enhanced/README.md)

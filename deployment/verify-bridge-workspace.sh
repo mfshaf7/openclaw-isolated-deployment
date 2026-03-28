@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="${1:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
 PARENT="$(cd -- "$ROOT/.." && pwd)"
 DEPLOY_BRIDGE="$ROOT/openclaw-host-bridge"
-CANON_BRIDGE="${PC_CONTROL_BRIDGE_REPO:-$PARENT/openclaw-host-bridge}"
+CANON_BRIDGE="${OPENCLAW_HOST_BRIDGE_REPO:-$PARENT/openclaw-host-bridge}"
 
 if [[ ! -d "$DEPLOY_BRIDGE" ]]; then
   echo "Missing deployment bridge folder: $DEPLOY_BRIDGE" >&2

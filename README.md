@@ -42,13 +42,13 @@ openclaw-isolated-deployment/
 │   ├── local-deployment-guide.md
 │   ├── wsl-codex-runbook.md
 │   ├── security-architecture-review.md
-│   ├── pc-control-openclaw-model.md
+│   ├── host-control-openclaw-model.md
 │   └── ...
 ├── deployment/
 │   ├── build-checklist.md
 │   └── vm-baseline.md
 ├── openclaw-host-bridge/
-├── pc-control-openclaw-plugin/
+├── host-control-openclaw-plugin/
 ├── openclaw-telegram-enhanced/
 └── ...
 ```
@@ -60,8 +60,8 @@ The repository is intentionally split into separate subprojects with separate re
 | Path | Purpose |
 | --- | --- |
 | `openclaw-host-bridge/` | Narrow host-control bridge that enforces policy, allowed roots, audits, and controlled host operations. |
-| `pc-control-openclaw-plugin/` | Typed OpenClaw plugin that exposes the bridge as approved tools instead of generic shell access. |
-| `openclaw-telegram-enhanced/` | Bundled Telegram replacement that adds deterministic `pc-control` routing, screenshots, media delivery, and confirmation flows. |
+| `host-control-openclaw-plugin/` | Typed OpenClaw plugin that exposes the bridge as approved tools instead of generic shell access. |
+| `openclaw-telegram-enhanced/` | Bundled Telegram replacement that adds deterministic `host-control` routing, screenshots, media delivery, and confirmation flows. |
 | `docs/` | System documentation: architecture, rationale, operator runbooks, known issues, and security review. |
 | `deployment/` | Deployment-specific guidance, checklists, and runtime-facing configuration notes. |
 
@@ -92,7 +92,7 @@ Important:
 
 - the bridge source of truth is the standalone `openclaw-host-bridge` repo, not the small bridge README copy inside this repository
 - the Telegram source of truth is the standalone `openclaw-telegram-enhanced` repo, even though this repository also carries a workspace copy used by the deployment image path
-- this repository still keeps `pc-control-openclaw-plugin/` locally because that plugin is part of the deployment workspace itself
+- this repository still keeps `host-control-openclaw-plugin/` locally because that plugin is part of the deployment workspace itself
 
 If someone clones only this repository, they will understand the architecture, but they will not have the full standalone bridge source tree required for the complete host-control workflow.
 
@@ -102,7 +102,7 @@ If someone clones only this repository, they will understand the architecture, b
 flowchart LR
     User[Telegram / Web UI / Operator] --> Gateway[OpenClaw Gateway in isolated Ubuntu VM]
     Gateway --> TG[Bundled Telegram override]
-    Gateway --> PCP[pc-control OpenClaw plugin]
+    Gateway --> PCP[host-control OpenClaw plugin]
     PCP --> Bridge[OpenClaw host bridge on Windows/WSL host]
     Bridge --> Host[Windows host resources]
     Operator[WSL operator workspace] --> Gateway
@@ -148,7 +148,7 @@ This repository currently documents and implements:
 
 - isolated OpenClaw deployment patterns
 - host bridge enforcement for file, health, export, and monitor actions
-- Telegram confirmation and deterministic routing for `pc-control`
+- Telegram confirmation and deterministic routing for `host-control`
 - self-heal and runtime verification patterns for the host bridge
 
 It does **not** claim to be:
@@ -165,7 +165,7 @@ For someone new to this repository, the right reading order is:
 2. [repository-map.md](docs/repository-map.md)
 3. [local-deployment-guide.md](docs/local-deployment-guide.md)
 4. [security-architecture-review.md](docs/security-architecture-review.md)
-5. [pc-control-openclaw-model.md](docs/pc-control-openclaw-model.md)
+5. [host-control-openclaw-model.md](docs/host-control-openclaw-model.md)
 
 If you are rebuilding the operator workstation, then use:
 - [wsl-codex-runbook.md](docs/wsl-codex-runbook.md)

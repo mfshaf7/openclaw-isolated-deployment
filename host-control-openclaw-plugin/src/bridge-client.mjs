@@ -1,6 +1,6 @@
-export async function callPcControlBridge(config, payload) {
+export async function callHostControlBridge(config, payload) {
   if (!config.enabled) {
-    throw new Error("pc-control plugin is disabled");
+    throw new Error("host-control plugin is disabled");
   }
   if (!config.authToken) {
     throw new Error(`Missing bridge auth token env: ${config.authTokenEnv}`);

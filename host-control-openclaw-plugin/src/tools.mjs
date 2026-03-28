@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
-import { callPcControlBridge } from "./bridge-client.mjs";
-import { resolvePcControlConfig } from "./config.mjs";
+import { callHostControlBridge } from "./bridge-client.mjs";
+import { resolveHostControlConfig } from "./config.mjs";
 
 function jsonResult(payload) {
   return {
@@ -191,7 +191,7 @@ function normalizeHostArguments(payload) {
 }
 
 function createReadTool(api, definition) {
-  const config = resolvePcControlConfig(api);
+  const config = resolveHostControlConfig(api);
   return {
     name: definition.name,
     label: definition.label,
@@ -203,17 +203,17 @@ function createReadTool(api, definition) {
         definition.operation,
         normalizeHostArguments(definition.mapParams(params)),
       );
-      const result = await callPcControlBridge(config, payload);
+      const result = await callHostControlBridge(config, payload);
       return jsonResult(result.result);
     },
   };
 }
 
 function createAllowedRootsSearchTool(api) {
-  const config = resolvePcControlConfig(api);
+  const config = resolveHostControlConfig(api);
   return {
-    name: "pc_control_find_in_allowed_roots",
-    label: "PC Control Find In Allowed Roots",
+    name: "host_control_find_in_allowed_roots",
+    label: "Host Control Find In Allowed Roots",
     description:
       "Search across the host roots currently allowed by bridge policy. Use this for generic host file finding instead of broad roots like /, ~/Desktop, or /mnt/c/Users/<name>.",
     parameters: operationSchema({
@@ -224,7 +224,7 @@ function createAllowedRootsSearchTool(api) {
       const pattern = params?.pattern;
       const limit = Math.max(1, Number(params?.limit || 20));
       const rootsPayload = buildPayload(api, "config.allowed_roots.list", {});
-      const rootsResult = await callPcControlBridge(config, rootsPayload);
+      const rootsResult = await callHostControlBridge(config, rootsPayload);
       const allowedRoots = Array.isArray(rootsResult?.result?.roots)
         ? rootsResult.result.roots.filter((entry) => typeof entry === "string" && entry.trim())
         : [];
@@ -241,7 +241,7 @@ function createAllowedRootsSearchTool(api) {
           pattern,
           limit: limit - results.length,
         });
-        const result = await callPcControlBridge(config, payload);
+        const result = await callHostControlBridge(config, payload);
         const entries = Array.isArray(result?.result?.results) ? result.result.results : [];
         for (const entry of entries) {
           results.push({ ...entry, matched_root: root });
@@ -260,7 +260,7 @@ function createAllowedRootsSearchTool(api) {
 }
 
 function createWriteTool(api, definition) {
-  const config = resolvePcControlConfig(api);
+  const config = resolveHostControlConfig(api);
   return {
     name: definition.name,
     label: definition.label,
@@ -268,7 +268,7 @@ function createWriteTool(api, definition) {
     parameters: definition.parameters,
     async execute(_id, params) {
       if (!config.allowWriteOperations) {
-        denyByPolicy("Write operations are disabled in pc-control plugin config");
+        denyByPolicy("Write operations are disabled in host-control plugin config");
       }
       requireConfirmedAction(params, definition.label);
       const payload = buildPayload(
@@ -276,14 +276,14 @@ function createWriteTool(api, definition) {
         definition.operation,
         normalizeHostArguments(definition.mapParams(params)),
       );
-      const result = await callPcControlBridge(config, payload);
+      const result = await callHostControlBridge(config, payload);
       return jsonResult(result.result);
     },
   };
 }
 
 function createExportTool(api, definition) {
-  const config = resolvePcControlConfig(api);
+  const config = resolveHostControlConfig(api);
   return {
     name: definition.name,
     label: definition.label,
@@ -291,7 +291,7 @@ function createExportTool(api, definition) {
     parameters: definition.parameters,
     async execute(_id, params) {
       if (!config.allowExportOperations) {
-        denyByPolicy("Export operations are disabled in pc-control plugin config");
+        denyByPolicy("Export operations are disabled in host-control plugin config");
       }
       if (!shouldBypassExplicitConfirm(api, definition)) {
         requireConfirmedAction(params, definition.label);
@@ -301,26 +301,26 @@ function createExportTool(api, definition) {
         definition.operation,
         normalizeHostArguments(definition.mapParams(params)),
       );
-      const result = await callPcControlBridge(config, payload);
+      const result = await callHostControlBridge(config, payload);
       return mediaResult(config, result.result);
     },
   };
 }
 
-export function createPcControlTools(api) {
-  const config = resolvePcControlConfig(api);
+export function createHostControlTools(api) {
+  const config = resolveHostControlConfig(api);
   const tools = [
     createReadTool(api, {
-      name: "pc_control_health_check",
-      label: "PC Control Health Check",
+      name: "host_control_health_check",
+      label: "Host Control Health Check",
       description: "Run a read-only health summary against the OpenClaw host bridge.",
       operation: "health.check",
       parameters: operationSchema(),
       mapParams: () => ({}),
     }),
     createReadTool(api, {
-      name: "pc_control_fs_list",
-      label: "PC Control List Files",
+      name: "host_control_fs_list",
+      label: "Host Control List Files",
       description: "List direct children of an allowed host-PC directory through the OpenClaw host bridge. Prefer this over exec for desktop, downloads, and documents.",
       operation: "fs.list",
       parameters: operationSchema({
@@ -329,8 +329,8 @@ export function createPcControlTools(api) {
       mapParams: (params) => ({ path: params.path }),
     }),
     createReadTool(api, {
-      name: "pc_control_list_host_folder",
-      label: "PC Control List Host Folder",
+      name: "host_control_list_host_folder",
+      label: "Host Control List Host Folder",
       description: "Primary tool for listing a host-PC folder inside allowed roots. Use this instead of exec for desktop, downloads, and documents.",
       operation: "fs.list",
       parameters: operationSchema({
@@ -343,8 +343,8 @@ export function createPcControlTools(api) {
       mapParams: (params) => ({ path: params.path }),
     }),
     createReadTool(api, {
-      name: "pc_control_fs_search",
-      label: "PC Control Search Files",
+      name: "host_control_fs_search",
+      label: "Host Control Search Files",
       description: "Search files under an allowed host-PC root through the OpenClaw host bridge. Prefer this over exec for host file finding.",
       operation: "fs.search",
       parameters: operationSchema({
@@ -355,10 +355,10 @@ export function createPcControlTools(api) {
       mapParams: (params) => ({ root: params.root, pattern: params.pattern, limit: params.limit }),
     }),
     createReadTool(api, {
-      name: "pc_control_find_host_files",
-      label: "PC Control Find Host Files",
+      name: "host_control_find_host_files",
+      label: "Host Control Find Host Files",
       description:
-        "Primary tool for finding files on the host PC inside one known allowed root. The root must be a single host alias like desktop, documents, or downloads, or one verified relative subpath. Do not pass ~ paths, Windows profile guesses, or multiple roots joined together; use pc_control_find_in_allowed_roots when the user did not name one specific root.",
+        "Primary tool for finding files on the host PC inside one known allowed root. The root must be a single host alias like desktop, documents, or downloads, or one verified relative subpath. Do not pass ~ paths, Windows profile guesses, or multiple roots joined together; use host_control_find_in_allowed_roots when the user did not name one specific root.",
       operation: "fs.search",
       parameters: operationSchema({
         root: {
@@ -373,8 +373,8 @@ export function createPcControlTools(api) {
     }),
     createAllowedRootsSearchTool(api),
     createReadTool(api, {
-      name: "pc_control_fs_read_meta",
-      label: "PC Control Read Metadata",
+      name: "host_control_fs_read_meta",
+      label: "Host Control Read Metadata",
       description: "Read file or directory metadata through the OpenClaw host bridge.",
       operation: "fs.read_meta",
       parameters: operationSchema({
@@ -387,8 +387,8 @@ export function createPcControlTools(api) {
   if (config.allowWriteOperations) {
     tools.push(
       createWriteTool(api, {
-      name: "pc_control_fs_mkdir",
-      label: "PC Control Make Directory",
+      name: "host_control_fs_mkdir",
+      label: "Host Control Make Directory",
       description: "Create a directory inside allowed roots through the OpenClaw host bridge.",
       operation: "fs.mkdir",
       parameters: operationSchema({
@@ -398,8 +398,8 @@ export function createPcControlTools(api) {
       mapParams: (params) => ({ path: params.path }),
     }),
       createWriteTool(api, {
-      name: "pc_control_fs_move",
-      label: "PC Control Move Path",
+      name: "host_control_fs_move",
+      label: "Host Control Move Path",
       description: "Move a file or folder inside allowed roots through the OpenClaw host bridge.",
       operation: "fs.move",
       parameters: operationSchema({
@@ -410,10 +410,10 @@ export function createPcControlTools(api) {
       mapParams: (params) => ({ source: params.source, destination: params.destination }),
     }),
       createWriteTool(api, {
-      name: "pc_control_fs_quarantine",
-      label: "PC Control Quarantine Path",
+      name: "host_control_fs_quarantine",
+      label: "Host Control Quarantine Path",
       description:
-        "Move a file or folder out of the visible working area into the managed pc-control quarantine directory. Use this instead of delete when the goal is to clean up a folder view without permanent removal.",
+        "Move a file or folder out of the visible working area into the managed host-control quarantine directory. Use this instead of delete when the goal is to clean up a folder view without permanent removal.",
       operation: "fs.quarantine",
       parameters: operationSchema({
         path: { type: "string", description: "Source path inside allowed roots." },
@@ -427,9 +427,9 @@ export function createPcControlTools(api) {
   if (config.allowExportOperations) {
     tools.push(
       createExportTool(api, {
-      name: "pc_control_stage_for_telegram",
-      label: "PC Control Stage For Telegram",
-      description: "Stage a host-PC file for Telegram delivery. Use this only when the user explicitly asks to stage or prepare a file for later Telegram delivery. Do not use this for direct 'send it to me' requests when pc_control_send_file_to_telegram fits.",
+      name: "host_control_stage_for_telegram",
+      label: "Host Control Stage For Telegram",
+      description: "Stage a host-PC file for Telegram delivery. Use this only when the user explicitly asks to stage or prepare a file for later Telegram delivery. Do not use this for direct 'send it to me' requests when host_control_send_file_to_telegram fits.",
       operation: "fs.stage_for_telegram",
       bypassConfirmInTelegramDelivery: true,
       parameters: operationSchema({
@@ -439,9 +439,9 @@ export function createPcControlTools(api) {
       mapParams: (params) => ({ path: params.path }),
     }),
       createExportTool(api, {
-      name: "pc_control_send_file_to_telegram",
-      label: "PC Control Send File To Telegram",
-      description: "Primary tool for sending a host-PC file to the user in Telegram. Use this after the exact host file is identified for any direct 'send', 'send it to me', or 'resend it' request. Do not use pc_control_stage_for_telegram when the user is asking for immediate delivery.",
+      name: "host_control_send_file_to_telegram",
+      label: "Host Control Send File To Telegram",
+      description: "Primary tool for sending a host-PC file to the user in Telegram. Use this after the exact host file is identified for any direct 'send', 'send it to me', or 'resend it' request. Do not use host_control_stage_for_telegram when the user is asking for immediate delivery.",
       operation: "fs.stage_for_telegram",
       bypassConfirmInTelegramDelivery: true,
       parameters: operationSchema({
@@ -451,8 +451,8 @@ export function createPcControlTools(api) {
       mapParams: (params) => ({ path: params.path }),
     }),
       createExportTool(api, {
-      name: "pc_control_capture_desktop_screenshot",
-      label: "PC Control Capture Desktop Screenshot",
+      name: "host_control_capture_desktop_screenshot",
+      label: "Host Control Capture Desktop Screenshot",
       description: "Capture the current host-PC desktop as a screenshot and send it back through Telegram. Use this for desktop screenshot requests instead of browser tab tools.",
       operation: "display.screenshot",
       parameters: operationSchema({
@@ -461,8 +461,8 @@ export function createPcControlTools(api) {
       mapParams: () => ({ file_name: "desktop-screenshot.png" }),
     }),
       createExportTool(api, {
-      name: "pc_control_send_desktop_screenshot_to_telegram",
-      label: "PC Control Send Desktop Screenshot To Telegram",
+      name: "host_control_send_desktop_screenshot_to_telegram",
+      label: "Host Control Send Desktop Screenshot To Telegram",
       description: "Primary tool for 'send me a screenshot of my desktop' requests. Capture the current host-PC desktop and return it directly to Telegram. Do not replace this with manual screenshot instructions when available.",
       operation: "display.screenshot",
       bypassConfirmInTelegramDelivery: true,

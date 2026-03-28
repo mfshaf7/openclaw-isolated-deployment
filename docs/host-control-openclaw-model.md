@@ -1,8 +1,8 @@
-# PC Control OpenClaw Model
+# Host Control OpenClaw Model
 
 ## Purpose
 
-This document defines how the current OpenClaw deployment should evolve to support `pc-control` without collapsing the isolation boundary.
+This document defines how the current OpenClaw deployment should evolve to support `host-control` without collapsing the isolation boundary.
 
 It is intentionally balanced:
 
@@ -28,7 +28,7 @@ That means host-PC control must not be modeled as a normal OpenClaw local capabi
 OpenClaw should:
 
 - receive the user's request
-- decide whether `pc-control` applies
+- decide whether `host-control` applies
 - call a typed adapter surface
 - present approvals and summaries
 
@@ -75,13 +75,13 @@ The preferred OpenClaw-side shape is a **typed adapter**, not raw transport acce
 
 Recommended operations:
 
-- `pc_control.health_check`
-- `pc_control.fs_list`
-- `pc_control.fs_search`
-- `pc_control.fs_read_meta`
-- `pc_control.fs_mkdir`
-- `pc_control.fs_move`
-- `pc_control.stage_for_telegram`
+- `host_control.health_check`
+- `host_control.fs_list`
+- `host_control.fs_search`
+- `host_control.fs_read_meta`
+- `host_control.fs_mkdir`
+- `host_control.fs_move`
+- `host_control.stage_for_telegram`
 
 These can be implemented by:
 
@@ -107,8 +107,8 @@ These can be implemented by:
 
 ### Adjust over time
 
-- add a dedicated `pc_control` adapter path instead of trying to force host access through generic `exec`
-- keep `commands.nativeSkills` enabled so `/skill pc-control` remains easy to invoke
+- add a dedicated `host_control` adapter path instead of trying to force host access through generic `exec`
+- keep `commands.nativeSkills` enabled so `/skill host-control` remains easy to invoke
 - do not treat `tools.exec.host: node` as the host-PC control path unless a real paired node exists
 - consider sandbox hardening after the host bridge exists, but do not introduce friction prematurely
 
@@ -120,12 +120,12 @@ The OpenClaw-side adapter should be enabled with a low-friction default profile:
 {
   "plugins": {
     "entries": {
-      "pc-control": {
+      "host-control": {
         "enabled": true,
         "config": {
           "enabled": true,
           "bridgeUrl": "http://127.0.0.1:48721",
-          "authTokenEnv": "PC_CONTROL_BRIDGE_TOKEN",
+          "authTokenEnv": "OPENCLAW_HOST_BRIDGE_TOKEN",
           "timeoutMs": 10000,
           "allowWriteOperations": false,
           "allowExportOperations": false,
@@ -139,10 +139,10 @@ The OpenClaw-side adapter should be enabled with a low-friction default profile:
 
 This profile keeps the useful read-only tools visible:
 
-- `pc_control_health_check`
-- `pc_control_fs_list`
-- `pc_control_fs_search`
-- `pc_control_fs_read_meta`
+- `host_control_health_check`
+- `host_control_fs_list`
+- `host_control_fs_search`
+- `host_control_fs_read_meta`
 
 And it keeps higher-risk tools hidden until they are deliberately enabled.
 
@@ -152,7 +152,7 @@ For the current isolated deployment, the balanced recommendation is:
 
 - keep generic `exec` available for container-local administration
 - do not present generic `exec` as the normal path for host-PC actions
-- use `pc-control` for host insight and later host organization/export
+- use `host-control` for host insight and later host organization/export
 - enable write operations only after the bridge policy is tested on the real Windows host
 - enable export only after file-send and screenshot paths are proven on the real bridge
 
@@ -177,4 +177,4 @@ It is:
 
 ## Next implementation step
 
-Build the OpenClaw-side adapter that maps typed `pc-control` actions to the host bridge, then test the flow with read-only operations first.
+Build the OpenClaw-side adapter that maps typed `host-control` actions to the host bridge, then test the flow with read-only operations first.

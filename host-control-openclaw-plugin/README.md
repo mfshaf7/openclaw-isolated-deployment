@@ -1,4 +1,4 @@
-# pc-control OpenClaw Plugin
+# host-control OpenClaw Plugin
 
 This plugin exposes the host bridge as **typed OpenClaw tools**.
 
@@ -19,7 +19,7 @@ This plugin is the contract between OpenClaw and the bridge.
 ```mermaid
 flowchart LR
     Gateway[OpenClaw Gateway]
-    Plugin[pc-control plugin]
+    Plugin[host-control plugin]
     Bridge[OpenClaw host bridge]
     Host[Windows host]
 
@@ -50,25 +50,25 @@ Those belong to the bridge and channel layers.
 
 ### Read-only by default
 
-- `pc_control_health_check`
-- `pc_control_find_in_allowed_roots`
-- `pc_control_fs_list`
-- `pc_control_list_host_folder`
-- `pc_control_fs_search`
-- `pc_control_find_host_files`
-- `pc_control_fs_read_meta`
+- `host_control_health_check`
+- `host_control_find_in_allowed_roots`
+- `host_control_fs_list`
+- `host_control_list_host_folder`
+- `host_control_fs_search`
+- `host_control_find_host_files`
+- `host_control_fs_read_meta`
 
 ### Hidden until `allowWriteOperations: true`
 
-- `pc_control_fs_mkdir`
-- `pc_control_fs_move`
+- `host_control_fs_mkdir`
+- `host_control_fs_move`
 
 ### Hidden until `allowExportOperations: true`
 
-- `pc_control_stage_for_telegram`
-- `pc_control_send_file_to_telegram`
-- `pc_control_capture_desktop_screenshot`
-- `pc_control_send_desktop_screenshot_to_telegram`
+- `host_control_stage_for_telegram`
+- `host_control_send_file_to_telegram`
+- `host_control_capture_desktop_screenshot`
+- `host_control_send_desktop_screenshot_to_telegram`
 
 ## Example Config
 
@@ -76,12 +76,12 @@ Those belong to the bridge and channel layers.
 {
   "plugins": {
     "entries": {
-      "pc-control": {
+      "host-control": {
         "enabled": true,
         "config": {
           "enabled": true,
           "bridgeUrl": "http://host.docker.internal:48721",
-          "authTokenEnv": "PC_CONTROL_BRIDGE_TOKEN",
+          "authTokenEnv": "OPENCLAW_HOST_BRIDGE_TOKEN",
           "timeoutMs": 10000,
           "allowWriteOperations": false,
           "allowAdminOperations": false,
@@ -101,7 +101,7 @@ The bridge token should come from the environment variable named by `authTokenEn
 Use the managed installer path:
 
 ```bash
-openclaw plugins install ./pc-control-openclaw-plugin
+openclaw plugins install ./host-control-openclaw-plugin
 ```
 
 That keeps plugin provenance under OpenClaw’s normal install records instead of relying on ad hoc copies.
@@ -137,5 +137,5 @@ node test/tools.test.mjs
 
 - [README.md](../openclaw-host-bridge/README.md)
 - [README.md](../openclaw-telegram-enhanced/README.md)
-- [pc-control-openclaw-model.md](../docs/pc-control-openclaw-model.md)
+- [host-control-openclaw-model.md](../docs/host-control-openclaw-model.md)
 - [architecture-overview.md](../docs/architecture-overview.md)

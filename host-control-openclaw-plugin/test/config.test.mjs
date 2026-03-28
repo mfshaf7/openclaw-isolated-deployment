@@ -1,20 +1,20 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { resolvePcControlConfig } from "../src/config.mjs";
+import { resolveHostControlConfig } from "../src/config.mjs";
 
-test("resolvePcControlConfig requires an explicit bridge URL", () => {
-  delete process.env.PC_CONTROL_BRIDGE_URL;
-  delete process.env.PC_CONTROL_BRIDGE_TOKEN;
+test("resolveHostControlConfig requires an explicit bridge URL", () => {
+  delete process.env.OPENCLAW_HOST_BRIDGE_URL;
+  delete process.env.OPENCLAW_HOST_BRIDGE_TOKEN;
   assert.throws(
-    () => resolvePcControlConfig({ pluginConfig: {} }),
-    /requires plugin config\.bridgeUrl or PC_CONTROL_BRIDGE_URL/,
+    () => resolveHostControlConfig({ pluginConfig: {} }),
+    /requires plugin config\.bridgeUrl or OPENCLAW_HOST_BRIDGE_URL/,
   );
 });
 
-test("resolvePcControlConfig uses explicit plugin config and trims trailing slash", () => {
+test("resolveHostControlConfig uses explicit plugin config and trims trailing slash", () => {
   process.env.OPENCLAW_GATEWAY_TOKEN = "token";
-  const config = resolvePcControlConfig({
+  const config = resolveHostControlConfig({
     pluginConfig: {
       bridgeUrl: "http://host.docker.internal:48721/",
       authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -34,10 +34,10 @@ test("resolvePcControlConfig uses explicit plugin config and trims trailing slas
   });
 });
 
-test("resolvePcControlConfig trims env-provided bridge settings", () => {
-  process.env.PC_CONTROL_BRIDGE_URL = "  http://host.docker.internal:48721/  ";
-  process.env.PC_CONTROL_BRIDGE_TOKEN = "  token-from-env  ";
-  const config = resolvePcControlConfig({
+test("resolveHostControlConfig trims env-provided bridge settings", () => {
+  process.env.OPENCLAW_HOST_BRIDGE_URL = "  http://host.docker.internal:48721/  ";
+  process.env.OPENCLAW_HOST_BRIDGE_TOKEN = "  token-from-env  ";
+  const config = resolveHostControlConfig({
     pluginConfig: {},
   });
   assert.equal(config.bridgeUrl, "http://host.docker.internal:48721");

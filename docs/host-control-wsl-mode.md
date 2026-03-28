@@ -1,6 +1,6 @@
-# PC Control WSL Mode
+# Host Control WSL Mode
 
-This document defines the current WSL-backed deployment mode for `pc-control`.
+This document defines the current WSL-backed deployment mode for `host-control`.
 
 ## Scope
 
@@ -15,8 +15,8 @@ It is intentionally a **supported mode**, not a hidden local hack.
 
 ## Components
 
-- ClawHub-style skill: `pc-control`
-- OpenClaw plugin: `pc-control`
+- ClawHub-style skill: `host-control`
+- OpenClaw plugin: `host-control`
 - Host bridge: `openclaw-host-bridge`
 - Startup helpers in the standalone bridge repo:
   - `openclaw-host-bridge/scripts/start-openclaw-host-bridge.sh`
@@ -63,9 +63,9 @@ Customize:
 
 The startup scripts support these environment variables:
 
-- `PC_CONTROL_ROOT`
-- `PC_CONTROL_BRIDGE_CONFIG`
-- `PC_CONTROL_NODE_BIN_DIR`
+- `HOST_CONTROL_ROOT`
+- `HOST_CONTROL_BRIDGE_CONFIG`
+- `HOST_CONTROL_NODE_BIN_DIR`
 - `OPENCLAW_HOME`
 - `OPENCLAW_CONFIG_PATH`
 
@@ -73,19 +73,19 @@ The startup scripts support these environment variables:
 
 The hidden launcher supports:
 
-- `PC_CONTROL_WSL_DISTRO`
-- `PC_CONTROL_ROOT`
-- `PC_CONTROL_WINDOWS_LAUNCHER`
+- `HOST_CONTROL_WSL_DISTRO`
+- `HOST_CONTROL_ROOT`
+- `HOST_CONTROL_WINDOWS_LAUNCHER`
 
 ## OpenClaw plugin profile
 
 Install the plugin through the managed installer:
 
 ```bash
-openclaw plugins install ./pc-control-openclaw-plugin
+openclaw plugins install ./host-control-openclaw-plugin
 ```
 
-That keeps `pc-control` on the supported plugin-install path and avoids
+That keeps `host-control` on the supported plugin-install path and avoids
 untracked local plugin warnings.
 
 Recommended starting profile:
@@ -94,7 +94,7 @@ Recommended starting profile:
 {
   "plugins": {
     "entries": {
-      "pc-control": {
+      "host-control": {
         "enabled": true,
         "config": {
           "enabled": true,
@@ -136,7 +136,7 @@ That means:
 
 - deployment and docs come from `openclaw-isolated-deployment`
 - bridge scripts, config examples, and bridge runtime come from `openclaw-host-bridge`
-- the OpenClaw plugin continues to come from `openclaw-isolated-deployment/pc-control-openclaw-plugin`
+- the OpenClaw plugin continues to come from `openclaw-isolated-deployment/host-control-openclaw-plugin`
 
 ## Known limitations
 

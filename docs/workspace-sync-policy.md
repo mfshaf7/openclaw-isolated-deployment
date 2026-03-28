@@ -20,7 +20,7 @@ Use these ownership rules:
   - deployment docs
   - architecture docs
   - operator runbooks
-  - `pc-control-openclaw-plugin/`
+  - `host-control-openclaw-plugin/`
   - bundled Telegram build copy under `openclaw-telegram-enhanced/`
 - `openclaw-host-bridge`
   - runnable bridge source
@@ -76,7 +76,7 @@ Before building, run:
 ./deployment/verify-workspace-sync.sh
 ./deployment/verify-telegram-router-contract.sh
 ./deployment/verify-bridge-workspace.sh
-./deployment/verify-pc-control-contract.sh
+./deployment/verify-host-control-contract.sh
 ```
 
 This verifier checks the shared Telegram source tree between:
@@ -131,11 +131,11 @@ This verifier ensures:
 
 Before producing a deployment image, confirm:
 
-1. `pc-control-openclaw-plugin/` changes are committed in `openclaw-isolated-deployment`
+1. `host-control-openclaw-plugin/` changes are committed in `openclaw-isolated-deployment`
 2. `openclaw-telegram-enhanced` standalone changes are synced into the deployment workspace copy if needed
 3. the Telegram deterministic router still requires explicit host-scoped intent and does not hijack normal chat
 4. the bridge repository revision is the intended one for the host side
-5. scaffold-only bridge capabilities are still hidden from the `pc-control` plugin surface
+5. scaffold-only bridge capabilities are still hidden from the `host-control` plugin surface
 6. no local-only junk like `node_modules/`, temp logs, or host placeholder directories are being mistaken for source
 
 ## What Not To Sync Blindly

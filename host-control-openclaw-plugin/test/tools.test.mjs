@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { createPcControlTools } from "../src/tools.mjs";
+import { createHostControlTools } from "../src/tools.mjs";
 
 test("stage_for_telegram export tool emits MEDIA:path for staged files", async () => {
   process.env.OPENCLAW_GATEWAY_TOKEN = "token";
@@ -21,7 +21,7 @@ test("stage_for_telegram export tool emits MEDIA:path for staged files", async (
   });
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -37,7 +37,7 @@ test("stage_for_telegram export tool emits MEDIA:path for staged files", async (
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_stage_for_telegram");
+    const tool = tools.find((entry) => entry.name === "host_control_stage_for_telegram");
     assert.ok(tool, "expected stage_for_telegram tool to be registered");
 
     const result = await tool.execute("call-1", {
@@ -70,7 +70,7 @@ test("send_file_to_telegram tool emits MEDIA:path for staged files", async () =>
   });
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -86,7 +86,7 @@ test("send_file_to_telegram tool emits MEDIA:path for staged files", async () =>
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_send_file_to_telegram");
+    const tool = tools.find((entry) => entry.name === "host_control_send_file_to_telegram");
     assert.ok(tool, "expected send_file_to_telegram tool to be registered");
 
     const result = await tool.execute("call-send", {
@@ -119,7 +119,7 @@ test("stage_for_telegram in Telegram DM does not require an extra confirm flag",
   });
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -135,7 +135,7 @@ test("stage_for_telegram in Telegram DM does not require an extra confirm flag",
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_stage_for_telegram");
+    const tool = tools.find((entry) => entry.name === "host_control_stage_for_telegram");
     assert.ok(tool, "expected stage_for_telegram tool to be registered");
 
     const result = await tool.execute("call-stage-no-confirm", {
@@ -169,7 +169,7 @@ test("send_file_to_telegram in Telegram DM does not require an extra confirm fla
   });
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -185,7 +185,7 @@ test("send_file_to_telegram in Telegram DM does not require an extra confirm fla
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_send_file_to_telegram");
+    const tool = tools.find((entry) => entry.name === "host_control_send_file_to_telegram");
     assert.ok(tool, "expected send_file_to_telegram tool to be registered");
 
     const result = await tool.execute("call-send-no-confirm", {
@@ -204,7 +204,7 @@ test("send_file_to_telegram in Telegram DM does not require an extra confirm fla
 test("send_file_to_telegram still requires confirm outside Telegram delivery contexts", async () => {
   process.env.OPENCLAW_GATEWAY_TOKEN = "token";
 
-  const tools = createPcControlTools({
+  const tools = createHostControlTools({
     pluginConfig: {
       bridgeUrl: "http://host.docker.internal:48721",
       authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -216,7 +216,7 @@ test("send_file_to_telegram still requires confirm outside Telegram delivery con
       requesterSenderId: "1337",
     },
   });
-  const tool = tools.find((entry) => entry.name === "pc_control_send_file_to_telegram");
+  const tool = tools.find((entry) => entry.name === "host_control_send_file_to_telegram");
   assert.ok(tool, "expected send_file_to_telegram tool to be registered");
 
   await assert.rejects(
@@ -250,7 +250,7 @@ test("capture_desktop_screenshot emits MEDIA:path for staged screenshots", async
   };
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -266,7 +266,7 @@ test("capture_desktop_screenshot emits MEDIA:path for staged screenshots", async
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_capture_desktop_screenshot");
+    const tool = tools.find((entry) => entry.name === "host_control_capture_desktop_screenshot");
     assert.ok(tool, "expected capture_desktop_screenshot tool to be registered");
 
     const result = await tool.execute("call-shot", { confirm: true });
@@ -303,7 +303,7 @@ test("send_desktop_screenshot_to_telegram emits MEDIA:path for staged screenshot
   };
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -319,7 +319,7 @@ test("send_desktop_screenshot_to_telegram emits MEDIA:path for staged screenshot
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_send_desktop_screenshot_to_telegram");
+    const tool = tools.find((entry) => entry.name === "host_control_send_desktop_screenshot_to_telegram");
     assert.ok(tool, "expected send_desktop_screenshot_to_telegram tool to be registered");
 
     const result = await tool.execute("call-shot-send", { confirm: true });
@@ -360,7 +360,7 @@ test("capture_desktop_screenshot emits one MEDIA block per captured display", as
   });
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -376,7 +376,7 @@ test("capture_desktop_screenshot emits one MEDIA block per captured display", as
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_capture_desktop_screenshot");
+    const tool = tools.find((entry) => entry.name === "host_control_capture_desktop_screenshot");
     assert.ok(tool, "expected capture_desktop_screenshot tool to be registered");
 
     const result = await tool.execute("call-shot-multi", { confirm: true });
@@ -399,7 +399,7 @@ test("capture_desktop_screenshot emits one MEDIA block per captured display", as
 test("host folder and host search aliases are registered", () => {
   process.env.OPENCLAW_GATEWAY_TOKEN = "token";
 
-  const tools = createPcControlTools({
+  const tools = createHostControlTools({
     pluginConfig: {
       bridgeUrl: "http://host.docker.internal:48721",
       authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -412,12 +412,12 @@ test("host folder and host search aliases are registered", () => {
     },
   });
 
-  assert.ok(tools.find((entry) => entry.name === "pc_control_list_host_folder"));
-  assert.ok(tools.find((entry) => entry.name === "pc_control_find_host_files"));
-  assert.ok(tools.find((entry) => entry.name === "pc_control_find_in_allowed_roots"));
-  assert.ok(tools.find((entry) => entry.name === "pc_control_send_file_to_telegram"));
-  assert.ok(tools.find((entry) => entry.name === "pc_control_capture_desktop_screenshot"));
-  assert.ok(tools.find((entry) => entry.name === "pc_control_send_desktop_screenshot_to_telegram"));
+  assert.ok(tools.find((entry) => entry.name === "host_control_list_host_folder"));
+  assert.ok(tools.find((entry) => entry.name === "host_control_find_host_files"));
+  assert.ok(tools.find((entry) => entry.name === "host_control_find_in_allowed_roots"));
+  assert.ok(tools.find((entry) => entry.name === "host_control_send_file_to_telegram"));
+  assert.ok(tools.find((entry) => entry.name === "host_control_capture_desktop_screenshot"));
+  assert.ok(tools.find((entry) => entry.name === "host_control_send_desktop_screenshot_to_telegram"));
 });
 
 test("find_in_allowed_roots searches the roots exposed by bridge policy without broad roots", async () => {
@@ -455,7 +455,7 @@ test("find_in_allowed_roots searches the roots exposed by bridge policy without 
   };
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -466,7 +466,7 @@ test("find_in_allowed_roots searches the roots exposed by bridge policy without 
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_find_in_allowed_roots");
+    const tool = tools.find((entry) => entry.name === "host_control_find_in_allowed_roots");
     assert.ok(tool, "expected find_in_allowed_roots tool to be registered");
 
     const result = await tool.execute("call-find", {
@@ -515,7 +515,7 @@ test("search tool rewrites guessed Linux home desktop paths to host aliases", as
   };
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -526,7 +526,7 @@ test("search tool rewrites guessed Linux home desktop paths to host aliases", as
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_fs_search");
+    const tool = tools.find((entry) => entry.name === "host_control_fs_search");
     assert.ok(tool, "expected fs_search tool to be registered");
 
     await tool.execute("call-2", {
@@ -564,7 +564,7 @@ test("list tool rewrites guessed Windows profile desktop paths to host aliases",
   };
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -575,7 +575,7 @@ test("list tool rewrites guessed Windows profile desktop paths to host aliases",
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_fs_list");
+    const tool = tools.find((entry) => entry.name === "host_control_fs_list");
     assert.ok(tool, "expected fs_list tool to be registered");
 
     await tool.execute("call-2b", {
@@ -609,7 +609,7 @@ test("search tool rewrites guessed WSL profile desktop paths to host aliases", a
   };
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -620,7 +620,7 @@ test("search tool rewrites guessed WSL profile desktop paths to host aliases", a
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_fs_search");
+    const tool = tools.find((entry) => entry.name === "host_control_fs_search");
     assert.ok(tool, "expected fs_search tool to be registered");
 
     await tool.execute("call-2c", {
@@ -656,7 +656,7 @@ test("move tool rewrites guessed Linux home paths in source and destination", as
   };
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -668,7 +668,7 @@ test("move tool rewrites guessed Linux home paths in source and destination", as
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_fs_move");
+    const tool = tools.find((entry) => entry.name === "host_control_fs_move");
     assert.ok(tool, "expected fs_move tool to be registered");
 
     await tool.execute("call-3", {
@@ -705,7 +705,7 @@ test("quarantine tool rewrites guessed Linux home paths", async () => {
   };
 
   try {
-    const tools = createPcControlTools({
+    const tools = createHostControlTools({
       pluginConfig: {
         bridgeUrl: "http://host.docker.internal:48721",
         authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -717,7 +717,7 @@ test("quarantine tool rewrites guessed Linux home paths", async () => {
         requesterSenderId: "1337",
       },
     });
-    const tool = tools.find((entry) => entry.name === "pc_control_fs_quarantine");
+    const tool = tools.find((entry) => entry.name === "host_control_fs_quarantine");
     assert.ok(tool, "expected fs_quarantine tool to be registered");
 
     await tool.execute("call-4", {
@@ -733,7 +733,7 @@ test("quarantine tool rewrites guessed Linux home paths", async () => {
 });
 
 test("scaffold-only bridge tools are not exposed in the plugin surface", () => {
-  const tools = createPcControlTools({
+  const tools = createHostControlTools({
     pluginConfig: {
       bridgeUrl: "http://host.docker.internal:48721",
       authTokenEnv: "OPENCLAW_GATEWAY_TOKEN",
@@ -748,7 +748,7 @@ test("scaffold-only bridge tools are not exposed in the plugin surface", () => {
   });
 
   const names = new Set(tools.map((entry) => entry.name));
-  assert.equal(names.has("pc_control_browser_tab_inspect"), false);
-  assert.equal(names.has("pc_control_browser_tabs_list"), false);
-  assert.equal(names.has("pc_control_zip_for_export"), false);
+  assert.equal(names.has("host_control_browser_tab_inspect"), false);
+  assert.equal(names.has("host_control_browser_tabs_list"), false);
+  assert.equal(names.has("host_control_zip_for_export"), false);
 });

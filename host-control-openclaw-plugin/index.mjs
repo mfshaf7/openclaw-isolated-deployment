@@ -1,7 +1,7 @@
-import { createPcControlTools } from "./src/tools.mjs";
+import { createHostControlTools } from "./src/tools.mjs";
 
 export default function register(api) {
-  const tools = createPcControlTools(api);
+  const tools = createHostControlTools(api);
   for (const tool of tools) {
     api.registerTool(tool);
   }

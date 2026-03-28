@@ -22,7 +22,7 @@ echo
 "$ROOT/deployment/verify-workspace-sync.sh" "$ROOT"
 "$ROOT/deployment/verify-telegram-router-contract.sh" "$ROOT"
 "$ROOT/deployment/verify-bridge-workspace.sh" "$ROOT"
-"$ROOT/deployment/verify-pc-control-contract.sh" "$ROOT"
+"$ROOT/deployment/verify-host-control-contract.sh" "$ROOT"
 
 echo
 echo "Building Docker image..."

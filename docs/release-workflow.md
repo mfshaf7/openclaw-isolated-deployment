@@ -19,7 +19,7 @@ Use these roles:
 - `openclaw-isolated-deployment`
   - deployment docs
   - deployment image inputs
-  - `pc-control-openclaw-plugin/`
+  - `host-control-openclaw-plugin/`
 - `openclaw-host-bridge`
   - canonical bridge runtime source
   - canonical bridge scripts, config examples, and tests
@@ -101,7 +101,7 @@ Run:
 ./deployment/verify-workspace-sync.sh
 ./deployment/verify-telegram-router-contract.sh
 ./deployment/verify-bridge-workspace.sh
-./deployment/verify-pc-control-contract.sh
+./deployment/verify-host-control-contract.sh
 ```
 
 Or use the bundled wrapper:
@@ -114,7 +114,7 @@ This wrapper:
 
 1. syncs the Telegram build copy
 2. runs both workspace verifiers
-3. verifies that the exposed `pc-control` tool surface does not leak scaffold-only bridge capabilities
+3. verifies that the exposed `host-control` tool surface does not leak scaffold-only bridge capabilities
 4. builds the bundled image with the Telegram replacement
 
 These checks are meant to fail fast if:
@@ -124,14 +124,14 @@ These checks are meant to fail fast if:
 - junk like `node_modules/` is present in the embedded Telegram copy
 - the deployment bridge folder stopped being documentation-only
 - the standalone bridge repo is missing expected source directories
-- the `pc-control` plugin still exposes scaffold-only bridge operations such as browser inspection or zip export
+- the `host-control` plugin still exposes scaffold-only bridge operations such as browser inspection or zip export
 
 ## Required Verification After Build
 
 After building and deploying, verify real behavior instead of only startup health:
 
 1. Telegram plugin loads
-2. `pc-control` plugin loads
+2. `host-control` plugin loads
 3. bridge is reachable from the gateway
 4. one real read path works
 5. one real send/export path works

@@ -1,7 +1,7 @@
 {
-  "id": "pc-control",
-  "name": "PC Control",
-  "description": "Typed adapter tools for the pc-control host bridge.",
+  "id": "host-control",
+  "name": "Host Control",
+  "description": "Typed adapter tools for the OpenClaw host bridge.",
   "configSchema": {
     "type": "object",
     "additionalProperties": false,

@@ -3,10 +3,10 @@ set -euo pipefail
 
 ROOT="${1:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
 PARENT="$(cd -- "$ROOT/.." && pwd)"
-PLUGIN_TOOLS="$ROOT/pc-control-openclaw-plugin/src/tools.mjs"
-PLUGIN_TESTS="$ROOT/pc-control-openclaw-plugin/test/tools.test.mjs"
-PLUGIN_CONFIG_TESTS="$ROOT/pc-control-openclaw-plugin/test/config.test.mjs"
-CANON_BRIDGE="${PC_CONTROL_BRIDGE_REPO:-$PARENT/openclaw-host-bridge}"
+PLUGIN_TOOLS="$ROOT/host-control-openclaw-plugin/src/tools.mjs"
+PLUGIN_TESTS="$ROOT/host-control-openclaw-plugin/test/tools.test.mjs"
+PLUGIN_CONFIG_TESTS="$ROOT/host-control-openclaw-plugin/test/config.test.mjs"
+CANON_BRIDGE="${OPENCLAW_HOST_BRIDGE_REPO:-$PARENT/openclaw-host-bridge}"
 BRIDGE_BROWSER_OPS="$CANON_BRIDGE/src/ops/browser.mjs"
 BRIDGE_FS_OPS="$CANON_BRIDGE/src/ops/fs.mjs"
 
@@ -26,12 +26,12 @@ for path in "${required_paths[@]}"; do
   fi
 done
 
-echo "Verifying pc-control contract surface"
+echo "Verifying host-control contract surface"
 echo "  plugin tools : $PLUGIN_TOOLS"
 echo "  bridge repo  : $CANON_BRIDGE"
 echo
 
-if rg -n 'pc_control_browser_tab_inspect|pc_control_browser_tabs_list|pc_control_zip_for_export' "$PLUGIN_TOOLS" >/dev/null; then
+if rg -n 'host_control_browser_tab_inspect|host_control_browser_tabs_list|host_control_zip_for_export' "$PLUGIN_TOOLS" >/dev/null; then
   echo "Scaffold-only tool name still exposed in plugin surface" >&2
   exit 1
 fi
@@ -51,5 +51,5 @@ node "$PLUGIN_CONFIG_TESTS"
 node --test "$CANON_BRIDGE"/test/*.test.mjs
 
 echo
-echo "pc-control contract verification passed."
+echo "host-control contract verification passed."
 echo "Scaffold-only bridge operations remain hidden from the plugin surface."

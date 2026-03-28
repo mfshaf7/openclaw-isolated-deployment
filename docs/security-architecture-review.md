@@ -9,7 +9,7 @@ Balanced here means:
 - preserve the current isolation model
 - reduce avoidable risk
 - avoid operator burden that would make the deployment annoying to use
-- keep a clean path for adding a future `pc-control` host bridge
+- keep a clean path for adding a future `host-control` host bridge
 
 ## Current deployment shape
 
@@ -145,7 +145,7 @@ Implication:
 
 ### Add
 
-- `pc-control` skill
+- `host-control` skill
 - Windows host bridge with narrow JSON API
 - read-only default policy
 - explicit export policy
@@ -235,7 +235,7 @@ From a balanced cybersecurity-architecture perspective, the current OpenClaw dep
 
 - good isolation at the runtime boundary
 - incomplete at the host-control boundary
-- acceptable for local use if host access stays behind `pc-control`
+- acceptable for local use if host access stays behind `host-control`
 
 Recommended stance now:
 
@@ -243,7 +243,7 @@ Recommended stance now:
 - keep Telegram DM approvals
 - keep elevated mode disabled
 - keep generic `exec` for container-local administration only
-- prefer the `pc-control` plugin for host-facing actions
+- prefer the `host-control` plugin for host-facing actions
 
 Recommended changes only after the bridge is live and stable:
 

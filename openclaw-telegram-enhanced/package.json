@@ -2,7 +2,7 @@
   "name": "@mfshaf7/telegram-plugin",
   "version": "2026.3.22",
   "private": false,
-  "description": "Enhanced bundled Telegram replacement for OpenClaw with pc-control-aware delivery and host screenshot enforcement",
+  "description": "Enhanced bundled Telegram replacement for OpenClaw with host-control-aware delivery and host screenshot enforcement",
   "type": "module",
   "dependencies": {
     "@grammyjs/runner": "^2.0.3",

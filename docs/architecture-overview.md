@@ -31,7 +31,7 @@ flowchart LR
     Ops[Operator in WSL workspace]
     VM[OpenClaw Gateway in isolated Ubuntu VM]
     TG[Telegram override plugin]
-    PCP[pc-control OpenClaw plugin]
+    PCP[host-control OpenClaw plugin]
     Bridge[OpenClaw host bridge on Windows/WSL host]
     Host[Windows host resources]
 
@@ -66,14 +66,14 @@ The Telegram override exists because the default channel behavior was not strict
 
 It adds:
 
-- deterministic `pc-control` routing
+- deterministic `host-control` routing
 - inline confirmation buttons
 - controlled desktop screenshot handling
 - reply shaping that avoids fake tool narratives
 
 This is packaged as a bundled channel replacement because `telegram` is a built-in channel, not a normal side-loaded extension.
 
-### 3. pc-control OpenClaw plugin
+### 3. host-control OpenClaw plugin
 
 This plugin is the typed adapter between OpenClaw and the host bridge.
 
@@ -110,7 +110,7 @@ flowchart TD
     U[User Input]
     C[Telegram / UI channel]
     G[Gateway]
-    P[pc-control plugin]
+    P[host-control plugin]
     B[OpenClaw host bridge]
     H[Windows host]
 
@@ -190,12 +190,12 @@ sequenceDiagram
     participant U as User
     participant T as Telegram override
     participant G as Gateway
-    participant P as pc-control plugin
+    participant P as host-control plugin
     participant B as Bridge
     participant H as Host
 
     U->>T: "show me what's inside spotify-local"
-    T->>G: deterministic pc-control intent
+    T->>G: deterministic host-control intent
     G->>P: typed browse request
     P->>B: fs.search / fs.list
     B->>H: constrained host file access
@@ -213,7 +213,7 @@ sequenceDiagram
     participant U as User
     participant T as Telegram override
     participant G as Gateway
-    participant P as pc-control plugin
+    participant P as host-control plugin
     participant B as Bridge
 
     U->>T: "send me no 1"
@@ -235,7 +235,7 @@ sequenceDiagram
     participant U as User
     participant T as Telegram override
     participant G as Gateway
-    participant P as pc-control plugin
+    participant P as host-control plugin
     participant B as Bridge
     participant H as Windows monitor stack
 
@@ -282,4 +282,4 @@ It is specifically a reference for **isolated local deployment with controlled h
 - [repository-map.md](repository-map.md)
 - [local-deployment-guide.md](local-deployment-guide.md)
 - [security-architecture-review.md](security-architecture-review.md)
-- [pc-control-openclaw-model.md](pc-control-openclaw-model.md)
+- [host-control-openclaw-model.md](host-control-openclaw-model.md)

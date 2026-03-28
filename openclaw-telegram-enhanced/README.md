@@ -2,13 +2,13 @@
 
 This package replaces the bundled OpenClaw `telegram` channel in deployments that need stricter, more deterministic Telegram behavior for host-control workflows.
 
-It exists because Telegram was not just another channel in this system. It became a primary control surface for sensitive `pc-control` actions.
+It exists because Telegram was not just another channel in this system. It became a primary control surface for sensitive `host-control` actions.
 
 ## Why This Exists
 
 The default channel behavior was not enough for this deployment because Telegram needed to support:
 
-- deterministic `pc-control` routing
+- deterministic `host-control` routing
 - button-based confirmations
 - desktop screenshot capture and delivery
 - media delivery for staged host files
@@ -23,10 +23,10 @@ flowchart LR
     User[Telegram user]
     Telegram[Telegram override plugin]
     Gateway[OpenClaw Gateway]
-    PcControl[pc-control plugin]
+    HostControl[host-control plugin]
     Bridge[OpenClaw host bridge]
 
-    User --> Telegram --> Gateway --> PcControl --> Bridge
+    User --> Telegram --> Gateway --> HostControl --> Bridge
 ```
 
 ## What This Plugin Adds
@@ -35,9 +35,9 @@ This override currently carries the Telegram-side logic for:
 
 - forced host desktop screenshot handling
 - Telegram document delivery for bridge-staged files and screenshots
-- deterministic `pc-control` proposal and confirmation flows
+- deterministic `host-control` proposal and confirmation flows
 - inline `Proceed` / `Cancel` button handling
-- direct Telegram routing for selected `pc-control` operations
+- direct Telegram routing for selected `host-control` operations
 - suppression of misleading freeform replies on tool-required host actions
 
 ## Deployment Model
@@ -56,9 +56,9 @@ The unsupported long-lived approach is:
 
 This distinction matters because `telegram` is a built-in channel, not a normal optional extension.
 
-## Why This Is Separate From `pc-control`
+## Why This Is Separate From `host-control`
 
-The `pc-control` plugin knows how to expose bridge operations as tools.
+The `host-control` plugin knows how to expose bridge operations as tools.
 
 This Telegram override knows how to make those tool-backed flows behave well in Telegram:
 
@@ -74,7 +74,7 @@ Keeping those responsibilities separate avoids mixing channel UX with host polic
 The most important code paths in this repository for the isolated deployment are:
 
 - [bot-message-dispatch.ts](src/bot-message-dispatch.ts)
-- [bot-message-dispatch.pc-control.ts](src/bot-message-dispatch.pc-control.ts)
+- [bot-message-dispatch.host-control.ts](src/bot-message-dispatch.host-control.ts)
 - [bot-handlers.runtime.ts](src/bot-handlers.runtime.ts)
 - [bot/delivery.ts](src/bot/delivery.ts)
 
@@ -93,5 +93,5 @@ For the isolated deployment work, the most relevant tests are under:
 
 - [README.md](../README.md)
 - [architecture-overview.md](../docs/architecture-overview.md)
-- [README.md](../pc-control-openclaw-plugin/README.md)
+- [README.md](../host-control-openclaw-plugin/README.md)
 - [README.md](../openclaw-host-bridge/README.md)

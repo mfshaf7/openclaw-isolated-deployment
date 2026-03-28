@@ -35,16 +35,16 @@ function toOperationTimeouts(value) {
   return output;
 }
 
-export function resolvePcControlConfig(api) {
+export function resolveHostControlConfig(api) {
   const cfg = api.pluginConfig ?? {};
   const bridgeUrl =
     toTrimmedString(cfg.bridgeUrl) ||
-    toTrimmedString(process.env.PC_CONTROL_BRIDGE_URL) ||
+    toTrimmedString(process.env.OPENCLAW_HOST_BRIDGE_URL) ||
     "";
-  const authTokenEnv = toTrimmedString(cfg.authTokenEnv, "PC_CONTROL_BRIDGE_TOKEN");
+  const authTokenEnv = toTrimmedString(cfg.authTokenEnv, "OPENCLAW_HOST_BRIDGE_TOKEN");
   const authToken = toTrimmedString(process.env[authTokenEnv]);
   if (!bridgeUrl) {
-    throw new Error("pc-control requires plugin config.bridgeUrl or PC_CONTROL_BRIDGE_URL");
+    throw new Error("host-control requires plugin config.bridgeUrl or OPENCLAW_HOST_BRIDGE_URL");
   }
   return {
     enabled: toBoolean(cfg.enabled, true),

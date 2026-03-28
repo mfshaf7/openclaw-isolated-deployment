@@ -14,7 +14,7 @@ flowchart TD
     Root --> Docs[docs]
     Root --> Deploy[deployment]
     Root --> Bridge[openclaw-host-bridge]
-    Root --> Plugin[pc-control-openclaw-plugin]
+    Root --> Plugin[host-control-openclaw-plugin]
     Root --> Telegram[openclaw-telegram-enhanced]
 ```
 
@@ -29,14 +29,14 @@ So:
 
 - `docs/` explains how the whole isolated system works
 - `openclaw-host-bridge/README.md` explains the bridge
-- `pc-control-openclaw-plugin/README.md` explains the adapter plugin
+- `host-control-openclaw-plugin/README.md` explains the adapter plugin
 - `openclaw-telegram-enhanced/README.md` explains the Telegram channel replacement
 
 Canonical source ownership for this workspace model is:
 
 - standalone repo: `openclaw-host-bridge`
 - standalone repo: `openclaw-telegram-enhanced`
-- workspace repo: `openclaw-isolated-deployment/pc-control-openclaw-plugin`
+- workspace repo: `openclaw-isolated-deployment/host-control-openclaw-plugin`
 
 That keeps cross-cutting material centralized without hiding component contracts from the repos that implement them.
 
@@ -56,7 +56,7 @@ It is the place where host-specific implementation details belong.
 
 The runnable bridge code lives in the standalone `openclaw-host-bridge` repository. The bridge folder in this workspace is documentation-oriented.
 
-### `pc-control-openclaw-plugin/`
+### `host-control-openclaw-plugin/`
 
 This is the typed adapter between OpenClaw and the bridge.
 
@@ -75,7 +75,7 @@ This is a bundled replacement for the built-in Telegram channel.
 Why it exists:
 
 - stock Telegram behavior was not strict enough for deterministic host-control flows
-- screenshot delivery, button-confirmed proposals, and `pc-control` routing needed channel-level changes
+- screenshot delivery, button-confirmed proposals, and `host-control` routing needed channel-level changes
 - built-in channel replacement is cleaner than carrying a broad core fork for Telegram-specific behavior
 
 This repository exists because the channel itself needed opinionated behavior, not just extra tools.
@@ -121,7 +121,7 @@ If you want to understand:
 - the system model: start with [architecture-overview.md](architecture-overview.md)
 - the deployment baseline: read [local-deployment-guide.md](local-deployment-guide.md)
 - the multi-repo sync rules: read [workspace-sync-policy.md](workspace-sync-policy.md)
-- the host-control security model: read [pc-control-openclaw-model.md](pc-control-openclaw-model.md)
+- the host-control security model: read [host-control-openclaw-model.md](host-control-openclaw-model.md)
 - the actual bridge contract: read [README.md](../openclaw-host-bridge/README.md)
-- the OpenClaw adapter contract: read [README.md](../pc-control-openclaw-plugin/README.md)
+- the OpenClaw adapter contract: read [README.md](../host-control-openclaw-plugin/README.md)
 - the Telegram channel contract: read [README.md](../openclaw-telegram-enhanced/README.md)
