@@ -16,8 +16,8 @@ The current deployment is operating as:
 - OpenClaw state bind-mounted into the container from the host OpenClaw home
 - OpenClaw workspace bind-mounted into the container from the same host state tree
 - host control handled by a separate WSL-backed bridge stack
-- Windows logon startup handled by a scheduled task that launches the full host stack into WSL
-- host bridge and recovery kept alive through detached `tmux` sessions inside WSL
+- Windows logon startup handled by `PlatformCoreHostStack`
+- WSL `systemd` owns the host bridge and recovery services inside `Platform-Core`
 
 ## Container Runtime Shape
 
@@ -39,12 +39,11 @@ What should be reproducible:
 
 Current validated assumptions:
 
-- Windows host runs a scheduled task named like `OpenClawHostStack`
-- that task launches WSL and calls the stack startup script
-- the WSL side starts:
-  - `openclaw-host-bridge`
-  - `openclaw-host-recovery`
-- both processes live under detached `tmux` sessions
+- Windows host runs the `PlatformCoreHostStack` scheduled task
+- that task launches WSL and starts `openclaw-host-stack.target`
+- `systemd` inside WSL starts:
+  - `openclaw-host-bridge.service`
+  - `openclaw-host-recovery.service`
 - recovery can restart/repair the bridge without rebuilding the runtime image
 
 ## Runtime Paths That Matter
