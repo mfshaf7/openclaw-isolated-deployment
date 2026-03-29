@@ -21,9 +21,8 @@ It is intentionally a **supported mode**, not a hidden local hack.
 - Startup helpers in the standalone bridge repo:
   - `openclaw-host-bridge/scripts/start-openclaw-host-bridge.sh`
   - `openclaw-host-bridge/scripts/start-openclaw-host-recovery.sh`
-  - `openclaw-host-bridge/scripts/start-openclaw-host-stack-tmux.sh`
-  - `openclaw-host-bridge/scripts/start-openclaw-host-stack-hidden.ps1`
   - `openclaw-host-bridge/scripts/register-openclaw-host-stack-task.ps1`
+  - `systemctl start openclaw-host-stack.target` inside WSL
 
 ## Prerequisites
 
@@ -143,7 +142,7 @@ That means:
 
 - requires WSL
 - bridge lifecycle on Windows logon still depends on the local task/launcher path being validated in the target environment
-- the current validated startup path is stack-based, not bridge-only
+- the current validated startup path is stack-based under WSL `systemd`, not bridge-only
 - browser inspection is not complete
 - export flow is not complete
 
@@ -151,8 +150,8 @@ That means:
 
 The current validated direction is:
 
-- bridge and recovery come up together from the same stack startup path
-- Telegram host-control diagnostics should be able to report bridge, recovery, session, pid, and auth state
+- bridge and recovery come up together from the same stack target
+- Telegram host-control diagnostics should be able to report bridge, recovery, service, pid, and auth state
 - live hotfixes in the bundled Telegram runtime must be backported into the standalone Telegram repo and the deployment build copy
 
 ## What makes this mode coherent
