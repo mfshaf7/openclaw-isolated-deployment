@@ -68,6 +68,7 @@ The repository is intentionally split into separate subprojects with separate re
 Read the full repo map here:
 - [repository-map.md](docs/repository-map.md)
 - [workspace-sync-policy.md](docs/workspace-sync-policy.md)
+- [current-runtime-shape.md](docs/current-runtime-shape.md)
 
 ## Workspace Layout
 
@@ -163,9 +164,10 @@ For someone new to this repository, the right reading order is:
 
 1. [architecture-overview.md](docs/architecture-overview.md)
 2. [repository-map.md](docs/repository-map.md)
-3. [local-deployment-guide.md](docs/local-deployment-guide.md)
-4. [security-architecture-review.md](docs/security-architecture-review.md)
-5. [host-control-openclaw-model.md](docs/host-control-openclaw-model.md)
+3. [current-runtime-shape.md](docs/current-runtime-shape.md)
+4. [local-deployment-guide.md](docs/local-deployment-guide.md)
+5. [security-architecture-review.md](docs/security-architecture-review.md)
+6. [host-control-openclaw-model.md](docs/host-control-openclaw-model.md)
 
 If you are rebuilding the operator workstation, then use:
 - [wsl-codex-runbook.md](docs/wsl-codex-runbook.md)

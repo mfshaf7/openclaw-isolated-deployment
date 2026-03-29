@@ -20,6 +20,13 @@ The current deployment shape is:
 - managed `host-control` plugin install
 - authenticated gateway with rate limiting
 - Windows firewall as part of the practical host exposure boundary
+- host OpenClaw state bind-mounted into the gateway container
+- WSL-backed bridge and recovery stack started outside the container
+- Windows logon task used for host-stack startup persistence
+
+Read the current sanitized runtime description here:
+
+- [current-runtime-shape.md](current-runtime-shape.md)
 
 ## Local Change Areas To Recheck During Updates
 

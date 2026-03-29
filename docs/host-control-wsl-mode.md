@@ -20,9 +20,10 @@ It is intentionally a **supported mode**, not a hidden local hack.
 - Host bridge: `openclaw-host-bridge`
 - Startup helpers in the standalone bridge repo:
   - `openclaw-host-bridge/scripts/start-openclaw-host-bridge.sh`
-  - `openclaw-host-bridge/scripts/start-openclaw-host-bridge-daemon.sh`
-  - `openclaw-host-bridge/scripts/start-openclaw-host-bridge-hidden.ps1`
-  - `openclaw-host-bridge/scripts/register-openclaw-host-bridge-task.ps1`
+  - `openclaw-host-bridge/scripts/start-openclaw-host-recovery.sh`
+  - `openclaw-host-bridge/scripts/start-openclaw-host-stack-tmux.sh`
+  - `openclaw-host-bridge/scripts/start-openclaw-host-stack-hidden.ps1`
+  - `openclaw-host-bridge/scripts/register-openclaw-host-stack-task.ps1`
 
 ## Prerequisites
 
@@ -31,7 +32,7 @@ It is intentionally a **supported mode**, not a hidden local hack.
 - a Linux distro such as `Ubuntu`
 - Node installed inside WSL for the bridge runtime
 - OpenClaw gateway token available through the local OpenClaw state file
-- Docker container able to reach the host bridge through `host.docker.internal`
+- Docker container able to reach the host bridge and recovery listener through the configured host-facing bridge URLs
 - workspace layout that includes both:
   - `~/projects/openclaw-isolated-deployment`
   - `~/projects/openclaw-host-bridge`
@@ -98,7 +99,7 @@ Recommended starting profile:
         "enabled": true,
         "config": {
           "enabled": true,
-          "bridgeUrl": "http://host.docker.internal:48721",
+          "bridgeUrl": "http://<host-bridge-address>:48721",
           "authTokenEnv": "OPENCLAW_GATEWAY_TOKEN",
           "timeoutMs": 10000,
           "allowWriteOperations": false,
@@ -142,8 +143,17 @@ That means:
 
 - requires WSL
 - bridge lifecycle on Windows logon still depends on the local task/launcher path being validated in the target environment
+- the current validated startup path is stack-based, not bridge-only
 - browser inspection is not complete
 - export flow is not complete
+
+## Current Direction
+
+The current validated direction is:
+
+- bridge and recovery come up together from the same stack startup path
+- Telegram host-control diagnostics should be able to report bridge, recovery, session, pid, and auth state
+- live hotfixes in the bundled Telegram runtime must be backported into the standalone Telegram repo and the deployment build copy
 
 ## What makes this mode coherent
 
