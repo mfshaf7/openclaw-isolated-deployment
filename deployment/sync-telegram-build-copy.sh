@@ -21,9 +21,11 @@ copy_paths=(
   api.ts
   index.ts
   openclaw.plugin.json
+  package-lock.json
   runtime-api.ts
   setup-entry.ts
   src
+  tsconfig.host-control-check.json
 )
 
 echo "Syncing Telegram build copy"
