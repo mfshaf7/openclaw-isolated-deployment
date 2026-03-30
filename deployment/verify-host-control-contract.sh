@@ -10,6 +10,16 @@ CANON_BRIDGE="${OPENCLAW_HOST_BRIDGE_REPO:-$PARENT/openclaw-host-bridge}"
 BRIDGE_BROWSER_OPS="$CANON_BRIDGE/src/ops/browser.mjs"
 BRIDGE_FS_OPS="$CANON_BRIDGE/src/ops/fs.mjs"
 
+search() {
+  local pattern="$1"
+  shift
+  if command -v rg >/dev/null 2>&1; then
+    rg -n "$pattern" "$@"
+  else
+    grep -nE "$pattern" "$@"
+  fi
+}
+
 required_paths=(
   "$PLUGIN_TOOLS"
   "$PLUGIN_TESTS"
@@ -31,17 +41,17 @@ echo "  plugin tools : $PLUGIN_TOOLS"
 echo "  bridge repo  : $CANON_BRIDGE"
 echo
 
-if rg -n 'host_control_browser_tab_inspect|host_control_browser_tabs_list|host_control_zip_for_export' "$PLUGIN_TOOLS" >/dev/null; then
+if search 'host_control_browser_tab_inspect|host_control_browser_tabs_list|host_control_zip_for_export' "$PLUGIN_TOOLS" >/dev/null; then
   echo "Scaffold-only tool name still exposed in plugin surface" >&2
   exit 1
 fi
 
-if rg -n 'browser\\.tabs\\.inspect|browser\\.tabs\\.list|fs\\.zip_for_export' "$PLUGIN_TOOLS" >/dev/null; then
+if search 'browser\\.tabs\\.inspect|browser\\.tabs\\.list|fs\\.zip_for_export' "$PLUGIN_TOOLS" >/dev/null; then
   echo "Plugin still references scaffold-only bridge operations" >&2
   exit 1
 fi
 
-if ! rg -n 'not implemented yet in the scaffold' "$BRIDGE_BROWSER_OPS" "$BRIDGE_FS_OPS" >/dev/null; then
+if ! search 'not implemented yet in the scaffold' "$BRIDGE_BROWSER_OPS" "$BRIDGE_FS_OPS" >/dev/null; then
   echo "Expected scaffold markers were not found in bridge sources" >&2
   exit 1
 fi

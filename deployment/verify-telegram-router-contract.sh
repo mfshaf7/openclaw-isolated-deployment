@@ -7,6 +7,16 @@ DEPLOY_ROUTER="$ROOT/openclaw-telegram-enhanced/src/bot-message-dispatch.host-co
 CANON_TELEGRAM="${OPENCLAW_TELEGRAM_REPO:-$PARENT/openclaw-telegram-enhanced}"
 CANON_ROUTER="$CANON_TELEGRAM/src/bot-message-dispatch.host-control.ts"
 
+search() {
+  local pattern="$1"
+  shift
+  if command -v rg >/dev/null 2>&1; then
+    rg -n "$pattern" "$@"
+  else
+    grep -nE "$pattern" "$@"
+  fi
+}
+
 required_paths=(
   "$DEPLOY_ROUTER"
   "$CANON_ROUTER"
@@ -30,12 +40,12 @@ if ! cmp -s "$DEPLOY_ROUTER" "$CANON_ROUTER"; then
   exit 1
 fi
 
-if rg -n '\\bwhat about\\b|\\bhow about\\b' "$CANON_ROUTER" >/dev/null; then
+if search 'what about|how about' "$CANON_ROUTER" >/dev/null; then
   echo "Router still contains overly broad conversational host-control triggers." >&2
   exit 1
 fi
 
-if ! rg -n 'answer normally|just answer|no tools?|don'"'"'t use (?:pc-?control|tools?)' "$CANON_ROUTER" >/dev/null; then
+if ! search "answer normally|just answer|no tools?|don't use (pc-?control|tools?)" "$CANON_ROUTER" >/dev/null; then
   echo "Router is missing non-host-control escape phrases." >&2
   exit 1
 fi
@@ -50,12 +60,17 @@ if ! grep -F 'extractGeneralQuery(normalized)' "$CANON_ROUTER" >/dev/null; then
   exit 1
 fi
 
-if ! grep -F 'Boolean(pendingProposal) && isAffirmativeFollowup' "$CANON_ROUTER" >/dev/null; then
-  echo "Router no longer restricts pending proposal reuse to explicit affirmations." >&2
+if ! grep -F 'loadDirectReadProposalById(params.sessionKey, params.proposalId)' "$CANON_ROUTER" >/dev/null; then
+  echo "Router no longer resolves persisted direct-read proposals from button callbacks." >&2
   exit 1
 fi
 
-if ! rg -n 'pcctl:proceed:|pcctl:cancel:' "$CANON_ROUTER" >/dev/null; then
+if ! grep -F 'await params.clearButtons();' "$CANON_ROUTER" >/dev/null; then
+  echo "Router no longer clears Proceed/Cancel buttons after direct-read execution." >&2
+  exit 1
+fi
+
+if ! search 'pcctl:proceed:|pcctl:cancel:' "$CANON_ROUTER" >/dev/null; then
   echo "Router is missing deterministic Proceed/Cancel button callbacks." >&2
   exit 1
 fi
