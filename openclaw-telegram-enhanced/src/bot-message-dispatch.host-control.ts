@@ -2405,7 +2405,8 @@ export async function tryHandleForcedHostControlReadTelegram(
     ackReactionPromise,
     reactionApi,
   } = params;
-  if (isGroup && !isBoundHostControlTopicSession(ctxPayload.SessionKey)) {
+  const isBoundHostControlTopic = isGroup && isBoundHostControlTopicSession(ctxPayload.SessionKey);
+  if (isGroup && !isBoundHostControlTopic) {
     return false;
   }
   const intentText = normalizeTelegramIntentLine(
@@ -2433,7 +2434,26 @@ export async function tryHandleForcedHostControlReadTelegram(
   const intent = await parseDirectReadIntent(intentText, recentContext, hostControlConfig, actor);
   const shouldHandleReadOnlyHostControl = intent !== null;
   if (!shouldHandleReadOnlyHostControl) {
-    return false;
+    if (!isBoundHostControlTopic) {
+      return false;
+    }
+    const result = await deliverReplies({
+      ...deliveryBaseOptions,
+      replies: [
+        {
+          text:
+            "This topic stays on deterministic host-control only. Name a specific host-control action such as health check, show drives, list allowed roots, browse a folder, search files, send a selected file, rename, move, quarantine, or delete a numbered entry. If you want a normal assistant reply, say `answer normally` or `don't use tools`.",
+          isError: true,
+        } satisfies ReplyPayload,
+      ],
+    });
+    if (result.delivered && statusReactionController) {
+      void statusReactionController.setError().catch((reactionErr) => {
+        logVerbose(`telegram: status reaction error finalize failed: ${String(reactionErr)}`);
+      });
+    }
+    clearGroupHistory();
+    return true;
   }
   const shouldRunImmediately = intent ? isImmediateDirectReadIntent(intent) : false;
   if (shouldRunImmediately) {
@@ -2527,23 +2547,22 @@ export async function tryHandleForcedHostControlReadTelegram(
       originalSenderId:
         typeof ctxPayload.From === "string" ? ctxPayload.From : ctxPayload.From != null ? String(ctxPayload.From) : null,
     });
+    const proposalReply: ReplyPayload = {
+      text: `${describeDirectReadProposal(intent)} Use the button to continue, or refine your request.`,
+      channelData: {
+        telegram: {
+          buttons: [
+            [
+              { text: "Proceed", callback_data: `pcctl:proceed:${proposalId}`, style: "success" },
+              { text: "Cancel", callback_data: `pcctl:cancel:${proposalId}`, style: "danger" },
+            ],
+          ],
+        },
+      },
+    };
     const result = await deliverReplies({
       ...deliveryBaseOptions,
-      replies: [
-        {
-          text: `${describeDirectReadProposal(intent)} Use the button to continue, or refine your request.`,
-          channelData: {
-            telegram: {
-              buttons: [
-                [
-                  { text: "Proceed", callback_data: `pcctl:proceed:${proposalId}`, style: "success" },
-                  { text: "Cancel", callback_data: `pcctl:cancel:${proposalId}`, style: "danger" },
-                ],
-              ],
-            },
-          },
-        } satisfies ReplyPayload,
-      ],
+      replies: [proposalReply],
     });
     if (result.delivered && statusReactionController) {
       void statusReactionController.setDone().catch((err) => {
