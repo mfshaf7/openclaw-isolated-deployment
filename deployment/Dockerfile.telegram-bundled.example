@@ -18,6 +18,7 @@ RUN python3 -m pip install --break-system-packages --no-cache-dir uv
 # Replace the bundled Telegram plugin with the repository-managed replacement.
 # Build from the openclaw-isolated-deployment repository root so this path exists.
 COPY openclaw-telegram-enhanced/ /app/extensions/telegram/
+COPY host-control-openclaw-plugin/ /app/extensions/host-control/
 
 # Keep the runtime on the bundled plugin seam.
 ENV OPENCLAW_BUNDLED_PLUGINS_DIR=/app/extensions
