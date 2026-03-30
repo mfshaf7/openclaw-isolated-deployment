@@ -1,4 +1,4 @@
-ARG OPENCLAW_BASE_IMAGE=openclaw:stable-preview
+ARG OPENCLAW_BASE_IMAGE=ghcr.io/openclaw/openclaw:latest
 FROM ${OPENCLAW_BASE_IMAGE}
 
 # Add a practical Linux baseline for built-in/OpenClaw skills.

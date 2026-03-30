@@ -149,7 +149,7 @@ Optional environment overrides:
 
 ```bash
 OPENCLAW_LOCAL_IMAGE_TAG=openclaw:local \
-OPENCLAW_BASE_IMAGE=openclaw:stable-preview \
+OPENCLAW_BASE_IMAGE=ghcr.io/openclaw/openclaw:latest \
 ./deployment/build-openclaw-local.sh
 ```
 

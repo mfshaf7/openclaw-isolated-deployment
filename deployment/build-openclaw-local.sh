@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="${1:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
 IMAGE_TAG="${OPENCLAW_LOCAL_IMAGE_TAG:-openclaw:local}"
-BASE_IMAGE="${OPENCLAW_BASE_IMAGE:-openclaw:stable-preview}"
+BASE_IMAGE="${OPENCLAW_BASE_IMAGE:-ghcr.io/openclaw/openclaw:latest}"
 DOCKERFILE="${OPENCLAW_DOCKERFILE:-$ROOT/deployment/Dockerfile.telegram-bundled.example}"
 
 if [[ ! -f "$DOCKERFILE" ]]; then
