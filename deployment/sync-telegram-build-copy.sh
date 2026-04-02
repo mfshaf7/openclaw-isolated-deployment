@@ -22,6 +22,7 @@ copy_paths=(
   index.ts
   openclaw.plugin.json
   package-lock.json
+  package.json
   runtime-api.ts
   setup-entry.ts
   src

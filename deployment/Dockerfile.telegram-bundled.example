@@ -15,6 +15,11 @@ RUN apt-get update && \
 
 RUN python3 -m pip install --break-system-packages --no-cache-dir uv
 
+# The current base image ships /app/dist/plugin-sdk/telegram.js but omits the
+# matching self-export from /app/package.json. Repo-managed Telegram plugins
+# import "openclaw/plugin-sdk/telegram", so patch the export during bundling.
+RUN node -e 'const fs=require("node:fs"); const path="/app/package.json"; const pkg=JSON.parse(fs.readFileSync(path,"utf8")); pkg.exports ||= {}; if (!pkg.exports["./plugin-sdk/telegram"]) { pkg.exports["./plugin-sdk/telegram"]="./dist/plugin-sdk/telegram.js"; fs.writeFileSync(path, JSON.stringify(pkg, null, 2)+"\n"); }'
+
 # Replace the bundled Telegram plugin with the repository-managed replacement.
 # Build from the openclaw-isolated-deployment repository root so this path exists.
 COPY openclaw-telegram-enhanced/ /app/extensions/telegram/
