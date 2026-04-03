@@ -10,7 +10,7 @@ This is a working benchmark note. It reflects completed test runs as of `2026-03
 
 Companion evidence file:
 
-- [security-architecture-model-benchmark-artifacts.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/security-architecture-model-benchmark-artifacts.md)
+- [security-architecture-model-benchmark-artifacts.md](./security-architecture-model-benchmark-artifacts.md)
 
 ## Objective
 

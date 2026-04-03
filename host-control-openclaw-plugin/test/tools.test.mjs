@@ -579,7 +579,7 @@ test("list tool rewrites guessed Windows profile desktop paths to host aliases",
     assert.ok(tool, "expected fs_list tool to be registered");
 
     await tool.execute("call-2b", {
-      path: "C:\\Users\\Sevensoul\\Desktop",
+      path: "C:\\Users\\ExampleUser\\Desktop",
     });
 
     assert.equal(capturedRequest.arguments.path, "desktop");
@@ -624,7 +624,7 @@ test("search tool rewrites guessed WSL profile desktop paths to host aliases", a
     assert.ok(tool, "expected fs_search tool to be registered");
 
     await tool.execute("call-2c", {
-      root: "/mnt/c/Users/Sevensoul/Desktop",
+      root: "/mnt/c/Users/ExampleUser/Desktop",
       pattern: "*.docx",
       limit: 10,
     });

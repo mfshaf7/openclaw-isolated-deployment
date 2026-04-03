@@ -4,7 +4,7 @@
 
 This file stores concrete artifacts behind the model benchmark judgments in:
 
-- [security-architecture-model-benchmark.md](/home/mfshaf7/projects/openclaw-isolated-deployment/docs/security-architecture-model-benchmark.md)
+- [security-architecture-model-benchmark.md](./security-architecture-model-benchmark.md)
 
 It is intentionally selective:
 
