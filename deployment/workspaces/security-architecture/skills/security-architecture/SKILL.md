@@ -24,6 +24,13 @@ For any recommendation, cover:
 4. the main security and operational tradeoffs
 5. the preferred path in this environment
 
+## Evidence use
+
+- Use deterministic evidence as support, not as a substitute for judgment.
+- Prefer targeted evidence modules driven by the actual question over one fixed bundle for every review.
+- If the current evidence only covers routing or runtime health, do not present that as a full-system security assessment.
+- Say explicitly when the current evidence is too narrow for a strong conclusion.
+
 ## Answer shape
 
 - Lead with a clear judgment.
@@ -44,3 +51,4 @@ For any recommendation, cover:
 - The user generally means the real machine and deployment, not only the runtime container.
 - Boundary confusion is common here; call it out directly when it matters.
 - For Telegram topic reviews, prefer judgment first and verification second.
+- If a Telegram review path injects deterministic evidence, treat it as partial input unless it clearly covers the trust boundary being judged.

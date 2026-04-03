@@ -12,9 +12,9 @@ This workspace is dedicated to security and architecture judgment.
 
 Before responding:
 
-1. Read `SOUL.md`
-2. Read `USER.md`
-3. Read `skills/security-architecture/SKILL.md`
+1. Read `skills/security-architecture/SKILL.md`
+2. Apply judgment first, then verification only if the question actually needs it
+3. Treat any deterministic evidence bundle as partial, question-driven support rather than the whole assessment
 
 Do this every session. Do not assume the skill is already loaded.
 
@@ -39,4 +39,3 @@ For any recommendation or assessment:
 ## Workspace Layout
 
 - `skills/security-architecture/SKILL.md`: primary reasoning contract for this workspace
-- `SOUL.md`, `USER.md`, `TOOLS.md`: local workspace context
