@@ -21,8 +21,8 @@ It is intentionally a **supported mode**, not a hidden local hack.
 - Startup helpers in the standalone bridge repo:
   - `openclaw-host-bridge/scripts/start-openclaw-host-bridge.sh`
   - `openclaw-host-bridge/scripts/start-openclaw-host-recovery.sh`
-  - `openclaw-host-bridge/scripts/register-openclaw-host-stack-task.ps1`
   - `systemctl start openclaw-host-stack.target` inside WSL
+  - `platform-engineering/ansible/generated/openclaw-host-stack-windows-bootstrap.ps1`
 
 ## Prerequisites
 
@@ -69,13 +69,12 @@ The startup scripts support these environment variables:
 - `OPENCLAW_HOME`
 - `OPENCLAW_CONFIG_PATH`
 
-### 3. Windows launcher environment
+### 3. Windows bootstrap environment
 
-The hidden launcher supports:
+The platform-managed Windows bootstrap supports:
 
-- `HOST_CONTROL_WSL_DISTRO`
-- `HOST_CONTROL_ROOT`
-- `HOST_CONTROL_WINDOWS_LAUNCHER`
+- the rendered task parameters in
+  `platform-engineering/ansible/generated/openclaw-host-stack-windows-bootstrap.ps1`
 
 ## OpenClaw plugin profile
 
@@ -141,7 +140,8 @@ That means:
 ## Known limitations
 
 - requires WSL
-- bridge lifecycle on Windows logon still depends on the local task/launcher path being validated in the target environment
+- bridge lifecycle on Windows logon depends on the
+  `PlatformCoreHostStack` scheduled task rendered by `platform-engineering`
 - the current validated startup path is stack-based under WSL `systemd`, not bridge-only
 - browser inspection is not complete
 - export flow is not complete
