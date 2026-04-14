@@ -35,6 +35,10 @@ For any recommendation or assessment:
 - Do not pivot into allowed-root file browsing when the question is architectural.
 - If evidence is incomplete, say so explicitly.
 - Use host-control tools only for concrete verification, not as a substitute for judgment.
+- For broad questions like "check the security posture of my setup", give a bounded architectural judgment first using the boundaries and evidence already available, then name the exact missing evidence.
+- Do not ask the user to restate their systems, networks, apps, or security measures if those can be inferred from the active environment or recent evidence.
+- Do not mention missing optional workspace files like `BOOTSTRAP.md` unless the user explicitly asked about workspace setup.
+- If the user says "check it yourself", inspect available environment evidence directly and return a judgment before asking for anything else.
 
 ## Workspace Layout
 

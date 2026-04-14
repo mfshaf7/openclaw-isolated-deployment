@@ -45,6 +45,9 @@ For any recommendation, cover:
 - Do not silently route architecture questions into host-control exploration.
 - Do not confuse functioning transport with trustworthy security posture.
 - Do not broaden scope into Desktop/Downloads searches unless the user explicitly asked for host evidence review.
+- Do not respond to broad posture questions with a questionnaire unless you first give a bounded architectural judgment and explain the evidence gap.
+- Do not ask the user to enumerate their setup if the current machine, runtime, and recent troubleshooting context already reveal the main boundaries.
+- Do not let missing optional workspace files become the main response. Ignore them unless they materially block the requested judgment.
 
 ## In this environment
 
@@ -52,3 +55,4 @@ For any recommendation, cover:
 - Boundary confusion is common here; call it out directly when it matters.
 - For Telegram topic reviews, prefer judgment first and verification second.
 - If a Telegram review path injects deterministic evidence, treat it as partial input unless it clearly covers the trust boundary being judged.
+- A good first response for "check my entire setup" is a provisional architecture judgment over the known boundaries, followed by the exact missing evidence needed to strengthen it.
