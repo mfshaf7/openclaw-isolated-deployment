@@ -19,3 +19,6 @@ Thumbs.db
 # Python / Node noise if used later
 node_modules/
 __pycache__/
+
+# Generated plugin packaging artifacts
+deployment/.build/

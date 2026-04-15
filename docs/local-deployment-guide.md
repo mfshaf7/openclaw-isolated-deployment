@@ -136,15 +136,15 @@ Capture:
 
 After the upstream baseline is working, this repository adds the isolated-deployment layers.
 
-### Layer A: bundled Telegram override
+### Layer A: managed Telegram plugin package
 
-Use the repository-managed Telegram override as the bundled `telegram` plugin replacement instead of treating it as a second side-loaded `telegram` plugin.
+Use the repository-managed Telegram package as a normal OpenClaw plugin artifact installed through `openclaw plugins install`.
 
 Why:
 
-- `telegram` is a built-in channel
-- deterministic `host-control` behavior belongs at the channel layer
-- duplicate runtime plugin ids create ambiguity and loader noise
+- plugin provenance stays inside OpenClaw's managed install records
+- the package can be published and reproduced by other operators
+- the deployment stops depending on direct source copies into `/app/extensions`
 
 Relevant component:
 - [openclaw-telegram-enhanced/README.md](../openclaw-telegram-enhanced/README.md)
@@ -157,7 +157,7 @@ Deployment copy:
 
 - workspace copy: `openclaw-isolated-deployment/openclaw-telegram-enhanced/`
 
-The deployment image path in this repository copies the workspace copy. To reproduce the same result reliably, keep that workspace copy aligned with the standalone Telegram repository revision you intend to deploy.
+The deployment image path in this repository packages the workspace copy into a plugin artifact and installs it with `openclaw plugins install`. To reproduce the same result reliably, keep that workspace copy aligned with the standalone Telegram repository revision you intend to deploy.
 
 Use:
 - [workspace-sync-policy.md](workspace-sync-policy.md)
@@ -170,9 +170,10 @@ Before building, verify the sync state:
 ./deployment/verify-bridge-workspace.sh
 ```
 
-Or use the gated build wrapper:
+Or use the gated packaging + build wrapper:
 
 ```bash
+./deployment/package-local-plugins.sh
 ./deployment/build-openclaw-local.sh
 ```
 

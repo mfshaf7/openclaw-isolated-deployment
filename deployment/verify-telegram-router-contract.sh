@@ -10,11 +10,7 @@ CANON_ROUTER="$CANON_TELEGRAM/src/bot-message-dispatch.host-control.ts"
 search() {
   local pattern="$1"
   shift
-  if command -v rg >/dev/null 2>&1; then
-    rg -n "$pattern" "$@"
-  else
-    grep -nE "$pattern" "$@"
-  fi
+  grep -nE "$pattern" "$@"
 }
 
 required_paths=(

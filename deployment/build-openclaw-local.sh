@@ -4,25 +4,21 @@ set -euo pipefail
 ROOT="${1:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
 IMAGE_TAG="${OPENCLAW_LOCAL_IMAGE_TAG:-openclaw:local}"
 BASE_IMAGE="${OPENCLAW_BASE_IMAGE:-ghcr.io/openclaw/openclaw:latest}"
-DOCKERFILE="${OPENCLAW_DOCKERFILE:-$ROOT/deployment/Dockerfile.telegram-bundled.example}"
+DOCKERFILE="${OPENCLAW_DOCKERFILE:-$ROOT/deployment/Dockerfile.plugin-install.example}"
 
 if [[ ! -f "$DOCKERFILE" ]]; then
   echo "Missing Dockerfile: $DOCKERFILE" >&2
   exit 1
 fi
 
-echo "Preparing bundled OpenClaw image build"
+echo "Preparing managed-plugin OpenClaw image build"
 echo "  root      : $ROOT"
 echo "  dockerfile: $DOCKERFILE"
 echo "  base image: $BASE_IMAGE"
 echo "  output tag: $IMAGE_TAG"
 echo
 
-"$ROOT/deployment/sync-telegram-build-copy.sh" "$ROOT"
-"$ROOT/deployment/verify-workspace-sync.sh" "$ROOT"
-"$ROOT/deployment/verify-telegram-router-contract.sh" "$ROOT"
-"$ROOT/deployment/verify-bridge-workspace.sh" "$ROOT"
-"$ROOT/deployment/verify-host-control-contract.sh" "$ROOT"
+"$ROOT/deployment/package-local-plugins.sh" "$ROOT"
 
 echo
 echo "Building Docker image..."
