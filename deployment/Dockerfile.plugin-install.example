@@ -23,7 +23,7 @@ COPY --chown=node:node deployment/.build/plugin-artifacts/ /tmp/openclaw-plugin-
 COPY --chown=node:node deployment/workspaces/security-architecture/ /home/node/.openclaw/workspace-security-architecture/
 
 USER node
-RUN set -euo pipefail; \
+RUN set -eu; \
     test -n "$(find /tmp/openclaw-plugin-artifacts -maxdepth 1 -type f -name '*.tgz' -print -quit)"; \
     for plugin in /tmp/openclaw-plugin-artifacts/*.tgz; do \
       openclaw plugins install --force "$plugin"; \
