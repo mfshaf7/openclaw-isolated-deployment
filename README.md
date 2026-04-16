@@ -1,6 +1,8 @@
 # OpenClaw Isolated Deployment
 
-This repository is a reference implementation for running **OpenClaw in a truly isolated local environment** instead of collapsing the assistant, host control, and operator tooling into one machine with one trust boundary.
+This repository is a reference implementation for running **OpenClaw in a truly
+isolated local environment** instead of collapsing the assistant, host control,
+and operator tooling into one machine with one trust boundary.
 
 It exists to solve a specific problem:
 
@@ -60,8 +62,8 @@ The repository is intentionally split into separate subprojects with separate re
 | Path | Purpose |
 | --- | --- |
 | `openclaw-host-bridge/` | Narrow host-control bridge that enforces policy, allowed roots, audits, and controlled host operations. |
-| `host-control-openclaw-plugin/` | Typed OpenClaw plugin that exposes the bridge as approved tools instead of generic shell access. |
-| `openclaw-telegram-enhanced/` | Bundled Telegram replacement that adds deterministic `host-control` routing, screenshots, media delivery, and confirmation flows. |
+| `host-control-openclaw-plugin/` | Model-scoped reference copy of the typed host-control plugin for this isolated deployment design. |
+| `openclaw-telegram-enhanced/` | Reference copy of the Telegram replacement used to explain the isolated deployment model. |
 | `docs/` | System documentation: architecture, rationale, operator runbooks, known issues, and security review. |
 | `deployment/` | Deployment-specific guidance, checklists, and runtime-facing configuration notes. |
 
@@ -79,23 +81,28 @@ Example:
 ```text
 ~/projects/
 ├── openclaw-isolated-deployment/
+├── openclaw-runtime-distribution/
 ├── openclaw-host-bridge/
 └── openclaw-telegram-enhanced/
 ```
 
 This is the intended split:
 
-- `openclaw-isolated-deployment` is the system and deployment workspace
+- `openclaw-isolated-deployment` is the system and reference-architecture workspace
+- `openclaw-runtime-distribution` is the current governed stage/prod build and composition workspace
 - `openclaw-host-bridge` is the canonical bridge source repository
 - `openclaw-telegram-enhanced` is the canonical Telegram channel source repository
 
 Important:
 
 - the bridge source of truth is the standalone `openclaw-host-bridge` repo, not the small bridge README copy inside this repository
-- the Telegram source of truth is the standalone `openclaw-telegram-enhanced` repo, even though this repository also carries a workspace copy used by the deployment image path
-- this repository still keeps `host-control-openclaw-plugin/` locally because that plugin is part of the deployment workspace itself
+- the Telegram source of truth is the standalone `openclaw-telegram-enhanced` repo; the local embedded copy in this repo is no longer the active governed build input
+- the active stage/prod packaged `host-control-openclaw-plugin/` now lives in `openclaw-runtime-distribution`; the local copy here is reference/model-scoped
 
-If someone clones only this repository, they will understand the architecture, but they will not have the full standalone bridge source tree required for the complete host-control workflow.
+If someone clones only this repository, they will understand the architecture,
+but they will not have the full active build/composition workspace or the full
+standalone bridge source tree required for the current governed host-control
+workflow.
 
 ## Architecture
 
@@ -158,6 +165,35 @@ It does **not** claim to be:
 - a general replacement for upstream OpenClaw docs
 - a public multi-tenant service template
 
+## Current Operating Relationship
+
+For the current governed workspace:
+
+- this repo explains the isolated deployment design
+- `openclaw-runtime-distribution` owns the active stage/prod runtime assembly
+- `platform-engineering` owns environment approval, digests, and promotion
+- `openclaw-host-bridge` owns the runnable host bridge
+- `openclaw-telegram-enhanced` owns the canonical Telegram implementation
+
+That split is intentional. This repo should remain the place where operators can
+understand the architecture, even when the active build path lives elsewhere.
+
+## Audit And Visibility
+
+This repository is documentation-first, so its visibility surfaces are mainly:
+
+- architecture docs that explain the trust boundary
+- repository maps that explain owner vs reference copies
+- current runtime shape docs that explain how the live system is meant to look
+- security review notes that explain why the model exists
+
+It is not the runtime evidence source for stage or prod. For live evidence,
+operators should look to:
+
+- `platform-engineering` for approved SHAs, digests, and Argo revisions
+- `openclaw-host-bridge` for host audit and bridge attestation
+- the live gateway and Telegram logs for runtime behavior
+
 ## Start Here
 
 For someone new to this repository, the right reading order is:
@@ -172,8 +208,22 @@ For someone new to this repository, the right reading order is:
 If you are rebuilding the operator workstation, then use:
 - [wsl-codex-runbook.md](docs/wsl-codex-runbook.md)
 
-If you are maintaining the multi-repo workspace and need to keep the build copy aligned with the standalone repos, use:
+If you are maintaining the current governed stage/prod build path, start in:
+- `openclaw-runtime-distribution/README.md`
+- `platform-engineering/docs/runbooks/rebuild-and-promote-gateway.md`
+
+If you are maintaining the reference architecture and need to understand how the
+older embedded-copy model related to the isolated deployment design, use:
 - [workspace-sync-policy.md](docs/workspace-sync-policy.md)
+
+## Governance Moving Forward
+
+- Keep this repo explicit about whether a path is canonical, active, or
+  reference-only.
+- When the governed runtime shape changes, update the corresponding architecture
+  and runtime-shape docs here in the same change class.
+- Do not let old embedded-copy workflows look active if they are no longer part
+  of the current build path.
 
 ## Documentation Standard
 
