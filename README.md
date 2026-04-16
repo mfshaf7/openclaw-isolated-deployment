@@ -210,7 +210,7 @@ If you are rebuilding the operator workstation, then use:
 
 If you are maintaining the current governed stage/prod build path, start in:
 - `openclaw-runtime-distribution/README.md`
-- `platform-engineering/docs/runbooks/rebuild-and-promote-gateway.md`
+- `platform-engineering/products/openclaw/runbooks/rebuild-and-promote-gateway.md`
 
 If you are maintaining the reference architecture and need to understand how the
 older embedded-copy model related to the isolated deployment design, use:
